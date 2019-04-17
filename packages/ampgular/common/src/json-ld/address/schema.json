@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "The Address Schema",
+  "properties": {
+    "streetAddress":{
+      "type": "string"
+    },
+    "addressLocality": {
+      "type": "string"
+    },
+    "addressRegion":{
+      "type": "string"
+    },
+    "postalCode": {
+      "type": "string"
+    },
+    "addressCountry": {
+      "type": "string"
+    }
+  },
+  "required":["streetAddress","addressCountry","addressLocality","addressRegion","postalCode"]
+}

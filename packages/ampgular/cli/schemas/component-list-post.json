@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Component List post",
+  "$id": "amp-cli://schemas/component-list-post.json",
+  "description": "list-post-component",
+  "type": "object",
+  "anyOf": [{
+      "$ref": "./definitions.amp.json#/definitions/listPostComponent"
+    }]
+  }

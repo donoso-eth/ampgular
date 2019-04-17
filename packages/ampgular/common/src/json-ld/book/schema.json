@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "The Book Schema",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Book's name"
+    },
+    "author": {
+      "$ref": "../person/schema.json#"
+    },
+    "url": {
+      "type": "string",
+      "title": "Book´s url"
+    },
+    "workExample": {
+      "type": "array",
+      "title": "Wotk Editions",
+      "items": {
+        "$ref": "#definitions/workExample"
+      }
+    }
+  },
+  "definitions": {
+    "workExample": {
+      "@type": {
+        "type": "string",
+        "title": "Book´s Type must be 'Book",
+        "enum": ["Book"]
+      },
+      "isbn": {
+        "type": "string",
+        "title": "Book's ISBN"
+      },
+      "bookEdition": {
+        "type": "string",
+        "title": "Book's book Edition"
+      },
+      "bookFormat": {
+        "type": "string",
+        "title": "Book´s Type must be 'Book",
+        "enum": ["https://schema.org/Hardcover", "https://schema.org/AudiobookFormat",
+          "https://schema.org/EBook", "https://schema.org/Paperback"
+        ]
+      },
+      "potentialAction": {
+        "$ref": "#defitions/potentialAction"
+      }
+    },
+    "potentialAction": {
+      "@type": {
+        "type": "string",
+        "title": "Book´s Type must be 'Book",
+        "enum": ["ReadAction"]
+      },
+      "target": {
+        "$ref": ".#defitions/target"
+      },
+      "expectsAcceptanceOf": {
+        "$ref": "../offers/schema.json"
+      }
+    },
+    "target": {
+      "@type": {
+        "type": "string",
+        "title": "Book´s Type must be 'Book",
+        "enum": ["EntryPoint"]
+      },
+      "urlTemplate": {
+        "type": "string",
+        "title": "Book's  Url Template"
+      },
+      "actionPlatform": {
+        "title": "Action PLatform",
+        "type": "string",
+        "items": {
+          "anyOf": [
+            "http://schema.org/DesktopWebPlatform",
+            "http://schema.org/IOSPlatform",
+            "http://schema.org/AndroidPlatform"
+          ]
+        }
+
+      }
+    }
+  }
+}

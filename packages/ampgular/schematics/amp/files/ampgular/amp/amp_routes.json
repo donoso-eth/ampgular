@@ -1,0 +1,6 @@
+{
+  "$schema": "../node_modules/@ampgular/cli/schemas/route-definition",
+  "ampRoutes": [
+    { "match": ["**"] }
+  ]
+}

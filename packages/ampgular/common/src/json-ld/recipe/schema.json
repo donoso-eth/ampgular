@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "@ampgular/common/json-ld/aggregateRating",
+  "type": "object",
+  "title": "The Recipe Schema",
+  "required": [
+    "name",
+    "image"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "image": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "aggregateRating": {
+      "$ref": "../aggregate-rating/schema.json#"
+    },
+    "author": {
+      "$ref": "../person/schema.json#"
+    },
+    "nutrition": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": ["NutritionInformation"]
+        },
+        "calories": {
+          "type": "string"
+        }
+      }
+    },
+    "cookTime": {
+      "type": "string"
+    },
+    "datePublished": {
+      "type": "string"
+    },
+    "keywords": {
+      "type": "string"
+    },
+    "totalTime": {
+      "type": "string"
+    },
+
+    "recipeYield": {
+      "type": "string"
+    },
+    "recipeCategory": {
+      "type": "string"
+    },
+    "recipeCuisine": {
+      "type": "string"
+    },
+    "recipeIngredients": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recipeInstructions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@type": {
+            "type": "string",
+            "enum": ["HowToStep"]
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "video": { "$ref": "../video/schema.json#"}
+  }
+}

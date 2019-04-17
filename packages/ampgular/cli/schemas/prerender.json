@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Prerender Configuration",
+  "$id": "amp-cli://schemas/prerender.json",
+  "description": "Command to Prerender Angualr Sites",
+  "type": "object",
+  "allOf": [{
+      "type": "object",
+      "properties": {
+        "excludeQuery": {
+          "description": "When true, indocate the routes are going to fight",
+          "type": "boolean",
+          "default": false,
+          "alias": "r"
+        },
+        "cssOptimize": {
+          "description": "Ensure Canonical",
+          "type": "boolean",
+          "default": true
+        },
+        "namedFiles": {
+          "description": "Ensure DryRun",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": ["namedFiles", "cssOptimize"]
+    },
+    {
+      "$ref": "./definitions.json#/definitions/build"
+
+    },
+    {
+      "$ref": "./definitions.json#/definitions/node"
+
+    }
+  ]
+}

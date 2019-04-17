@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "State Defnition",
+  "description": "State Defnition",
+  "type": "object",
+  "anyOf": [
+    {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "./definitions.amp.json#/definitions/simpleComponent"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "./definitions.amp.json#/definitions/listSingleComponent"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "./definitions.amp.json#/definitions/listBindComponent"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "./definitions.amp.json#/definitions/multiBindComponent"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "./definitions.amp.json#/definitions/scrollComponent"
+        }
+      }
+    }
+  ]
+}

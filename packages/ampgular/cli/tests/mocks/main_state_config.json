@@ -1,0 +1,128 @@
+{
+  "$schema": "../node_modules/@ampgular/cli/shemas/state-definition.json",
+  "menuOpen": {
+      "routes": {
+        "match": [
+          "**"
+        ]
+      },
+      "events": [
+        {
+          "id": "[id='button-open']",
+          "event": "tap"
+        }
+      ],
+      "css": [
+        {
+          "id": "[id='nav-hub']",
+          "class": "nav-hub-active"
+        },
+        {
+          "id": "[id='nav-item']",
+          "class": "nav-hub-active"
+        },
+        {
+          "id": "[id='button-open']",
+          "class": "nav-is-open"
+        }
+      ]
+    },
+    "company": {
+      "routes": {
+        "length": 5,
+        "match": [
+          "/es/wellness-y-bienestar-natural/**",
+          "/de/wellness-und-natuerliches-wohlbefinden/**",
+          "/fr/day-spa-bien-etre-naturel/**",
+          "/en/natural-wellness/**"
+        ]
+      },
+      "events": [
+        {
+          "id": "[id='myCheckBox']",
+          "event": "tap"
+        }
+      ],
+      "css": [
+        {
+          "id": "[id='myCheckBox']",
+          "class": "mat-checkbox-checked"
+        }
+      ]
+    },
+    "goToOffers": {
+      "routes": {
+        "length": 5,
+        "match": [
+          "/es/wellness-y-bienestar-natural/**",
+          "/de/wellness-und-natuerliches-wohlbefinden/**",
+          "/fr/day-spa-bien-etre-naturel/**",
+          "/en/natural-wellness/**"
+        ]
+      },
+      "type": "scroll",
+      "events": [
+        {
+          "id": "[id='gotoOffers']",
+          "target": "offers",
+          "duration": 400
+        }
+      ]
+    },
+    "summaryCard": {
+      "routes": {
+        "length": 4,
+        "match": [
+          "/es/wellness-y-bienestar-natural/**",
+          "/de/wellness-und-natuerliches-wohlbefinden/**",
+          "/fr/day-spa-bien-etre-naturel/**",
+          "/en/natural-wellness/**"
+        ]
+      },
+      "type": "list-single",
+      "events": [
+        {
+          "id": ".turn__summary",
+          "event": "tap"
+        },
+        {
+          "id": ".close__summary",
+          "event": "tap"
+        }
+      ],
+      "css": [
+        {
+          "id": ".prod-card",
+          "class": "prod-card--back-visible"
+        }
+      ]
+    },
+    "summaryCardExpress": {
+      "routes": {
+        "match": [
+          "/es/tratamientos-express",
+          "/de/express-behandlungen",
+          "/fr/express-traitements",
+          "/en/express-treatments"
+        ]
+      },
+      "type": "list-single",
+      "events": [
+        {
+          "id": ".turn__summary",
+          "event": "tap"
+        },
+        {
+          "id": ".close__summary",
+          "event": "tap"
+        }
+      ],
+      "css": [
+        {
+          "id": ".prod-card",
+          "class": "prod-card--back-visible"
+        }
+      ]
+    }
+  }
+

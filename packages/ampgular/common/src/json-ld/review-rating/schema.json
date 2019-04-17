@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "@ampgular/common/json-ld/aggregateRating",
+      "type": "object",
+      "title": "The Aggregaterating Schema",
+      "required": [
+        "ratingValue",
+        "reviewCount"
+      ],
+      "properties": {
+        "ratingValue": {
+          "type": "number",
+          "title": "The Ratingvalue"
+    
+        },
+        "worstRating": {
+          "type": "number",
+          "title": "The Reviewcount"
+        },
+        "bestRating": {
+          "type": "number",
+          "title": "The Reviewcount"
+        }
+      }
+}

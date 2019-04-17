@@ -1,0 +1,74 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noUnusedParameters": false,  // The linter is used for these.
+    "noUnusedLocals": false,  // The linter is used for these.
+    "outDir": "./dist",
+    "rootDir": ".",
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "inlineSourceMap": true,
+    "sourceRoot": ".",
+    // Inline sources are necessary for our tests to show the proper sources, since we are using
+    // Istanbul (not Constantinople) as well, and applying both source maps to get the original
+    // source in devtools.
+    "inlineSources": true,
+    "strictNullChecks": true,
+    "target": "es2017",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "baseUrl": "",
+    "rootDirs": [
+      ".",
+      "./dist-schema/",
+      // "./bazel-bin/"
+    ],
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ],
+     "paths": {
+    //   "@_/benchmark": [ "./packages/_/benchmark/src/index" ],
+       "@ampgular/common/utility": [ "./packages/ampgular/common/src/utility/index" ],
+       "@ampgular/common/json-ld": [ "./packages/ampgular/common/src/json-ld/index" ],
+       "@angular-devkit/core": [ "./packages/angular_devkit/core/src/index" ],
+       "@angular-devkit/core/node": [ "./packages/angular_devkit/core/node/index" ],
+       "@angular-devkit/core/node/testing": [ "./packages/angular_devkit/core/node/testing/index" ],
+     }
+  },
+  "bazelOptions": {
+    "suppressTsconfigOverrideWarnings": true
+  },
+  "exclude": [
+    "bazel-*/**/*",
+    "dist/**/*",
+    "etc/cli.angular.io",
+    "node_modules/**/*",
+    "packages/_/devkit/**/*files/**/*",
+    "packages/schematics/*/*/*files/**/*",
+    "packages/ampgular/schematics/*/*files/**/*",
+    "tmp/**/*",
+    "scripts/patches/**/*",
+    "tests/**/*",
+    "tools/**/*",
+    "benchmark/**/*",
+    "etc/api/**/*",
+    "packages/ampgular/cli/helpers-amp/temp/**/*",
+    "node_modules",
+    "**/__test*", //exclude all that *__test*
+    "**/*._spec.ts" // exclude all that contain "spec.ts" in name
+
+    ]
+}

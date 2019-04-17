@@ -1,0 +1,114 @@
+{
+  "$schema": "../node_modules/@ampgular/cli/shemas/state-definition.json",
+    "fraganceSlider": {
+      "routes": {
+        "length": 5,
+        "match": [
+          "/es/wellness-y-bienestar-natural/**",
+          "/de/wellness-und-natuerliches-wohlbefinden/**",
+          "/fr/day-spa-bien-etre-naturel/**",
+          "/en/natural-wellness/**"
+        ]
+      },
+      "type": "list-bind",
+      "events": [
+        {
+          "id": ".fragance",
+          "event": "tap"
+        }
+      ],
+      "css": [
+        {
+          "id": ".fragance",
+          "class": [
+            "fragSelected",
+            ""
+          ]
+        },
+        {
+          "id": ".tabs",
+          "class": [
+            "left",
+            "center",
+            "right"
+          ]
+        }
+      ]
+    },
+    "dateId": {
+      "routes": {
+        "match": [
+          "/es/last-minute*"
+        ]
+      },
+      "type": "multi-bind",
+      "events": [
+        {
+          "id": "[id='btnToday']",
+          "event": "tap",
+          "state": "today"
+        },
+        {
+          "id": "[id='btnTomorrow']",
+          "event": "tap",
+          "state": "tomorrow"
+        }
+      ],
+      "css": {
+        "today": [
+          {
+            "id": "[id='btnToday']",
+            "class": "active"
+          },
+          {
+            "id": "[id='btnTomorrow']",
+            "class": ""
+          },
+          {
+            "id": "[id='reportToday']",
+            "class": ""
+          },
+          {
+            "id": "[id='reportTomorrow']",
+            "class": "display-amp"
+          },
+          {
+            "id": "[id='sloganToday']",
+            "class": ""
+          },
+          {
+            "id": "[id='sloganTomorrow']",
+            "class": "display-amp"
+          }
+        ],
+        "tomorrow": [
+          {
+            "id": "[id='btnToday']",
+            "class": ""
+          },
+          {
+            "id": "[id='btnTomorrow']",
+            "class": "active"
+          },
+          {
+            "id": "[id='reportToday']",
+            "class": "display-amp"
+          },
+          {
+            "id": "[id='reportTomorrow']",
+            "class": ""
+          },
+          {
+            "id": "[id='sloganToday']",
+            "class": "display-amp"
+          },
+          {
+            "id": "[id='sloganTomorrow']",
+            "class": ""
+          }
+        ]
+      }
+    }
+    
+  }
+

@@ -1,0 +1,9 @@
+{
+  "schematics": {
+    "ng-add": {
+      "factory": "./index#amp",
+      "schema": "./schema.json",
+      "description": "Create an amp files helper to the current project."
+    }
+  }
+}

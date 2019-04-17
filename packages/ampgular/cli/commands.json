@@ -1,0 +1,9 @@
+{
+  "help": "./commands/help.json",
+  "prerender":"./commands/prerender.json",
+  "spider":"./commands/spider.json",
+  "build":"./commands/build.json",
+  "deploy":"./commands/deploy.json",
+  "amp":"./commands/me.json",
+  "sitemap":"./commands/sitemap.json"
+}

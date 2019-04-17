@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "The Address Schema",
+  "properties": {
+    "@type":{
+      "type": "string"
+    },
+    "name":{
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "image": {
+      "type": "array",
+      "items": { 
+        "type":"string"
+      }
+    },
+    "address": {
+     "$ref": "../address/schema.json#"
+    },
+    "@id":{
+      "type": "string",
+      "description": "The nique url of the Business Webpage"
+    },
+    "geo": {
+      "type": "object",
+      "properties": {
+          "longitude": {
+            "type":"number"
+          },
+          "latitude": {
+            "type":"number"
+          }
+      }
+    },
+    "menu": {
+      "type": "string"
+    },
+    "telephone": {
+      "type": "string"
+    },
+    "openingHoursSpecification": {
+      "type":"array",
+      "items":{
+        "type":"object",
+        "properties": {
+          "@type": {
+              "type":"string",
+              "enum": ["OpeningHoursSpecification"]
+          },
+          "dayOfWeek": {
+            "type": "string",
+            "enum": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+          },
+          "opens": {
+            "type": "string"
+          },
+          "closes": {
+            "type": "string"
+          }
+          , "validFrom": {
+            "type": "string"
+          }
+          , "validThrough": {
+            "type": "string"
+          }
+        },
+        "required": ["@type","opens","closes"]
+      }
+    }
+
+  },
+  
+
+  "required":["@id","address","name"]
+}

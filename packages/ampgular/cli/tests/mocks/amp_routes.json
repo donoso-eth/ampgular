@@ -1,0 +1,93 @@
+{
+  "$schema": "../node_modules/@ampgular/cli/schemas/route-definition",
+    "ampRoutes": [
+       {
+          "match": [
+             "/es/nuilea-day-spa",
+             "/de/wellness-nuilea-day-spa",
+             "/en/wellness-nuilea-day-spa",
+             "/fr/bien-etre-nuilea-day-spa"
+          ]
+       },
+       {
+          "match": [
+             "/es/about-us-nuilea-day-spa/contacto",
+             "/en/about-us-nuilea-day-spa/contact",
+             "/de/ueber-uns-spa-madrid/kontakt",
+             "/fr/about-us-nuilea-day-spa/contact"
+          ]
+       },
+       {
+          "match": [
+             "/es/tratamientos-express",
+             "/de/express-behandlungen",
+             "/fr/express-traitements",
+             "/en/express-treatments"
+          ]
+       },
+       {
+          "match": [
+             "/es/regalo-bienestar-spa-gift-vouchers",
+             "/de/wellness-geschenke",
+             "/fr/cadeaux-bien-etre",
+             "/en/wellbeing-gifts"
+          ]
+       },
+       {
+          "match": [
+             "/es/wellness-y-bienestar-natural-veganos",
+             "/de/vegan-behandlungen",
+             "/fr/vegan-traitements",
+             "/en/vegan-wellness"
+          ]
+       },
+       {
+          "match": [
+             "/es/wellness-y-bienestar-natural",
+             "/de/wellness-und-natuerliches-wohlbefinden",
+             "/fr/day-spa-bien-etre-naturel",
+             "/en/natural-wellness"
+          ]
+       },
+       {
+          "length": 5,
+          "match": [
+             "/es/wellness-y-bienestar-natural/**",
+             "/de/wellness-und-natuerliches-wohlbefinden/**",
+             "/fr/day-spa-bien-etre-naturel/**",
+             "/en/natural-wellness/**"
+          ]
+       },
+       {
+          "length": 4,
+          "match": [
+             "/es/wellness-y-bienestar-natural/**",
+             "/de/wellness-und-natuerliches-wohlbefinden/**",
+             "/fr/day-spa-bien-etre-naturel/**",
+             "/en/natural-wellness/**"
+          ]
+       },
+       {
+          "match": [
+             "/es/nuilea-day-spa",
+             "/de/wellness-nuilea-day-spa",
+             "/en/wellness-nuilea-day-spa",
+             "/fr/bien-etre-nuilea-day-spa"
+          ]
+       },
+       {
+          "match": [
+             "/fr/profitez-a-deux",
+             "/es/disfruta-a-dos-packages-wellness",
+             "/en/couple-enjoying",
+             "/de/zu-zwei-profitieren"
+          ]
+       },
+       {
+          "match": [
+             "**/last-minute*"
+          ]
+       }
+    ]
+ }
+

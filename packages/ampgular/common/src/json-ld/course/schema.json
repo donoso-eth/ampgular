@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "The Course Schema",
+  "properties": {
+    "name":{
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "provider": {
+      "$ref": "../organization/schema.json"
+    }
+  },
+  "required":["name","description","provider"]
+}

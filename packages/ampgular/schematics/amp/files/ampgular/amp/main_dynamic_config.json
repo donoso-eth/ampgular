@@ -1,0 +1,153 @@
+{
+  "minuteOffers": {
+     "routes": {
+        "match": [
+           "**/last-minute**"
+        ]
+     },
+     "lists": [
+        {
+           "id": "singlet",
+           "type": "get",
+           "api": "https://us-central1-madrid-day-spa.cloudfunctions.net/returnAmpSlotsFunction",
+           "inputs": {
+              "fixed": [
+                 "slot",
+                 "time",
+                 "shower"
+              ]
+           }
+        },
+        {
+           "id": "couplet",
+           "type": "get",
+           "api": "https://us-central1-madrid-day-spa.cloudfunctions.net/returnAmpSlotsFunction",
+           "inputs": {
+              "fixed": [
+                 "slot",
+                 "time",
+                 "shower"
+              ]
+           }
+        },
+        {
+           "id": "singlem",
+           "type": "get",
+           "api": "https://us-central1-madrid-day-spa.cloudfunctions.net/returnAmpSlotsFunction",
+           "inputs": {
+              "fixed": [
+                 "slot",
+                 "time",
+                 "shower"
+              ]
+           }
+        },
+        {
+           "id": "couplem",
+           "type": "get",
+           "api": "https://us-central1-madrid-day-spa.cloudfunctions.net/returnAmpSlotsFunction",
+           "inputs": {
+              "fixed": [
+                 "slot",
+                 "time",
+                 "shower"
+              ]
+           }
+        }
+     ]
+  },
+  "morningDeals": {
+     "routes": {
+        "length": 5,
+        "match": [
+           "/es/wellness-y-bienestar-natural/**",
+           "/de/wellness-und-natuerliches-wohlbefinden/**",
+           "/fr/day-spa-bien-etre-naturel/**",
+           "/en/natural-wellness/**"
+        ]
+     },
+     "lists": [
+        {
+           "id": "mustache1",
+           "type": "post",
+           "api": "https://us-central1-madrid-day-spa.cloudfunctions.net/returnAmpSlotsFunction",
+           "inputs": {
+              "bind": [
+                 "company"
+              ],
+              "fixed": [
+                 "slot",
+                 "time",
+                 "shower"
+              ]
+           },
+           "state": [
+              "init",
+              "loading",
+              "empty"
+           ],
+           "ampState": "slotMorning",
+           "src": "slotMorning['items']",
+           "height": "slotMorning['items'].length * 60",
+           "submit": [
+              {
+                 "id": "[id='verDispo']",
+                 "event": "tap"
+              }
+           ]
+        },
+        {
+           "id": "mustache2",
+           "type": "post",
+           "api": "https://us-central1-madrid-day-spa.cloudfunctions.net/returnAmpSlotsFunction",
+           "inputs": {
+              "bind": [
+                 "company"
+              ],
+              "fixed": [
+                 "slot",
+                 "time",
+                 "shower"
+              ]
+           },
+           "state": [
+              "init",
+              "loading",
+              "empty"
+           ],
+           "ampState": "slotEvening",
+           "src": "slotEvening['items']",
+           "height": "slotEvening['items'].length * 60",
+           "submit": [
+              {
+                 "id": "[id='verDispo']",
+                 "event": "tap"
+              }
+           ]
+        }
+     ]
+  },
+  "contactForm": {
+     "routes": {
+        "match": [
+           "/es/about-us-nuilea-day-spa/contacto",
+           "/en/about-us-nuilea-day-spa/contact",
+           "/de/ueber-uns-spa-madrid/kontakt",
+           "/fr/about-us-nuilea-day-spa/contact"
+        ]
+     },
+     "forms": [
+        {
+           "id": "contactFormGroup",
+           "type": "post",
+           "api": "https://us-central1-madrid-day-spa.cloudfunctions.net/returnContactFunction",
+           "state": [
+              "loading",
+              "success",
+              "error"
+           ],
+           "validation": true
+        }
+     ]
+  }
+}

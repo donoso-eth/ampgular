@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "AmpRoute Definition",
+  "description": "AmpRoute Definition",
+  "type": "object",
+  "properties": {
+    "ampRoutes": {
+      "$ref": "./definitions.amp.json#/definitions/ampRoute"
+    }
+  },
+  "required": ["ampRoutes"],
+  "additionalProperties": false
+}

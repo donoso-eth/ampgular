@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "amp-cli://commands/deploy.json",
+  "description": "DEPLOY DEPLOY ",
+  "$longDescription": "./deploy-long.md",
+
+  "$aliases": ["b"],
+  "$scope": "in",
+  "$type": "deploy",
+  "$impl": "./deploy-impl#DeployCommand",
+  "allOf": [
+    { "$ref": "./definitions.json#/definitions/base" }
+   
+  ]
+}

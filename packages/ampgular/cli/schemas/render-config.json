@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "Build Config",
+    "$id": "amp-cli://schemas/render-config.json",
+    "description": "Build Configuration",
+    "additionalProperties": false,
+    "type": "object",
+    "properties": {
+      "node": {
+        "$ref": "./definitions.json#/definitions/node"
+      },
+      "browser": {
+        "type": "object",
+        "properties": {
+          "port": {
+            "type": "string",
+            "description": "Port to be used for Express ",
+            "default": false
+          }
+        },
+        "required":["port"]
+      }
+    }
+  }
+  

@@ -1,0 +1,237 @@
+{
+  "$schema": "../node_modules/@ampgular/cli/shemas/state-definition.json",
+  "menuOpen": {
+      "routes": {
+        "match": [
+          "**"
+        ]
+      },
+      "events": [
+        {
+          "id": "[id='button-open']",
+          "event": "tap"
+        }
+      ],
+      "css": [
+        {
+          "id": "[id='nav-hub']",
+          "class": "nav-hub-active"
+        },
+        {
+          "id": "[id='nav-item']",
+          "class": "nav-hub-active"
+        },
+        {
+          "id": "[id='button-open']",
+          "class": "nav-is-open"
+        }
+      ]
+    },
+    "company": {
+      "routes": {
+        "length": 5,
+        "match": [
+          "/es/wellness-y-bienestar-natural/**",
+          "/de/wellness-und-natuerliches-wohlbefinden/**",
+          "/fr/day-spa-bien-etre-naturel/**",
+          "/en/natural-wellness/**"
+        ]
+      },
+      "events": [
+        {
+          "id": "[id='myCheckBox']",
+          "event": "tap"
+        }
+      ],
+      "css": [
+        {
+          "id": "[id='myCheckBox']",
+          "class": "mat-checkbox-checked"
+        }
+      ]
+    },
+    "goToOffers": {
+      "routes": {
+        "length": 5,
+        "match": [
+          "/es/wellness-y-bienestar-natural/**",
+          "/de/wellness-und-natuerliches-wohlbefinden/**",
+          "/fr/day-spa-bien-etre-naturel/**",
+          "/en/natural-wellness/**"
+        ]
+      },
+      "type": "scroll",
+      "events": [
+        {
+          "id": "[id='gotoOffers']",
+          "target": "offers",
+          "duration": 400
+        }
+      ]
+    },
+    "summaryCard": {
+      "routes": {
+        "length": 4,
+        "match": [
+          "/es/wellness-y-bienestar-natural/**",
+          "/de/wellness-und-natuerliches-wohlbefinden/**",
+          "/fr/day-spa-bien-etre-naturel/**",
+          "/en/natural-wellness/**"
+        ]
+      },
+      "type": "list-single",
+      "events": [
+        {
+          "id": ".turn__summary",
+          "event": "tap"
+        },
+        {
+          "id": ".close__summary",
+          "event": "tap"
+        }
+      ],
+      "css": [
+        {
+          "id": ".prod-card",
+          "class": "prod-card--back-visible"
+        }
+      ]
+    },
+    "summaryCardExpress": {
+      "routes": {
+        "match": [
+          "/es/tratamientos-express",
+          "/de/express-behandlungen",
+          "/fr/express-traitements",
+          "/en/express-treatments"
+        ]
+      },
+      "type": "list-single",
+      "events": [
+        {
+          "id": ".turn__summary",
+          "event": "tap"
+        },
+        {
+          "id": ".close__summary",
+          "event": "tap"
+        }
+      ],
+      "css": [
+        {
+          "id": ".prod-card",
+          "class": "prod-card--back-visible"
+        }
+      ]
+    },
+    "fraganceSlider": {
+      "routes": {
+        "length": 5,
+        "match": [
+          "/es/wellness-y-bienestar-natural/**",
+          "/de/wellness-und-natuerliches-wohlbefinden/**",
+          "/fr/day-spa-bien-etre-naturel/**",
+          "/en/natural-wellness/**"
+        ]
+      },
+      "type": "list-bind",
+      "events": [
+        {
+          "id": ".fragance",
+          "event": "tap"
+        }
+      ],
+      "css": [
+        {
+          "id": ".fragance",
+          "class": [
+            "fragSelected",
+            ""
+          ]
+        },
+        {
+          "id": ".tabs",
+          "class": [
+            "left",
+            "center",
+            "right"
+          ]
+        }
+      ]
+    },
+    "dateId": {
+      "routes": {
+        "match": [
+          "/es/last-minute*"
+        ]
+      },
+      "type": "multi-bind",
+      "events": [
+        {
+          "id": "[id='btnToday']",
+          "event": "tap",
+          "state": "today"
+        },
+        {
+          "id": "[id='btnTomorrow']",
+          "event": "tap",
+          "state": "tomorrow"
+        }
+      ],
+      "css": {
+        "today": [
+          {
+            "id": "[id='btnToday']",
+            "class": "active"
+          },
+          {
+            "id": "[id='btnTomorrow']",
+            "class": ""
+          },
+          {
+            "id": "[id='reportToday']",
+            "class": ""
+          },
+          {
+            "id": "[id='reportTomorrow']",
+            "class": "display-amp"
+          },
+          {
+            "id": "[id='sloganToday']",
+            "class": ""
+          },
+          {
+            "id": "[id='sloganTomorrow']",
+            "class": "display-amp"
+          }
+        ],
+        "tomorrow": [
+          {
+            "id": "[id='btnToday']",
+            "class": ""
+          },
+          {
+            "id": "[id='btnTomorrow']",
+            "class": "active"
+          },
+          {
+            "id": "[id='reportToday']",
+            "class": "display-amp"
+          },
+          {
+            "id": "[id='reportTomorrow']",
+            "class": ""
+          },
+          {
+            "id": "[id='sloganToday']",
+            "class": "display-amp"
+          },
+          {
+            "id": "[id='sloganTomorrow']",
+            "class": ""
+          }
+        ]
+      }
+    }
+  }
+

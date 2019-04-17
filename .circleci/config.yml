@@ -1,0 +1,98 @@
+# Configuration file for https://circleci.com/gh/angular/angular-cli
+
+# Note: YAML anchors allow an object to be re-used, reducing duplication.
+# The ampersand declares an alias for an object, then later the `<<: *name`
+# syntax dereferences it.
+# See http://blog.daemonl.com/2016/02/yaml.html
+# To validate changes, use an online parser, eg.
+# http://yaml-online-parser.appspot.com/
+
+# Variables
+
+## IMPORTANT
+# If you change the `docker_image` version, also change the `cache_key` suffix and the version of
+# `com_github_bazelbuild_buildtools` in the `/WORKSPACE` file.
+# If you change the cache key prefix, also sync the restore_cache fallback to match.
+# Keep the static part of the cache key as prefix to enable correct fallbacks.
+# See https://circleci.com/docs/2.0/caching/#restoring-cache for how prefixes work in CircleCI.
+var_1: &docker_image angular/ngcontainer:0.10.0
+var_2: &cache_key angular_devkit-0.10.0-{{ checksum "yarn.lock" }}
+
+# Settings common to each job
+anchor_1: &defaults
+  working_directory: ~/ng
+  docker:
+    - image: *docker_image
+
+# After checkout, rebase on top of target branch.
+# anchor_2: &post_checkout
+#   run:
+#     name: Rebase PR on target branch
+#     command: >
+#       if [[ -n "${CIRCLE_PR_NUMBER}" ]]; then
+#         # User is required for rebase.
+#         git config user.name "angular-ci"	
+#         git config user.email "angular-ci"      
+#         # Rebase PR on top of target branch.
+#         node tools/rebase-pr.js angular/angular-cli ${CIRCLE_PR_NUMBER}
+#       else
+#         echo "This build is not over a PR, nothing to do."
+#       fi
+anchor_3: &restore_cache
+  restore_cache:
+    keys:
+      - *cache_key
+      # This fallback should be the cache_key without variables.
+      - angular_devkit-0.7.0-
+anchor_4: &attach_options
+  at: .
+
+# Job definitions
+version: 2
+jobs:
+  install:
+    <<: *defaults
+    steps:
+      - checkout
+      - *restore_cache
+      - run: yarn install --frozen-lockfile
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./*
+      - save_cache:
+          key: *cache_key
+          paths:
+            - ~/.cache/yarn
+
+
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace: *attach_options
+      - run: npm run test 
+
+ 
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace: *attach_options
+      - run: npm run admin -- build
+
+  
+
+workflows:
+  version: 2
+  default_workflow:
+    jobs:
+      - install
+      - build:
+          requires:
+            - install
+          filters:
+            branches:
+              ignore:
+              - /docs-preview/
+      - test:
+          requires:
+            - build

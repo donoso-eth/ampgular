@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsSchematicSchema",
+  "title": "Schematic Options Schema",
+  "type": "object",
+  "properties": {
+    "target": {
+      "type": "string",
+      "description": "The package name for the new schematic.",
+      "enum": ["node", "browser"],
+      "x-prompt": "Which configuration you want to install?"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author for the new schematic."
+    }
+  },
+  "required": []
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "@type": "Organization",
+  "type": "object",
+  "title": "The Root Schema",
+  "properties": {
+  "address": {
+    "$ref": "../address/schema.json#"
+  },
+  "sameAs": {
+    "title": "Organization profiles in Social Networks",
+    "type": "array",
+    "items": {
+      "type": "string"
+    }
+  },
+  "contactPoint": {
+    "$ref": "../contact-point/schema.json#"
+  },
+  "logo": {
+    "$ref": "../logo/schema.json#"
+  },
+  "email": {
+    "type": "string",
+    "title": "Organization email"
+  },
+  "name": {
+    "type": "string",
+    "title": "Organization name"
+  },
+  "description": {
+    "type": "string",
+    "title": "Organization Description"
+  },
+  "url": {
+    "type": "string",
+    "title": "Organization Homepage Url"
+  },
+  "telephone": {
+    "type": "string",
+    "title": "Organization telephone"
+  }
+},
+"required": [
+  "name",
+  "description",
+  "email","telephone","url","address"
+  ,"logo"
+]
+}

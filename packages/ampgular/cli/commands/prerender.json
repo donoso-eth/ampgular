@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "amp-cli://commands/prerender.json",
+  "description": "Lists available commands and their short descriptions.",
+  "$longDescription": "./prerender-long.md",
+
+  "$scope": "all",
+  "$aliases": [],
+  "$impl": "./prerender-impl#PrerenderCommand",
+  "type": "object",
+  "allOf": [
+    { "$ref": "./definitions.json#/definitions/base" }
+  ],
+  "required": [
+  
+  ]
+}

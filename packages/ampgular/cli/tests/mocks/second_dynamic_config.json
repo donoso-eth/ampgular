@@ -1,0 +1,25 @@
+{
+  "contactForm": {
+     "routes": {
+        "match": [
+           "/es/about-us-nuilea-day-spa/contacto",
+           "/en/about-us-nuilea-day-spa/contact",
+           "/de/ueber-uns-spa-madrid/kontakt",
+           "/fr/about-us-nuilea-day-spa/contact"
+        ]
+     },
+     "forms": [
+        {
+           "id": "contactFormGroup",
+           "type": "post",
+           "api": "https://us-central1-madrid-day-spa.cloudfunctions.net/returnContactFunction",
+           "state": [
+              "loading",
+              "success",
+              "error"
+           ],
+           "validation": true
+        }
+     ]
+  }
+}

@@ -1,0 +1,361 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "amp-cli://schemas/definitions.amp.json",
+  "definitions": {
+    "simpleComponent": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "routes": {
+              "$ref": "#/definitions/ampRoute"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["simple"]
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ampEvent"
+              }
+            },
+            "css": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ampClass"
+              }
+            }
+          },
+          "required": ["route", "type", "events", "css"]
+        }
+      }
+    },
+    "scrollComponent": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "routes": {
+              "$ref": "#/definitions/ampRoute"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["scroll"]
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ampEventScroll"
+              }
+            }
+          },
+          "required": ["route", "type", "events"]
+        }
+      }
+    },
+    "listSingleComponent": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "routes": {
+              "$ref": "#/definitions/ampRoute"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["list-single"]
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ampEvent"
+              }
+            },
+            "css": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ampClass"
+              }
+            }
+          },
+          "required": ["events", "type", "css", "route"]
+        }
+      }
+    },
+    "listBindComponent": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "routes": {
+              "$ref": "#/definitions/ampRoute"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["list-bind"]
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ampEvent"
+              }
+            },
+            "css": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ampClassArray"
+              }
+            }
+          },
+          "required": ["route", "type", "events", "css"]
+        }
+      }
+    },
+    "multiBindComponent": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "routes": {
+              "$ref": "#/definitions/ampRoute"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["multi-bind"]
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ampEventBind"
+              }
+            },
+            "css": {
+              "type": "object",
+              "patternProperties": {
+                ".*": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ampClass"
+                  }
+                }
+              }
+            }
+          },
+          "required": ["route", "type", "events", "css"]
+        }
+      }
+    },
+    "listGetComponent": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "api": {
+          "type": "string"
+        },
+        "inputs": {
+          "type": "object",
+          "properties": {
+            "fixed": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "required": ["type", "id", "api", "inputs"]
+    },
+    "listPostComponent": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "api": {
+          "type": "string"
+        },
+        "inputs": {
+          "type": "object",
+          "properties": {
+            "fixed": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "bind": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["bind", "fixed"]
+        },
+        "state": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ampState": {
+          "type": "string"
+        },
+        "src": {
+          "type": "string"
+        },
+        "height": {
+          "type": "string"
+        },
+        "submit": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ampEvent"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "api",
+        "inputs",
+        "state",
+        "ampState",
+        "src",
+        "submit"
+      ]
+    },
+    "formPostComponent": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum":["post"]
+        },
+        "id": {
+          "type": "string"
+        },
+        "api": {
+          "type": "string"
+        },
+        "state": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validation": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "api",
+        "inputs",
+        "state",
+        "validation"
+      ]
+    },
+    "ampRoute": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "length": {
+            "type": "number"
+          }
+        },
+        "required": ["match"]
+      }
+    },
+    "ampEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "event": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "event"]
+    },
+    "ampEventBind": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "event": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "event"]
+    },
+    "ampEventScroll": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "number"
+        }
+      },
+      "required": ["id", "target", "duration"]
+    },
+    "ampClassArray": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "class": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["id", "class"]
+    },
+    "ampClass": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "class"]
+    }
+  }
+}

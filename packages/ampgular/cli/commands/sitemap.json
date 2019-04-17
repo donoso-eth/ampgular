@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "amp-cli://commands/sitemap.json",
+  "description": "CSITEMAPspace directory.",
+  "$longDescription": "./sitemap-long.md",
+
+  "$aliases": ["d"],
+  "$scope": "in",
+  "$type": "sitemap",
+  "$impl": "./sitemap-impl#SitemapCommand",
+  "allOf": [
+    { "$ref": "./definitions.json#/definitions/base" }
+   
+  ]
+}

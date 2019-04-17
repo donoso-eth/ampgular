@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "@ampgular/common/json-ld/review-snippet",
+  "type": "object",
+  "title": "Video Object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "thumbnailUrl": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "uploadDate": {
+      "type": "string"
+    },
+    "contentUrl": {
+      "type": "string"
+    },
+    "embedUrl": {
+      "type": "string"
+    },
+    "expires": {
+      "type": "string"
+    },
+    "interactionCount": {
+      "type": "string"
+    }
+  },
+"required":["description","name","thumbnailUrl","uploadDate"]
+
+}

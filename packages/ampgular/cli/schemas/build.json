@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Build Config",
+  "$id": "amp-cli://schemas/build.json",
+  "description": "Build Configuration",
+  "type": "object",
+  "allOf": [{
+      "$ref": "./definitions.json#/definitions/build"
+    }]
+  }

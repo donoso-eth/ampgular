@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "@ampgular/common/json-ld/review-snippet",
+  "type": "object",
+  "title": "The Review Snippet  Schema",
+  "required": [
+   "potentialAction","url"
+  ],
+  "properties": {
+    "@type": {
+      "type": "string"
+    },
+    "potentialAction": {
+      "type":"array",
+      "items": {
+        "$ref": "../review-rating/schema.json#"
+      },
+     "maxItems": 2
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}

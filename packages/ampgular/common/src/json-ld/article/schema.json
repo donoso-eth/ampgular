@@ -1,0 +1,99 @@
+{
+
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "mainEntityOfPage",
+    "headline",
+    "image",
+    "datePublished",
+    "dateModified",
+    "author",
+    "publisher",
+    "description"
+  ],
+  "properties": {
+    "@type": {
+      "type": "string",
+      "title": "The @type Schema",
+      "enum": [
+        "NewsArticle", "Article", "BlogPosting"
+      ]
+    },
+    "mainEntityOfPage": {
+      "type": "object",
+      "title": "The Mainentityofpage Schema",
+      "required": [
+        "@type",
+        "@id"
+      ],
+      "properties": {
+        "@type": {
+          "$id": "#/properties/mainEntityOfPage/properties/@type",
+          "type": "string",
+          "title": "The @type Schema",
+          "default": "",
+          "examples": [
+            "WebPage"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "@id": {
+          "$id": "#/properties/mainEntityOfPage/properties/@id",
+          "type": "string",
+          "title": "The @id Schema",
+          "default": "",
+          "examples": [
+            "https://google.com/article"
+          ],
+          "pattern": "^(.*)$"
+        }
+      }
+    },
+    "headline": {
+      "type": "string",
+      "title": "The Headline Schema"
+    },
+    "image": {
+      "type": "array",
+      "title": "The Image Schema",
+      "items": {
+        "$id": "#/properties/image/items",
+        "type": "string"
+      }
+    },
+    "datePublished": {
+
+      "type": "string",
+      "title": "The Datepublished Schema"
+    },
+    "dateModified": {
+      "type": "string",
+      "title": "The Datemodified Schema"
+
+    },
+    "author": {
+      "oneOf": [{
+          "$ref": "../organization/schema.json#"
+        },
+        {
+          "$ref": "../person/schema.json#"
+        }
+      ]
+    },
+    "publisher": {
+      "$ref": "../organization/schema.json#"
+    },
+    "description": {
+      "$id": "#/properties/description",
+      "type": "string",
+      "title": "The Description Schema",
+      "default": "",
+      "examples": [
+        "A most wonderful article"
+      ],
+      "pattern": "^(.*)$"
+    }
+  }
+}

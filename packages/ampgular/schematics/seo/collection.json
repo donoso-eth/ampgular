@@ -1,0 +1,9 @@
+{
+  "schematics": {
+    "ng-add": {
+      "factory": "./index#seo",
+      "schema": "./schema.json",
+      "description": "Create an seo helper to the current project."
+    }
+  }
+}

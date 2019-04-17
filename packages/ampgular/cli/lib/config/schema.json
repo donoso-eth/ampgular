@@ -1,0 +1,302 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "ampgular-che,a",
+  "title": "Ampgular CLI Configuration",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "$ref": "#/definitions/fileVersion"
+    },
+    "host": {
+      "type": "string",
+      "description": "Web server from where the app will be served"
+    },
+    "target": {
+      "type": "string",
+      "enum": ["node", "browser"],
+      "description": "Rendering options, choose --configuration=client for Browser Rendering  or --configuration=server for Server Side (Node) Renderring, traditional SSR  "
+    },
+    "amp": {
+      "type": "object",
+      "properties": {
+        "route": {
+          "description": "Amp Page to be rendered, required only for devs (--test flag)",
+          "type": "string",
+          "default": true
+        },
+        "test": {
+          "description": "Create only one AMp Page (route porperty) and spin a loclaserver to easy the devs process",
+          "type": "boolean",
+          "default": false
+        },
+        "ampValidation": {
+          "description": "Launch the amp validation function",
+          "type": "boolean",
+          "default": true
+        },
+        "cssOptimize": {
+          "description": "Optimize the css and applying Purify-css, short css and cleancss",
+          "type": "boolean",
+          "default": true
+        },
+        "serviceWorker": {
+          "description": "Add Service Worker",
+          "type": "boolean",
+          "default": false
+        },
+        "stateFiles": {
+          "description": "Path to state config Files, per default the main state",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["/ampgular/amp/main_state_config"]
+        },
+        "dynamicFiles": {
+          "description": "Path to Dynamic config Files, per default the main dynamic",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["/ampgular/amp/main_dynamic_config"]
+        },
+        "pluginsFiles": {
+          "description": "Path to Pluggin File",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["/ampgular/amp/pluggings_config"]
+        }
+      },
+      "required": [
+        "ampValidation",
+        "cssOptimize",
+        "serviceWorker",
+        "stateFiles",
+        "dynamicFiles",
+        "pluginsFiles"
+      ]
+    },
+    "deploy": {
+      "type": "object",
+      "properties": {
+        "targetApp": {
+          "type": "string",
+          "enum": ["spa", "prerender", "ssr"]
+        },
+        "sitemap": {
+          "type": "boolean"
+        },
+        "robots": {
+          "type": "boolean"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              }
+            },
+            "required": ["from", "to"]
+          }
+        }
+      },
+      "required": ["robots", "sitemap", "files", "targetApp"]
+    },
+    "buildConfig": {
+      "type": "object",
+      "properties": {
+        "build": {
+          "type": "boolean",
+          "description": "A build must be launch",
+          "default": false
+        },
+        "configuration": {
+          "type": "string",
+          "enum": ["production", "seo", "amp"]
+        }
+      }
+    },
+    "renderConfig": {
+      "type": "object",
+      "properties": {
+        "port": {
+          "type": "string",
+          "description": "Port to be used for Express ",
+          "default": false
+        },
+        "node": {
+          "type": "object",
+          "properties": {
+            "webpack": {
+              "type": "boolean",
+              "description": " Must the server Render inlcude a Webpackbundle",
+              "default": false
+            },
+            "localhost": {
+              "type": "boolean",
+              "description": " Must the server Render spin a localhost",
+              "default": false
+            }
+          }
+        }
+      }
+    },
+    "prerender": {
+      "id": "@ampgular/cli/spider",
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "excludeQuery": {
+              "description": "When true, indocate the routes are going to fight",
+              "type": "boolean",
+              "default": false,
+              "alias": "r"
+            },
+            "cssOptimize": {
+              "description": "Ensure Canonical",
+              "type": "boolean",
+              "default": true
+            },
+            "namedFiles": {
+              "description": "Ensure DryRun",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "required": ["cssOptimize"]
+        }
+      ]
+    },
+    "spider": {
+      "id": "@ampgular/cli/spider",
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "entryPaths": {
+              "description": "Entry Paths for ",
+              "type": "array",
+              "default": ["/"],
+              "alias": "en",
+              "items": {
+                "type": "string"
+              }
+            },
+            "includePaths": {
+              "description": "Ensure this url's are included",
+              "type": "array",
+              "default": [],
+              "alias": "in",
+              "items": {
+                "type": "string"
+              }
+            },
+            "excludePaths": {
+              "description": "Excluded following url's",
+              "type": "array",
+              "default": [],
+              "alias": "ex",
+              "items": {
+                "type": "string"
+              }
+            },
+            "excludeQuery": {
+              "description": "When true, indocate the routes are going to fight",
+              "type": "boolean",
+              "default": false,
+              "alias": "r"
+            },
+            "ensureCanonical": {
+              "description": "Ensure Canonical",
+              "type": "boolean",
+              "default": true
+            },
+            "dryRun": {
+              "description": "Ensure DryRun",
+              "type": "boolean",
+              "default": true
+            },
+            "verbose": {
+              "description": "When true, print out the exluded and discarded paths",
+              "type": "boolean",
+              "default": false,
+              "alias": "r"
+            }
+          },
+          "required": ["entryPaths"]
+        }
+      ]
+    },
+    "sitemap": {
+      "id": "@ampgular/cli/sitemap",
+      "type": "object",
+      "properties": {
+        "defaultPriority": {
+          "type": "number",
+          "default": 1
+        },
+        "defaultFrecuency": {
+          "type": "string",
+          "default": "weekly"
+        },
+        "custom": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "frecuency": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "number"
+              },
+              "urls": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "prerender",
+    "target",
+    "buildConfig",
+    "renderConfig",
+    "spider"
+  ],
+  "definitions": {
+    "fileVersion": {
+      "type": "integer",
+      "description": "File format version",
+      "minimum": 1
+    },
+    "render": {
+      "type": "object",
+      "properties": {
+        "excludeQuery": {
+          "type": "boolean",
+          "default": false,
+          "description": "Urls with AqueryParams have to be crawled?"
+        }
+      }
+    }
+  }
+}

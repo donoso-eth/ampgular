@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "amp-cli://schemas/definitions.json",
+  "definitions": {
+    "render": {
+      "type": "object",
+      "properties": {
+        "build": {
+          "type": "boolean",
+          "default": false,
+          "description": "Prebuil the application prioe to spider"
+        },
+        "webpack": {
+          "type": "boolean",
+          "default": false,
+          "description": "When Server Configuration....."
+        },
+        "excludeQuery": {
+          "type": "boolean",
+          "default": false,
+          "description": "Urls with AqueryParams have to be crawled?"
+        }
+      }
+    },
+    "node": {
+      "type": "object",
+      "properties": {
+        "webpack": {
+          "type": "boolean",
+          "description": " Must the server Render inlcude a Webpackbundle",
+          "default": false
+        },
+        "localhost": {
+          "type": "boolean",
+          "description": " Must the server Render spin a localhost",
+          "default": false
+        }
+      }
+    
+
+    },
+    "build": {
+      "type":"object",
+      "properties": {
+        "build": {
+          "type": "boolean",
+          "description": "A build must be launch",
+          "default": "false"
+        },
+        "configuration": {
+          "type": "string",
+          "enum": [
+            "production",
+            "seo",
+            "amp"
+          ]
+        }
+      },
+      "required": ["build", "configuration"]
+
+    },
+    "base": {
+      "type": "object",
+      "properties": {
+        "help": {
+          "enum": [true, false, "json", "JSON"],
+          "description": "Shows a help message for this command in the console.",
+          "default": false
+        }
+      }
+    }
+  }
+}

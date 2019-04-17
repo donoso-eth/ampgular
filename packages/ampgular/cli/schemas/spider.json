@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Spider",
+  "$id": "amp-cli://schemas/spider.json",
+  "description": "Spider Command to Crawl the Site",
+  "type": "object",
+  "allOf": [{
+      "type": "object",
+      "properties": {
+        "entryPaths": {
+          "description": "Entry Paths for ",
+          "type": "array",
+          "default": ["/"],
+          "alias": "en",
+          "items": {
+            "type": "string"
+          }
+        },
+        "includePaths": {
+          "description": "Ensure this url's are included",
+          "type": "array",
+          "default": [],
+          "alias": "in",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excludePaths": {
+          "description": "Excluded following url's",
+          "type": "array",
+          "default": [],
+          "alias": "ex",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excludeQuery": {
+          "description": "When true, indocate the routes are going to fight",
+          "type": "boolean",
+          "default": false,
+          "alias": "r"
+        },
+        "ensureCanonical": {
+          "description": "Ensure Canonical",
+          "type": "boolean",
+          "default": true
+        },
+        "dryRun": {
+          "description": "Ensure DryRun",
+          "type": "boolean",
+          "default": false
+        },
+        "verbose": {
+          "description": "When true, print out the exluded and discarded paths",
+          "type": "boolean",
+          "default": false
+        }
+
+      },
+      "required": ["entryPaths"]
+    },
+    {
+  
+      "$ref": "./definitions.json#/definitions/build"
+ 
+  },
+    {
+  
+        "$ref": "./definitions.json#/definitions/node"
+   
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "The Eveny schema Schema",
+  "properties": {
+    "location": {
+      "$ref": "../location/schema.json#"
+    },
+    "startDate":{
+      "type": "string"
+    },
+    "endDate": {
+      "type": "string"
+    },
+    "name":{
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "image": {
+      "type": "array",
+      "items": { 
+        "type":"string"
+      }
+    },
+    "offers": { "$ref": "../offers/schema.json#"},
+    "performer": {
+      "oneOf": [{
+        "$ref": "../person/schema.json#"
+      },{
+        "$ref": "../organization/schema.json#"
+      }]
+    }
+  },
+
+  "required":["name","description","location","performer","startDate","endDate","image"]
+}

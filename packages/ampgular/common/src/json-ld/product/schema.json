@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "name",
+    "image",
+    "description",
+    "mpn"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "The Name Schema"
+    },
+    "image": {
+      "$id": "#/properties/image",
+      "type": "string",
+      "title": "The Image Schema",
+      "default": "",
+      "examples": [
+        "http://www.example.com/anvil_executive.jpg"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "description": {
+      "type": "string",
+      "title": "The Description "
+    },
+    "mpn": {
+      "type": "string",
+      "title": "The Mpn Schema"
+    },
+    "brand": {
+      "$id": "#/properties/brand",
+      "type": "object",
+      "title": "The Brand Schema",
+      "required": [
+        "@type",
+        "name"
+      ],
+      "properties": {
+        "@type": {
+          "$id": "#/properties/brand/properties/@type",
+          "type": "string",
+          "title": "The @type Schema",
+          "default": "",
+          "examples": [
+            "Thing"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "name": {
+          "$id": "#/properties/brand/properties/name",
+          "type": "string",
+          "title": "The Name Schema",
+          "default": "",
+          "examples": [
+            "ACME"
+          ],
+          "pattern": "^(.*)$"
+        }
+      }
+    },
+    "aggregateRating": {
+      "$ref": "../aggregate-rating/schema.json#"
+    },
+    "offers": {
+      "$ref": "../offers/schema.json#"
+    }
+  }
+}

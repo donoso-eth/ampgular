@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "amp-cli://commands/spider.json",
+  "description": "Crawl the site to create an array of paths/urls for later prerender or ssr .",
+  "$longDescription": "./spider-long.md",
+
+  "$aliases": [ "s" ],
+  "$scope": "in",
+  "$type": "render",
+  "$impl": "./spider-impl#SpiderCommand",
+
+  "allOf": [
+    { "$ref": "./definitions.json#/definitions/base" }
+  ]
+}

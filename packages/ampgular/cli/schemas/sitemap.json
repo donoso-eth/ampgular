@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Sitemap",
+  "description": "Sitemap Command",
+  "type": "object",
+  "properties": {
+    "defaultPriority": {
+      "type": "number",
+      "default": 1
+    },
+    "defaultFrecuency": {
+      "type": "string",
+      "default": "weekly"
+    },
+    "custom": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/custom"
+      }
+    }
+  },
+  "definitions": {
+    "custom": {
+      "type": "object",
+      "properties": {
+        "frecuency": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "number"
+        },
+        "urls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+"additionalProperties": false
+}

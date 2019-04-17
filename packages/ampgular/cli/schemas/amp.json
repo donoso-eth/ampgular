@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Amp properties",
+  "$id": "amp-cli://schemas/me.json",
+  "description": "Amp cnfiguration for Amp Pages Workflow",
+  "type": "object",
+  "properties": {
+    "route": {
+      "description": "Amp Page to be rendered, required only for devs (--test flag)",
+      "type": "string",
+      "default": true
+    },
+    "test": {
+      "description": "Create only one AMp Page (route porperty) and spin a loclaserver to easy the devs process",
+      "type": "boolean",
+      "default": false
+    },
+    "ampValidation": {
+      "description": "Launch the amp validation function",
+      "type": "boolean",
+      "default": true
+    },
+    "cssOptimize": {
+      "description": "Optimize the css and applying Purify-css, short css and cleancss",
+      "type": "boolean",
+      "default": true
+    },
+    "serviceWorker": {
+      "description": "Add Service Worker",
+      "type": "boolean",
+      "default": false
+    },
+    "host": {
+      "description": "Add Service Worker",
+      "type": "string"
+    },
+    "stateFiles": {
+      "description": "Path to state config Files, per default the main state",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": ["/ampgular/amp/main_state_config"]
+    },
+    "dynamicFiles": {
+      "description": "Path to Dynamic config Files, per default the main dynamic",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": ["/ampgular/amp/main_dynamic_config"]
+    },
+    "pluginsFiles": {
+      "description": "Path to Pluggin File",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": ["/ampgular/amp/plugging_config"]
+    }
+  },
+  "required": [
+    "ampValidation",
+    "cssOptimize",
+    "serviceWorker",
+    "stateFiles",
+    "dynamicFiles",
+    "pluginsFiles",
+    "host"
+  ]
+}
