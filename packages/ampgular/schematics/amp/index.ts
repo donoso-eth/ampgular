@@ -117,7 +117,6 @@ function changeConfigPaths(options: any, host: Tree): Rule {
     const clientProject: test = workspace.projects[options.clientProject] as {};
 
 
-
     if (target == 'node') {
 
       clientProject.architect.server.configurations['amp'] =

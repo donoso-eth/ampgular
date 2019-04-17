@@ -8,11 +8,11 @@
         },
         {
           "title": "![Dependency Status](https://david-dm.org/ampgular.svg)",
-          "url": "https://david-dm.org/ampgular/ampgular"
+          "url": "https://david-dm.org/ampgular"
         },
         {
           "title": "![devDependency Status](https://david-dm.org/ampgular/dev-status.svg)",
-          "url": "https://david-dm.org/ampgular/ampgular?type=dev"
+          "url": "https://david-dm.org/ampgular?type=dev"
         }
       ],
       [

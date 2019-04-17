@@ -4,8 +4,6 @@ import { AmpDescription } from '../models/interface';
 const PUBLIC_FOLDER = join(process.cwd(), 'dist', 'public');
 
 
-
-
 const createSWInstallPage = async (args: AmpDescription) => {
 
   const html = `<!DOCTYPE html> <html><head>

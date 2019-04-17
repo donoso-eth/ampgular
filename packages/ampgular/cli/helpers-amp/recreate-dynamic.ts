@@ -1,10 +1,9 @@
 import { load } from 'cheerio';
 import * as minimatch from 'minimatch';
 import { AmpDescription } from '../models/interface';
-import { Schema  as ListGetComponentSchema } from '../schemas/component-list-get'
-import { Schema  as ListPostComponentSchema } from '../schemas/component-list-post'
-import { Schema  as FormPostComponentSchema } from '../schemas/component-form-post'
-
+import { Schema  as FormPostComponentSchema } from '../schemas/component-form-post';
+import { Schema  as ListGetComponentSchema } from '../schemas/component-list-get';
+import { Schema  as ListPostComponentSchema } from '../schemas/component-list-post';
 import { recreateEvent } from './utils';
 
 export const createFormPostComponent = async (

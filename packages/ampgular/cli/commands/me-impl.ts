@@ -40,8 +40,8 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
   private pluginsFilesMap: dynamicMap = {
   };
   private _myPageState: StateSchema;
-  private _myPageDynamic:any;
-  private _myPagePlugins:any;
+  private _myPageDynamic: any;
+  private _myPagePlugins: any;
 
   public async initialize(options: MeCommandSchema & Arguments): Promise<void> {
     await super.initialize(options);

@@ -9,19 +9,19 @@
 import { AmpDescription } from '../models/interface';
 import {
   AmpClassArray as ClassAmpListBind, AmpEvent as EventAmpListBind,
-  Schema as ListBindComponentSchema
+  Schema as ListBindComponentSchema,
 } from '../schemas/component-list-bind';
 import {
   AmpClass as ClassAmpListSingle, AmpEvent as EventAmpListSingle,
-  Schema as ListSingleComponentSchema
+  Schema as ListSingleComponentSchema,
 } from '../schemas/component-list-single';
 import {
   AmpClass as ClassAmpMultiBind,
-  Schema as MultiBindComponentSchema
+  Schema as MultiBindComponentSchema,
 } from '../schemas/component-multi-bind';
 import {
   AmpEventScroll,
-  Schema as ScrollComponentSchema
+  Schema as ScrollComponentSchema,
 } from '../schemas/component-scroll';
 import { AmpClass, Schema as SimpleComponentSchema } from '../schemas/component-simple';
 import { recreateEvent } from './utils';

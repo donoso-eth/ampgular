@@ -221,7 +221,7 @@ extends RenderCommand<SpiderCommandSchema> {
     const href = body.querySelectorAll('[href]');
     for (let index = 0; index < href.length; index++) {
       const attr = href.item(index).getAttribute('href') as string;
-      attr.indexOf(':') == -1 ? routesHref.push(attr):'';
+      attr.indexOf(':') == -1 ? routesHref.push(attr) : '';
     }
 
     return routesHref;

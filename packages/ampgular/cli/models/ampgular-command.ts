@@ -1,4 +1,4 @@
-import { experimental, join, json, normalize, terminal, Path } from '@angular-devkit/core';
+import { Path, experimental, join, json, normalize, terminal } from '@angular-devkit/core';
 import { NodeJsSyncHost } from '@angular-devkit/core/node';
 import chalk from 'chalk';
 import { readFileSync } from 'fs';

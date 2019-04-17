@@ -68,7 +68,7 @@
     "packages/ampgular/cli/helpers-amp/temp/**/*",
     "node_modules",
     "**/__test*", //exclude all that *__test*
-    "**/*._spec.ts" // exclude all that contain "spec.ts" in name
+    "/**/*._spec.ts" // exclude all that contain "spec.ts" in name
 
     ]
 }

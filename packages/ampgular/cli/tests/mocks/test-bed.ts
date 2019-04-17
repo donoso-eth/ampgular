@@ -163,19 +163,19 @@ export class TestBed {
          singleUniStyle: globalCss,
          customScript: [],
          angCompo: [],
-         pageDynamic:{},
-         pageState:{},
-         pagePluggins:{},
-         options:{
-           cssOptimize:true,
-           ampValidation:true,
-           dynamicFiles:[],
-           serviceWorker:true,
-           host:"",
-           pluginsFiles:[],
-           stateFiles:[]
+         pageDynamic: {},
+         pageState: {},
+         pagePluggins: {},
+         options: {
+           cssOptimize: true,
+           ampValidation: true,
+           dynamicFiles: [],
+           serviceWorker: true,
+           host: '',
+           pluginsFiles: [],
+           stateFiles: [],
 
-         }
+         },
         };
 
      return testDescription;

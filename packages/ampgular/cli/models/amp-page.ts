@@ -32,7 +32,7 @@ export class AmpPage {
 
     }
 
-    public initialize(options: AmpOptions, pageState:any, pageDynamic:any, pagePluggins:any) {
+    public initialize(options: AmpOptions, pageState: any, pageDynamic: any, pagePluggins: any) {
 
         this._angularString =
         readFileSync(join(this.PUBLIC_FOLDER, (options as any).route

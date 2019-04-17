@@ -49,7 +49,7 @@ describe('BE READY SPEC STYLES & COMPONENTS', () => {
         stateFiles: [],
         serviceWorker: true,
         pluginsFiles: [''],
-        host:''
+        host: '',
     };
 
     const BeReadySpecClass = jasmine.createSpy('BeReadySpec');
