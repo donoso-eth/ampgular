@@ -4,6 +4,7 @@
   "description": "Common Dunctions and Schemas for AMPgular",
   "experimental": true,
   "main": "src/index.js",
+  "typings": "src/index.d.ts",
   "keywords": [
     "blueprints",
     "code generation",

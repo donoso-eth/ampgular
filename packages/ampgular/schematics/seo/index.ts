@@ -16,34 +16,33 @@ import {
   template,
   url,
 } from '@angular-devkit/schematics';
-import { throws } from 'assert';
-import * as ts from 'typescript';
-import { getWorkspace, getWorkspacePath } from './utility';
-import {
-  // getDecoratorMetadata,
-  // findNode,
-  addImportToModule,
-} from './utility';
-import { InsertChange } from './utility';
+import { WorkspaceProject, WorkspaceSchema, getWorkspace, getWorkspacePath } from './utility';
+
 // import { JsonObject } from "../core/src";
 
-export interface test {
+export interface Test {
+  // tslint:disable-next-line:no-any
   architect?: any;
 }
 
-function listProjectNames(workspace: any): string[] {
+export interface SeoOptions {
+  target: string;
+  clientProject?: string;
+}
+
+function listProjectNames(workspace: { [k: string]: WorkspaceProject; }): string[] {
   return Object.keys(workspace);
 }
 
-function getDefaultProjectName(workspace: any): string | null {
+function getDefaultProjectName(workspace: WorkspaceSchema): string | null {
 
 
   if (workspace.defaultProject) {
     // If there is a default project name, return it.
     return workspace.defaultProject;
-  } else if (listProjectNames(workspace).length === 1) {
+  } else if (listProjectNames(workspace.projects).length === 1) {
     // If there is only one project, return that one.
-    return listProjectNames(workspace)[0];
+    return listProjectNames(workspace.projects)[0];
   }
 
   // Otherwise return null.
@@ -51,8 +50,8 @@ function getDefaultProjectName(workspace: any): string | null {
 }
 
 function getClientProjectOptions(
-  options: any, host: Tree,
-): experimental.workspace.WorkspaceProject {
+  options: SeoOptions, host: Tree,
+): SeoOptions {
   const workspace = getWorkspace(host);
   const maybeProjectNames = listProjectNames(workspace.projects);
   let projectName;
@@ -83,7 +82,7 @@ function getClientProjectOptions(
 }
 
 
-function externalUniversal(options: any, host: Tree): Rule {
+function externalUniversal(options: SeoOptions, host: Tree): Rule {
   const filePathServer = '/src/app/app.server.module.ts';
   const existsUniversal = host.exists(filePathServer);
   if (options.clientProject == undefined) {
@@ -95,7 +94,6 @@ function externalUniversal(options: any, host: Tree): Rule {
       return host;
     };
   } else {
-    // if not client Project passed (necesary for Universal Schematics), will resolve it when a default project exists
 
 
     return branchAndMerge(
@@ -105,22 +103,21 @@ function externalUniversal(options: any, host: Tree): Rule {
 }
 
 
-function changeConfigPaths(options: any, host: Tree): Rule {
+function changeConfigPaths(options: SeoOptions, host: Tree): Rule {
   return (host: Tree) => {
     const workspace = getWorkspace(host);
 
     const { target } = options;
-    const configAvailable: any = {
-      server: { test: 'server' },
-      client: { test: 'client' },
-    };
 
 
-    const clientProject: test = workspace.projects[options.clientProject] as {};
+    console.log(options);
+    console.log('seo');
+    const clientProject: Test = workspace.projects[options.clientProject as string] as {};
 
     if (target == 'node') {
 
-      clientProject.architect.server.configurations['seo'] = Object.assign({}, clientProject.architect.server.configurations['production'])
+      clientProject.architect.server.configurations['seo'] =
+      Object.assign({}, clientProject.architect.server.configurations['production'])
         ;
       clientProject.architect.server.configurations['seo'][
         'fileReplacements'
@@ -132,7 +129,8 @@ function changeConfigPaths(options: any, host: Tree): Rule {
         ];
     } else {
 
-      clientProject.architect.build.configurations['seo'] = Object.assign({}, clientProject.architect.build.configurations['production'])
+      clientProject.architect.build.configurations['seo'] =
+      Object.assign({}, clientProject.architect.build.configurations['production'])
         ;
       clientProject.architect.build.configurations['seo'][
         'fileReplacements'
@@ -152,7 +150,7 @@ function changeConfigPaths(options: any, host: Tree): Rule {
   };
 }
 
-function createFiles(options: any, host: Tree): Rule {
+function createFiles(options: SeoOptions, host: Tree): Rule {
 
 
   const templateSource = applyWithOverwrite(url('./files'), [
@@ -194,71 +192,47 @@ function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
   };
 }
 
-function addModuleLoader(): Rule {
-  return (host: Tree) => {
-    host.getDir('src').visit(filePath => {
-      if (!filePath.endsWith('app.server.module.ts')) {
-        return;
-      }
-      const content = host.read(filePath);
+// function addModuleLoader(): Rule {
+//   return (host: Tree) => {
+//     host.getDir('src').visit(filePath => {
+//       if (!filePath.endsWith('app.server.module.ts')) {
+//         return;
+//       }
+//       const content = host.read(filePath);
 
-      if (!content) {
-        throw new SchematicsException(`app.server.modulets does not exist.`);
-      }
-      const sourceText = content.toString('utf-8');
+//       if (!content) {
+//         throw new SchematicsException(`app.server.modulets does not exist.`);
+//       }
+//       const sourceText = content.toString('utf-8');
 
-      const source = ts.createSourceFile(
-        filePath,
-        sourceText,
-        ts.ScriptTarget.Latest,
-        true,
-      );
+//       const source = ts.createSourceFile(
+//         filePath,
+//         sourceText,
+//         ts.ScriptTarget.Latest,
+//         true,
+//       );
 
-      const importRecorder = host.beginUpdate(filePath);
-      const importChanges = addImportToModule(
-        source,
-        filePath,
-        'ModuleMapLoaderModule',
-        '@nguniversal/module-map-ngfactory-loader',
-      );
+//       const importRecorder = host.beginUpdate(filePath);
+//       const importChanges = addImportToModule(
+//         source,
+//         filePath,
+//         'ModuleMapLoaderModule',
+//         '@nguniversal/module-map-ngfactory-loader',
+//       );
 
-      for (const change of importChanges) {
-        if (change instanceof InsertChange) {
-          importRecorder.insertLeft(change.pos, change.toAdd);
-        }
-      }
-      host.commitUpdate(importRecorder);
+//       for (const change of importChanges) {
+//         if (change instanceof InsertChange) {
+//           importRecorder.insertLeft(change.pos, change.toAdd);
+//         }
+//       }
+//       host.commitUpdate(importRecorder);
 
-      return host;
-    });
-  };
-}
+//       return host;
+//     });
+//   };
+// }
 
-function addConfigurationToConfig(options: any): Rule {
-  return (tree: Tree) => {
-
-    const configPath = '/ampgular/ampgular.json';
-    const buffer = tree.read(configPath);
-
-    if (buffer === null) {
-      throw new SchematicsException('Could not find ampgualr.json');
-    }
-    const { target } = options;
-    const config = JSON.parse(buffer.toString());
-    config['target'] = target;
-    const configAvailable: any = {
-      server: { test: 'server' },
-      client: { test: 'client' },
-
-    };
-    config[target] = configAvailable[target];
-    tree.overwrite(configPath, JSON.stringify(config, null, 2));
-
-    return tree;
-  };
-}
-
-function updteEnvironmentFiles(options: any, tree: Tree): Rule {
+function updteEnvironmentFiles(options: SeoOptions, tree: Tree): Rule {
   return (tree: Tree) => {
 
     const envDev = tree.read('src/environments/environment.ts') as Buffer;
@@ -282,7 +256,8 @@ function updteEnvironmentFiles(options: any, tree: Tree): Rule {
 
       tree.overwrite('src/environments/environment.seo.ts', JSON.stringify(enProdConfig, null, 2));
       enProdConfig.seo = false;
-      tree.overwrite('src/environments/environment.server.ts', JSON.stringify(enProdConfig, null, 2));
+      tree.overwrite('src/environments/environment.server.ts',
+      JSON.stringify(enProdConfig, null, 2));
     }
 
 
@@ -290,7 +265,7 @@ function updteEnvironmentFiles(options: any, tree: Tree): Rule {
   };
 }
 
-function addDependenciesandCreateScripts(options: any): Rule {
+function addDependenciesandCreateScripts(options: SeoOptions): Rule {
   return (host: Tree) => {
     const pkgPath = '/package.json';
     const buffer = host.read(pkgPath);
@@ -299,10 +274,8 @@ function addDependenciesandCreateScripts(options: any): Rule {
     }
 
     const pkg = JSON.parse(buffer.toString());
-
     pkg.dependencies['@nguniversal/module-map-ngfactory-loader'] = '^7.1.1';
-    pkg.dependencies['@ampgular/cli'] = '^0.0.1';
-
+    pkg.dependencies['@nguniversal/express-engine'] = '^7.1.1';
 
     host.overwrite(pkgPath, JSON.stringify(pkg, null, 2));
 
@@ -310,7 +283,7 @@ function addDependenciesandCreateScripts(options: any): Rule {
   };
 }
 
-export function seo(options: any): Rule {
+export function seo(options: SeoOptions): Rule {
   return (tree: Tree, context: SchematicContext) => {
 
 
@@ -319,7 +292,7 @@ export function seo(options: any): Rule {
       createFiles(options, tree),
       changeConfigPaths(options, tree),
       addDependenciesandCreateScripts(options),
-      addConfigurationToConfig(options),
+      // addConfigurationToConfig(options),
     //  updteEnvironmentFiles(options,tree)
     ])(tree, context);
   };

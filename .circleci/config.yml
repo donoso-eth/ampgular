@@ -65,6 +65,11 @@ jobs:
           paths:
             - ~/.cache/yarn
 
+  lint:
+    <<: *defaults
+    steps:
+      - attach_workspace: *attach_options
+      - run: npm run lint
 
   test:
     <<: *defaults
@@ -85,7 +90,10 @@ workflows:
   version: 2
   default_workflow:
     jobs:
-      - install
+      - install      
+      - lint:
+          requires:
+            - install
       - build:
           requires:
             - install

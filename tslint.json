@@ -9,9 +9,14 @@
     "exclude": [
         "packages/ampgular/cli/tests/**",
         "packages/ampgular/cli/utilities/**",
-        "packages/ampgular/schematics/**",
+        "packages/ampgular/cli/models/**",
+        "packages/ampgular/schematics/seo/utility/**",
+        "packages/ampgular/schematics/amp/utility/**",
         "packages/ampgular/common/**",
-        "packages/ampgular/cli/lib/init.ts"
+        "packages/ampgular/cli/lib/init.ts",
+        "packages/ampgular/cli/helpers-amp/**",
+        "packages/ampgular/cli/helpers-seo/**",
+        "packages/ampgular/cli/commands/**"
     ]
 },
   "rulesDirectory": [
