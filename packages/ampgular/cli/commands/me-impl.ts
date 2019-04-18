@@ -29,8 +29,8 @@ import { getWorkspaceDetails } from '../utilities/project';
 import { getRoutes } from '../utilities/utils';
 import { runOptionsBuild } from '../utilities/workspace-extensions';
 import { Schema as DeployCommandSchema } from './deploy';
-import { Schema as MeCommandSchema } from './me';
 import { getCommandDescription } from './deploy-impl';
+import { Schema as MeCommandSchema } from './me';
 interface StateMap {
 
 }

@@ -21,7 +21,7 @@
     rxjs "6.3.3"
     source-map "0.7.3"
 
-"@angular-devkit/schematics@7.3.8", "@angular-devkit/schematics@^7.3.6":
+"@angular-devkit/schematics@7.3.8", "@angular-devkit/schematics@^7.3.6", "@angular-devkit/schematics@^7.3.8":
   version "7.3.8"
   resolved "https://registry.yarnpkg.com/@angular-devkit/schematics/-/schematics-7.3.8.tgz#70bfc7876f7924ff53ab9310a00b62f20acf2f5c"
   integrity sha512-mvaKoORZIaW/h0VNZ3IQWP0qThRCZRX6869FNlzV0jlW0mhn07XbiIGHCGGSCDRxS7qJ0VbuIVnKXntF+iDeWw==

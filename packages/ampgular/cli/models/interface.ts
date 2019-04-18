@@ -72,7 +72,7 @@ export type StateSchema  = {
 export interface State {
      css?:    Css;
      events:  AmpEvent[];
-     routes: AmpRoute[];
+     routes: AmpRoute;
      type:    ComponentType;
  }
 
@@ -120,7 +120,7 @@ export interface Dynamic {
   api:         string;
   height?:     string;
   id:          string;
-  routes: AmpRoute[];
+  routes: AmpRoute;
   // tslint:disable-next-line:no-any
   inputs:      any;
   src?:        string;
