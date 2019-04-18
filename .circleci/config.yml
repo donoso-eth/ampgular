@@ -97,6 +97,7 @@ workflows:
       - build:
           requires:
             - install
+            - lint
           filters:
             branches:
               ignore:

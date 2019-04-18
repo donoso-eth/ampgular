@@ -1,88 +1,86 @@
 {
-    "badges": [
-      [
+  "badges": [
+    [
+      {
+        "image": "https://img.shields.io/circleci/project/github/ampgular/ampgular/master.svg?label=circleci",
+        "label": "CircleCI branch",
+        "url": "https://circleci.com/gh/ampgular/ampgular"
+      },
+      {
+        "title": "![Dependency Status](https://david-dm.org/ampgular.svg)",
+        "url": "https://david-dm.org/ampgular"
+      },
+      {
+        "title": "![devDependency Status](https://david-dm.org/ampgular/dev-status.svg)",
+        "url": "https://david-dm.org/ampgular?type=dev"
+      }
+    ],
+    [
+      {
+        "label": "License",
+        "image": "https://img.shields.io/npm/l/@ampgular/cli.svg",
+        "url": "/LICENSE"
+      }
+    ]
+  ],
+  "links": {
+    "Contributing": "/CONTRIBUTING.md",
+    "Ampgular CLI Repo": "http://github.com/ampgular/ampgular-cli",
+    "Ampgular SEO Repo": "http://github.com/ampgular/ampgular-cli",
+    "Ampgular AMP Repo": "http://github.com/ampgular/ampgular-cli"
+  },
+  "linksAngular": {
+    "Angular CLI Repo": "http://github.com/angular/angular-cli",
+    "Angular Universal Gitter": "http://github.com/ampgular/ampgular-cli",
+    "Angular CLI Gitter": "http://github.com/ampgular/ampgular-cli"
+  },
+  "packages": {
+    "devkit": {},
+    "@ampgular/cli": {
+      "name": "Angular CLI",
+      "section": "Tooling",
+      "links": [
         {
-          "image": "https://img.shields.io/circleci/project/github/ampgular/ampgular/master.svg?label=circleci",
-          "label": "CircleCI branch",
-          "url": "https://circleci.com/gh/ampgular/ampgular"
-        },
-        {
-          "title": "![Dependency Status](https://david-dm.org/ampgular.svg)",
-          "url": "https://david-dm.org/ampgular"
-        },
-        {
-          "title": "![devDependency Status](https://david-dm.org/ampgular/dev-status.svg)",
-          "url": "https://david-dm.org/ampgular?type=dev"
-        }
-      ],
-      [
-        {
-          "label": "License",
-          "image": "https://img.shields.io/npm/l/@ampgular/cli.svg",
-          "url": "/LICENSE"
+          "label": "README",
+          "url": "/packages/ampgular/cli/README.md"
         }
       ]
-    ],
-    "links": {
-      "Contributing": "/CONTRIBUTING.md",
-      "Ampgular CLI Repo": "http://github.com/ampgular/ampgular-cli",
-      "Ampgular SEO Repo": "http://github.com/ampgular/ampgular-cli",
-      "Ampgular AMP Repo": "http://github.com/ampgular/ampgular-cli"
-
     },
-    "linksAngular": {
-      "Contributing": "/CONTRIBUTING.md",
-      "Angular CLI Repo": "http://github.com/angular/angular-cli",
-      "Angular Universal Gitter": "http://github.com/ampgular/ampgular-cli",
-      "Angular CLI Gitter": "http://github.com/ampgular/ampgular-cli"
+    "@ampgular/seo": {
+      "name": "Anmpgular Schematics for making Angular Pages SEO friendly with ease",
+      "section": "Schematics",
+      "links": [
+        {
+          "label": "README",
+          "url": "/packages/ampgular/seo/README.md"
+        }
+      ]
     },
-    "packages": {
-      "devkit": {
-      },
-      "@ampgular/cli": {
-        "name": "Angular CLI",
-        "section": "Tooling",
-        "links": [
-          {
-            "label": "README",
-            "url": "/packages/ampgular/cli/README.md"
-          }
-        ]
-      },
-      "@ampgular/seo": {
-        "name": "Anmpgular Schematics for making Angular Pages SEO friendly with ease",
-        "section": "Schematics", 
-        "links": [
-          {
-            "label": "README",
-            "url": "/packages/ampgular/seo/README.md"
-          }
-        ]
-      },
-      "@ampgular/amp": {
-        "name": "Anmpgular Schematics for generation AMP Pages",
-        "section": "Schematics",
-        "links": [
-          {
-            "label": "README",
-            "url": "/packages/ampgular/amp/README.md"
-          }
-        ]
-      },
-      "@ampgular/common": {
-        "name": "Anmpgular Common Functions and Schemas"
-       
-      },
-      "@angular-devkit/core": {
-        "name": "Core",
-        "links": [
-          {
-            "label": "README",
-            "url": "/packages/angular_devkit/core/README.md"
-          }
-        ]
-      }
- 
+    "@ampgular/amp": {
+      "name": "Anmpgular Schematics for generation AMP Pages",
+      "section": "Schematics",
+      "links": [
+        {
+          "label": "README",
+          "url": "/packages/ampgular/amp/README.md"
+        }
+      ]
+    },
+    "@ampgular/common": {
+      "name": "Anmpgular Common Functions and Schemas"
+    },
+    "@angular-devkit/core": {
+      "name": "Core",
+      "links": [
+        {
+          "label": "README",
+          "url": "/packages/angular_devkit/core/README.md"
+        }
+      ]
     }
+  },
+  "versions": {
+    "stable": "0.0.5",
+    "experimental": "0.0.5"
   }
-  
+}
