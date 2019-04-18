@@ -70,19 +70,19 @@ describe('Seo Schematic', () => {
   });
 
 
-  it('should configure properly the ampgular.json file', (done) => {
-      defaultOptions.target = 'browser';
-      defaultOptions.clientProject = 'bar';
+  // it('should configure properly the ampgular.json file', (done) => {
+  //     defaultOptions.target = 'browser';
+  //     defaultOptions.clientProject = 'bar';
 
-      schematicRunner.runSchematicAsync('ng-add', defaultOptions, appTree)
-      .toPromise().then(tree => {
-      const configText = tree.readContent('/ampgular/ampgular.json');
-      const configAmpgular = JSON.parse(configText);
-      const targetConfig = configAmpgular.target;
-      expect(targetConfig).toEqual('browser');
-      done();
-    }, done.fail);
-  });
+  //     schematicRunner.runSchematicAsync('ng-add', defaultOptions, appTree)
+  //     .toPromise().then(tree => {
+  //     const configText = tree.readContent('/ampgular/ampgular.json');
+  //     const configAmpgular = JSON.parse(configText);
+  //     const targetConfig = configAmpgular.target;
+  //     expect(targetConfig).toEqual('browser');
+  //     done();
+  //   }, done.fail);
+  // });
 
   it('should add the enviroment files to the angular.json file', (done) => {
     defaultOptions.target = 'browser';

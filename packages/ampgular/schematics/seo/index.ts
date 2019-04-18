@@ -110,8 +110,6 @@ function changeConfigPaths(options: SeoOptions, host: Tree): Rule {
     const { target } = options;
 
 
-    console.log(options);
-    console.log('seo');
     const clientProject: Test = workspace.projects[options.clientProject as string] as {};
 
     if (target == 'node') {
