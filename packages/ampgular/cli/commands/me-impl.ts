@@ -68,6 +68,9 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
   public async run(options: MeCommandSchema & Arguments): Promise<0 | 1> {
     await super.run(options);
 
+
+    console.log(options);
+
     this.ROUTES = this._getRoutes();
 
     this._ampRoutesConfig = this._getAmpRoutesConfig();
@@ -183,13 +186,13 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
     Object.keys(dynamic).forEach(singleDynamic => {
       if (
         dynamic[singleDynamic].routes.length == undefined &&
-        dynamic[singleDynamic].routes['match'].some((patternAr: string) =>
+        dynamic[singleDynamic].routes.match.some((patternAr: string) =>
           minimatch(route, patternAr, {}),
         )
       ) {
         myPageDynamic[singleDynamic] = dynamic[singleDynamic];
       } else if (
-        dynamic[singleDynamic].routes['match'].some((patternAr: string) =>
+        dynamic[singleDynamic].routes.match.some((patternAr: string) =>
           minimatch(route, patternAr, {}),
         ) &&
         route.split('/').length == dynamic[singleDynamic].routes['length']
