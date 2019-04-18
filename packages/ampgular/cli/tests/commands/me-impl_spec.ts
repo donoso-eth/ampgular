@@ -153,41 +153,41 @@ describe('AMP SHOULD WORK', () => {
 
   });
 
-  it('it should filter the ROUTES', async () => {
+  // it('it should filter the ROUTES', async () => {
 
-    command._ampgularConfig = Object.assign({}, angObj);
-    command.commandConfigOptions = Object.assign({}, angObj.amp);
-    spyOn(command, '_getRoutes').and.returnValue(ROUTES);
+  //   command._ampgularConfig = Object.assign({}, angObj);
+  //   command.commandConfigOptions = Object.assign({}, angObj.amp);
+  //   spyOn(command, '_getRoutes').and.returnValue(ROUTES);
 
-    try {
-      await command.run();
-    } catch (e) {
+  //   try {
+  //     await command.run();
+  //   } catch (e) {
 
-    }
+  //   }
 
-    const numberRoutes = command.ROUTES.length;
-    expect(command._toAmpROUTES.length).toBeGreaterThan(0);
-    expect(command._toAmpROUTES.length).toBeLessThan(numberRoutes);
-    expect(command._getRoutes.calls.count()).toEqual(1);
-  });
+  //   const numberRoutes = command.ROUTES.length;
+  //   expect(command._toAmpROUTES.length).toBeGreaterThan(0);
+  //   expect(command._toAmpROUTES.length).toBeLessThan(numberRoutes);
+  //   expect(command._getRoutes.calls.count()).toEqual(1);
+  // });
 
-  it('it  should create the global stateMap', async () => {
+  // it('it  should create the global stateMap', async () => {
 
-    command._ampgularConfig = Object.assign({}, angObj);
-    command.commandConfigOptions = Object.assign({}, angObj.amp);
+  //   command._ampgularConfig = Object.assign({}, angObj);
+  //   command.commandConfigOptions = Object.assign({}, angObj.amp);
 
-    spyOn(command, '_getRoutes').and.returnValue(ROUTES);
-    try {
-      await command.run();
-    } catch (e) {
+  //   spyOn(command, '_getRoutes').and.returnValue(ROUTES);
+  //   try {
+  //     await command.run();
+  //   } catch (e) {
 
-    }
+  //   }
 
-    const nrKeysState = Object.keys(command.stateFilesMap).length;
+  //   const nrKeysState = Object.keys(command.stateFilesMap).length;
 
-    expect(nrKeysState).toBe(7);
+  //   expect(nrKeysState).toBe(7);
 
-  });
+  // });
 
   // it('it  should create the page state associated to the route 1', async () => {
 
@@ -226,26 +226,26 @@ describe('AMP SHOULD WORK', () => {
 
   // });
 
-  it('it  should create the global DynamicMap', async () => {
+  // it('it  should create the global DynamicMap', async () => {
 
-    command._ampgularConfig = Object.assign({}, angObj);
-    command.commandConfigOptions = Object.assign({}, angObj.amp);
+  //   command._ampgularConfig = Object.assign({}, angObj);
+  //   command.commandConfigOptions = Object.assign({}, angObj.amp);
 
-    spyOn(command, '_getRoutes').and.returnValue(ROUTES);
-
-
-    try {
-      await command.run();
-    } catch (e) {
-
-    }
+  //   spyOn(command, '_getRoutes').and.returnValue(ROUTES);
 
 
-    const nrKeysState = Object.keys(command.dynamicFilesMap).length;
+  //   try {
+  //     await command.run();
+  //   } catch (e) {
 
-    expect(nrKeysState).toBe(3);
+  //   }
 
-  });
+
+  //   const nrKeysState = Object.keys(command.dynamicFilesMap).length;
+
+  //   expect(nrKeysState).toBe(3);
+
+  // });
 
   // it('it  should create the page dynamic associated to the route 1', async () => {
 

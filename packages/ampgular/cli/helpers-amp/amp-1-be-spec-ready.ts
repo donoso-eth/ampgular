@@ -69,10 +69,10 @@ const CssAllTogether = async (
 const AngularComponentCheck = (args: AmpDescription): AmpDescription => {
   const $ = args['cheerio'];
   const indexHtml = $.html();
-  const host_regex = /(_nghost)-sc([0-9]+)/g;
-  const matchHost: any[] = [];
+  const hostRegex = /(_nghost)-sc([0-9]+)/g;
+  const matchHost: string[] = [];
   let angCompo: any[] = [];
-  indexHtml.replace(host_regex, function(id: any) {
+  indexHtml.replace(hostRegex, function(id: string) {
     if (matchHost.indexOf(id) == -1) {
       matchHost.push(id);
       const appCustom = $('[' + id + ']')[0];
@@ -83,10 +83,10 @@ const AngularComponentCheck = (args: AmpDescription): AmpDescription => {
     return '';
   });
 
-  const compo_regex = /(_ngcontent)-sc([0-9]+)/g;
+  const compoRegex = /(_ngcontent)-sc([0-9]+)/g;
   const matchComponent: string[] = [];
 
-  indexHtml.replace(compo_regex, (id: string) => {
+  indexHtml.replace(compoRegex, (id: string) => {
     if (matchComponent.indexOf(id) == -1) {
       matchComponent.push(id);
     }

@@ -7,8 +7,7 @@
   "properties": {
     "route": {
       "description": "Amp Page to be rendered, required only for devs (--test flag)",
-      "type": "string",
-      "default": true
+      "type": "string"
     },
     "build": {
       "type": "boolean",

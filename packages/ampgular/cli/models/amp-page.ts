@@ -1,9 +1,10 @@
 import { Path, dirname, join, normalize } from '@angular-devkit/core';
 import { load } from 'cheerio';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { BeReadySpec } from '../helpers-amp/amp-1-be-spec-ready';
 import { Schema as AmpOptions } from '../schemas/amp';
-import { AmpDescription } from './interface';
+import { AmpDescription, StateSchema, DynamicSchema } from './interface';
+import { consoleTestResultHandler } from 'tslint/lib/test';
 
 export class AmpPage {
 
@@ -32,12 +33,14 @@ export class AmpPage {
 
     }
 
-    public initialize(options: AmpOptions, pageState: any, pageDynamic: any, pagePluggins: any) {
+    public initialize(
+      options: AmpOptions, pageState: StateSchema,
+      pageDynamic: DynamicSchema, pagePluggins: any) {
 
         // this._angularString =
         // readFileSync(join(this.PUBLIC_FOLDER, (options as any).route
         // , 'index.html')).toString('utf-8');
-        console.log(options);
+        // console.log(options);
 
         this._ampString = readFileSync(join(this.AMP_FOLDER, this.route
         , 'index.html')).toString('utf-8');
@@ -72,6 +75,16 @@ export class AmpPage {
 
         this._args = await BeReadySpec(this._args);
 
+    }
+
+    public AmpToFile(test: boolean) {
+
+      const myAMPHtml = this._args.cheerio.html();
+      if (test) {
+          writeFileSync(join(this.AMP_FOLDER, '/index.html'), myAMPHtml
+          , 'utf-8');
+
+      }
     }
 
 

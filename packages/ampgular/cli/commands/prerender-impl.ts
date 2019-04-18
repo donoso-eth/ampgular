@@ -34,7 +34,7 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
     await super.run(options);
     await this.validateAndLaunch();
 
-    console.log(this.commandConfigOptions);
+
     if (this.commandConfigOptions.routes != undefined) {
       this.ROUTES = this.commandConfigOptions.routes;
     } else {

@@ -25,6 +25,7 @@ import {
   DynamicSchema, StateSchema,
 } from '../models/interface';
 import { Schema as AmpOptions } from '../schemas/amp';
+import { ExpressServer } from '../utilities/expressserver';
 import { getWorkspaceDetails } from '../utilities/project';
 import { getRoutes } from '../utilities/utils';
 import { runOptionsBuild } from '../utilities/workspace-extensions';
@@ -54,6 +55,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
   private _myPageDynamic: DynamicSchema;
   private _myPagePlugins: any;
   private prerender: CommandInterface;
+  appServerNew: ExpressServer;
 
   public async initialize(options: MeCommandSchema & Arguments): Promise<void> {
     await super.initialize(options);
@@ -65,16 +67,20 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
     } as AmpOptions;
   }
 
-  public async run(options: MeCommandSchema & Arguments): Promise<0 | 1> {
+  public async run(options: MeCommandSchema & Arguments): Promise< 0 | 1> {
     await super.run(options);
 
 
-    console.log(options);
+    if (this.overrides['route'] !== undefined) {
+     this.commandConfigOptions.test = true ;
+    }
 
+    if (this.commandConfigOptions.test) {
+      this._toAmpROUTES = [];
+      this._toAmpROUTES.push(this.commandConfigOptions.route as string);
+    } else {
     this.ROUTES = this._getRoutes();
-
     this._ampRoutesConfig = this._getAmpRoutesConfig();
-
     this._toAmpROUTES = this.ROUTES.filter(route => {
       return this._ampRoutesConfig.some((config: AmpRoute) => {
         if (config['length'] == undefined) {
@@ -90,6 +96,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
         }
       });
     });
+  }
 
     for (const stateFilePath of this.commandConfigOptions.stateFiles) {
       const stateContent: StateMap = this._readFile(stateFilePath) as StateMap;
@@ -150,11 +157,23 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
       await myAMPPage.AmpToSpec();
 
+      await myAMPPage.AmpToFile(this.commandConfigOptions.test as boolean);
+
 
     }
 
+    if (this.commandConfigOptions.test) {
+      this.appServerNew = new ExpressServer(normalize('src/assets'));
+      await this.appServerNew.LaunchServer();
+      while (this.appServerNew.server.listening) {
 
+      }
+
+
+      return 0;
+    } else {
     return 0;
+    }
   }
 
   _getRoutes() {
@@ -270,4 +289,6 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
       { configuration: 'amp', target: this._ampgularConfig.target,
         routes: this._toAmpROUTES, path: 'src' });
   }
+
+
 }
