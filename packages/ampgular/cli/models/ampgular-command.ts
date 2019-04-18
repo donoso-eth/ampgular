@@ -18,9 +18,12 @@ export abstract class AmpgularCommand<
     public _host = new NodeJsSyncHost();
     _ampgularConfig: AmpgularOptions;
     _registry: json.schema.CoreSchemaRegistry;
+    // tslint:disable-next-line:no-any
     public commandConfigOptions: any;
     public _workspace: Workspace;
+    // tslint:disable-next-line:no-any
     CommandConf: any;
+    // tslint:disable-next-line:no-any
     PrerenderDesc: any;
     overrides: Arguments;
     public basedir: Path = normalize(process.cwd());
@@ -89,7 +92,8 @@ export abstract class AmpgularCommand<
       }
 
     public async  checkOptions(): Promise<0|1> {
-        this.logger.info(terminal.yellow(`Starting Options Parsing & Validation for ${this.command}`));
+        this.logger.info(terminal.yellow(
+          `Starting Options Parsing & Validation for ${this.command}`));
 
         if (this.overrides != undefined) {
 
@@ -113,11 +117,14 @@ export abstract class AmpgularCommand<
                 )
                 .toPromise();
         } catch (e) {
-            this.logger.fatal(` Properties from ${JSON.stringify(this.commandConfigOptions)} not accepted in ${this.command} Schema Definition`);
+            this.logger.fatal(` Properties from
+            ${JSON.stringify(this.commandConfigOptions)}
+            not accepted in ${this.command} Schema Definition`);
 
             return 1;
         }
-        this.logger.info(terminal.blue(`Options Parsing & Validation..... Completed for ${this.command}`));
+        this.logger.info(terminal.blue(
+          `Options Parsing & Validation..... Completed for ${this.command}`));
 
         return 0;
 

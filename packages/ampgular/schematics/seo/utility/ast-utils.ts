@@ -7,7 +7,7 @@
  */
 import * as ts from 'typescript';
 import { Change, InsertChange, NoopChange } from './change';
-
+// ts-lint:disable
 
 /**
  * Add Import `import { symbolName } from fileName` if the import doesn't exit

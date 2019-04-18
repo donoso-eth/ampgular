@@ -7,7 +7,8 @@
  */
 
 // tslint:disable:no-global-tslint-disable no-any
-import { experimental, join, json, logging, normalize, strings, tags, terminal } from '@angular-devkit/core';
+import { experimental, join, json, logging,
+  strings, tags, terminal } from '@angular-devkit/core';
 import * as path from 'path';
 import { getWorkspace } from '../utilities/config';
 import {

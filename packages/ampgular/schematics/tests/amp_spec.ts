@@ -5,6 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+// tslint:disable
+
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 // import { Schema as ApplicationOptions, Style } from '../application/schema';
 // import { Schema as WorkspaceOptions } from '../workspace/schema';

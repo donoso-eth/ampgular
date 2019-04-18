@@ -72,6 +72,7 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
       ...this.commandConfigOptions,
       ...renderCommandOptions,
       ...this.buildConfigOptions,
+      ...options,
       ...this.overrides,
     } ;
 

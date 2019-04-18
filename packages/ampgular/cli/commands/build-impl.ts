@@ -56,7 +56,7 @@ export class BuildCommand extends AmpgularCommand<BuildCommandSchema> {
 
 
    options = {...this._ampgularConfig.buildConfig, ...{ target: this._ampgularConfig.target}, ...options};
-   console.log(options);
+  
 
    return await runOptionsBuild(options, this.logger);
 

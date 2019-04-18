@@ -10,6 +10,11 @@
       "type": "string",
       "default": true
     },
+    "build": {
+      "type": "boolean",
+      "default": false,
+      "description": "Prebuil the application priot to AMP"
+    },
     "test": {
       "description": "Create only one AMp Page (route porperty) and spin a loclaserver to easy the devs process",
       "type": "boolean",

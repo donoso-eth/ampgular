@@ -280,7 +280,11 @@
     "target",
     "buildConfig",
     "renderConfig",
-    "spider"
+    "spider",
+    "host",
+    "amp",
+    "sitemap",
+    "deploy"
   ],
   "definitions": {
     "fileVersion": {

@@ -7,20 +7,29 @@
  */
 
 
-import { JsonParseMode, dirname, isJsonObject, join, json, logging, normalize, path, relative, resolve } from '@angular-devkit/core';
+import { JsonParseMode, dirname, isJsonObject,
+  join, json, logging, normalize, path, relative, resolve } from '@angular-devkit/core';
 import * as child_process from 'child_process';
-import { existsSync, mkdirSync, readFileSync, readdirSync, rmdirSync, statSync, unlinkSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync,
+  readdirSync, rmdirSync, statSync, unlinkSync, writeFileSync } from 'fs';
 import { CommandMapOptions } from '../models/command-runner';
-import { Arguments, CommandDescription, CommandDescriptionMap, CommandInterface, CommandWorkspace } from '../models/interface';
+import { Arguments, CommandDescription, CommandDescriptionMap,
+  CommandInterface, CommandWorkspace } from '../models/interface';
 import { findUp } from '../utilities/find-up';
-import { parseJsonSchemaToCommandDescription, parseJsonSchemaToOptions } from '../utilities/json-schema';
+import { parseJsonSchemaToCommandDescription } from '../utilities/json-schema';
 import { getWorkspaceDetails } from '../utilities/project';
 import { Schema as DeployCommandSchema } from './deploy';
 
+// tslint:disable-next-line:no-implicit-dependencies
 import glob = require('glob');
 
 import { AmpgularCommand } from '../models/ampgular-command';
 import { Schema as DeployOptions, TargetApp } from '../schemas/deploy';
+
+interface FileMove {
+ from: string;
+ to: string;
+}
 
 export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
   public readonly command = 'deploy';
@@ -30,11 +39,6 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
   workspace: CommandWorkspace;
 
- // public commandConfigOptions: DeployOptions;
-  CommandConf: any;
-
-  // _options:DeployOptions;
-  _test: any;
   public async initialize(
     options: DeployCommandSchema & Arguments,
   ): Promise<void> {
@@ -103,7 +107,8 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
   }
 
-  async _copyCustom(copyList: Array<any>) {
+
+  async _copyCustom(copyList: Array<FileMove>) {
 
     copyList.forEach( element => {
       _copy(element.from, element.to);
@@ -139,13 +144,16 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
 
   async _createServerBundle() {
-    return await  this.build.validateAndRun({ target: 'node', configuration: this._ampgularConfig.buildConfig.configuration});
+    return await
+    this.build.validateAndRun({ target: 'node',
+                                configuration: this._ampgularConfig.buildConfig.configuration});
   }
 
   async _callPrerender() {
     const workspace: CommandWorkspace = getWorkspaceDetails() as CommandWorkspace;
     const descriptionPrerender = await getCommandDescription('prerender', this._registry);
-    this.prerender = new descriptionPrerender.impl({ workspace }, descriptionPrerender, this.logger);
+    this.prerender =
+    new descriptionPrerender.impl({ workspace }, descriptionPrerender, this.logger);
 
     return await this.prerender.validateAndRun({ localhost: true, path: 'dist/browser'});
   }
@@ -222,10 +230,12 @@ function _mkdirp(p: string) {
 }
 
 
-export async function getCommandDescription(commandname: string, registry: json.schema.CoreSchemaRegistry): Promise<CommandDescription> {
+export async function getCommandDescription(
+  commandname: string,
+  registry: json.schema.CoreSchemaRegistry): Promise<CommandDescription> {
   let description: CommandDescription | null = null;
   let commands: CommandMapOptions = {};
-  const commandMapPath = join(normalize(process.cwd()), 'packages/ampgular/cli/commands.json');
+  const commandMapPath = join(normalize(process.cwd()), 'node_modules/@ampgular/cli/commands.json');
   if (commandMapPath === null) {
       throw new Error('Unable to find command map.');
     }

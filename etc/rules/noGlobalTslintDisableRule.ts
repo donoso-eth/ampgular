@@ -54,7 +54,7 @@ class Walker extends Lint.RuleWalker {
 
     // TODO(filipesilva): remove this once the files are cleaned up.
     // Ignore Angular CLI files files.
-    if (sourceFile.fileName.includes('/angular-cli-files/')) {
+    if (sourceFile.fileName.includes('/ampgular-cli-files/')) {
       return;
     }
 

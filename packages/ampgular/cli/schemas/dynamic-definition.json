@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "dynamic  Defnition",
+  "description": "Dynamic Defnition",
+  "type": "object",
+  "anyOf": [
+    {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "./definitions.amp.json#/definitions/listGetComponent"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "./definitions.amp.json#/definitions/listPostComponent"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "./definitions.amp.json#/definitions/formPostComponent"
+        }
+      }
+    }
+  ]
+}

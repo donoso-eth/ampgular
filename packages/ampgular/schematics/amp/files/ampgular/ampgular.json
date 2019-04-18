@@ -2,16 +2,17 @@
   "$schema": "../node_modules/@ampgular/cli/lib/config/schema.json",
   "version": 1,
   "target": "node",
+  "host":"www.myhost.com",
   "amp":{
     "ampValidation":true,
     "cssOptimize":true,
     "serviceWorker":true,
-    "stateFiles":["/ampgular/amp/main_state_config"],
-    "dynamicFiles":["/ampgular/amp/main_dynamic_config"],
-    "pluginsFiles":["/ampgular/amp/pluggings_config"]
+    "stateFiles":["/ampgular/amp/main_state_config.json"],
+    "dynamicFiles":["/ampgular/amp/main_dynamic_config.json"],
+    "pluginsFiles":["/ampgular/amp/plugins_config.json"]
   },
   "buildConfig": {
-    "configuration": "production",
+    "configuration": "amp",
     "build": false
   },
   "renderConfig": {

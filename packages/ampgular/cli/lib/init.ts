@@ -5,12 +5,16 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+// ts-lint:disable
+
 import { join, normalize } from '@angular-devkit/core';
 import * as fs from 'fs';
 import { readFileSync } from 'fs';
 import * as path from 'path';
 import { Duplex } from 'stream';
 import 'symbol-observable';
+
+// ts-lint:disable
 // import { isWarningEnabled } from '../utilities/config';
 interface NodeModuleHacked extends NodeModule {
   _compile: any;

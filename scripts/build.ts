@@ -5,7 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-// tslint:disable:no-implicit-dependencies
+// tslint:disable
+
 import { JsonObject, logging } from '@angular-devkit/core';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
@@ -209,7 +210,12 @@ export default async function(
 ) {
   _clean(logger);
 
-  const sortedPackages = _sortPackages();
+
+  let  sortedPackages:string[]  = _sortPackages();
+  sortedPackages = Object.keys(packages).filter((name) => /ampgular/.test(name))
+  //.forEach((key:any) => delete sortedPackages[key]);
+
+  //const sortedPackages = _sortPackages();
   await _bazel(logger);
   await buildSchema({}, logger);
   _build(logger);
@@ -416,9 +422,11 @@ export default async function(
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
   }
 
+
+
   logger.info('Tarring all packages...');
   const tarLogger = logger.createChild('license');
-  Object.keys(packages).forEach(pkgName => {
+  Object.keys(packages).filter((name) => /ampgular/.test(name)).forEach(pkgName => {
     const pkg = packages[pkgName];
     tarLogger.info(`${pkgName} => ${pkg.tar}`);
     _tar(pkg.tar, pkg.dist);

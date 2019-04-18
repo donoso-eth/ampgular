@@ -22,7 +22,7 @@ export class AmpPage {
     public readonly pluggingMap: {};
     public readonly globalCss: string;
 
-    constructor(route: string,  globalCss: string) {
+    constructor(public route: string,  globalCss: string) {
 
 
         this.globalCss = globalCss;
@@ -34,11 +34,12 @@ export class AmpPage {
 
     public initialize(options: AmpOptions, pageState: any, pageDynamic: any, pagePluggins: any) {
 
-        this._angularString =
-        readFileSync(join(this.PUBLIC_FOLDER, (options as any).route
-        , 'index.html')).toString('utf-8');
+        // this._angularString =
+        // readFileSync(join(this.PUBLIC_FOLDER, (options as any).route
+        // , 'index.html')).toString('utf-8');
+        console.log(options);
 
-        this._ampString = readFileSync(join(this.AMP_FOLDER, (options as any).route
+        this._ampString = readFileSync(join(this.AMP_FOLDER, this.route
         , 'index.html')).toString('utf-8');
 
         this._$ = load(this._ampString);

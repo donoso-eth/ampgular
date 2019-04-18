@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-// tslint:disable:no-implicit-dependencies
+// tslint:disable
 import { logging } from '@angular-devkit/core';
 import * as fs from 'fs';
 import * as path from 'path';

@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+// tslint:disable
 // tslint:disable:no-any non-null-operator no-big-function
 
 import { join, json, normalize, terminal } from '@angular-devkit/core';
@@ -91,7 +92,7 @@ describe('AMP SHOULD WORK', () => {
 
   beforeEach(async function () {
 
-    command = await TestBed.createCommand('amp');
+    command = await TestBed.createCommand('me');
 
     spyOn(command, 'validateScope').and.returnValue(true);
 
@@ -188,42 +189,42 @@ describe('AMP SHOULD WORK', () => {
 
   });
 
-  it('it  should create the page state associated to the route 1', async () => {
+  // it('it  should create the page state associated to the route 1', async () => {
 
-    command._ampgularConfig = Object.assign({}, angObj);
-    command.commandConfigOptions = Object.assign({}, angObj.amp);
+  //   command._ampgularConfig = Object.assign({}, angObj);
+  //   command.commandConfigOptions = Object.assign({}, angObj.amp);
 
-    spyOn(command, '_getRoutes').and.returnValue(['/es/nuilea-day-spa']);
+  //   spyOn(command, '_getRoutes').and.returnValue(['/es/nuilea-day-spa']);
 
-    try {
-      await command.run();
-    } catch (e) {
+  //   try {
+  //     await command.run();
+  //   } catch (e) {
 
-    }
+  //   }
 
-    expect(Object.keys(command._myPageState).length).toBe(1);
-    expect(command._myPageState.menuOpen).toBeDefined();
+  //   expect(Object.keys(command._myPageState).length).toBe(1);
+  //   expect(command._myPageState.menuOpen).toBeDefined();
 
-  });
+  // });
 
-  it('it  should create the page state associated to the route 2', async () => {
+  // it('it  should create the page state associated to the route 2', async () => {
 
-    command._ampgularConfig = Object.assign({}, angObj);
-    command.commandConfigOptions = Object.assign({}, angObj.amp);
+  //   command._ampgularConfig = Object.assign({}, angObj);
+  //   command.commandConfigOptions = Object.assign({}, angObj.amp);
 
-    spyOn(command, '_getRoutes')
-    // tslint:disable-next-line:max-line-length
-    .and.returnValue(['/es/wellness-y-bienestar-natural/exoticos-y-maravillosos-masajes/reflexologia-tus-pies-en-las-nubes']);
+  //   spyOn(command, '_getRoutes')
+  //   // tslint:disable-next-line:max-line-length
+  //   .and.returnValue(['/es/wellness-y-bienestar-natural/exoticos-y-maravillosos-masajes/reflexologia-tus-pies-en-las-nubes']);
 
-    try {
-      await command.run();
-    } catch (e) {
+  //   try {
+  //     await command.run();
+  //   } catch (e) {
 
-    }
-    expect(Object.keys(command._myPageState).length).toBe(4);
-    expect(command._myPageState.menuOpen).toBeDefined();
+  //   }
+  //   expect(Object.keys(command._myPageState).length).toBe(4);
+  //   expect(command._myPageState.menuOpen).toBeDefined();
 
-  });
+  // });
 
   it('it  should create the global DynamicMap', async () => {
 
@@ -246,44 +247,44 @@ describe('AMP SHOULD WORK', () => {
 
   });
 
-  it('it  should create the page dynamic associated to the route 1', async () => {
+  // it('it  should create the page dynamic associated to the route 1', async () => {
 
-    command._ampgularConfig = Object.assign({}, angObj);
-    command.commandConfigOptions = Object.assign({}, angObj.amp);
-
-
-    spyOn(command, '_getRoutes').and.returnValue(['/es/nuilea-day-spa']);
-
-    try {
-      await command.run();
-    } catch (e) {
-
-    }
-
-    expect(Object.keys(command._myPageDynamic).length).toBe(0);
+  //   command._ampgularConfig = Object.assign({}, angObj);
+  //   command.commandConfigOptions = Object.assign({}, angObj.amp);
 
 
-  });
+  //   spyOn(command, '_getRoutes').and.returnValue(['/es/nuilea-day-spa']);
 
-  it('it  should create the page state associated to the route 2', async () => {
+  //   try {
+  //     await command.run();
+  //   } catch (e) {
 
-    command._ampgularConfig = Object.assign({}, angObj);
-    command.commandConfigOptions = Object.assign({}, angObj.amp);
+  //   }
+
+  //   expect(Object.keys(command._myPageDynamic).length).toBe(0);
 
 
-    spyOn(command, '_getRoutes')
-    // tslint:disable-next-line:max-line-length
-    .and.returnValue(['/es/wellness-y-bienestar-natural/exoticos-y-maravillosos-masajes/reflexologia-tus-pies-en-las-nubes']);
+  // });
 
-    try {
-      await command.run();
-    } catch (e) {
+  // it('it  should create the page state associated to the route 2', async () => {
 
-    }
+  //   command._ampgularConfig = Object.assign({}, angObj);
+  //   command.commandConfigOptions = Object.assign({}, angObj.amp);
 
-    expect(Object.keys(command._myPageDynamic).length).toBe(1);
-    expect(command._myPageDynamic.morningDeals).toBeDefined();
 
-  });
+  //   spyOn(command, '_getRoutes')
+  //   // tslint:disable-next-line:max-line-length
+  //   .and.returnValue(['/es/wellness-y-bienestar-natural/exoticos-y-maravillosos-masajes/reflexologia-tus-pies-en-las-nubes']);
+
+  //   try {
+  //     await command.run();
+  //   } catch (e) {
+
+  //   }
+
+  //   expect(Object.keys(command._myPageDynamic).length).toBe(1);
+  //   expect(command._myPageDynamic.morningDeals).toBeDefined();
+
+  // });
 
 });

@@ -155,7 +155,8 @@
       "type": "object",
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum":["get"]
         },
         "id": {
           "type": "string"
@@ -181,7 +182,8 @@
       "type": "object",
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum":["post"]
         },
         "id": {
           "type": "string"

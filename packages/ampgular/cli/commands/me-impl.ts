@@ -6,24 +6,35 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import { experimental, join, logging, normalize } from '@angular-devkit/core';
-import { readFileSync } from 'fs';
+
+import {
+  JsonParseMode, dirname, isJsonObject,
+  join, json, logging, normalize, path, relative, resolve,
+} from '@angular-devkit/core';
+import {
+  readFileSync,
+} from 'fs';
 import * as minimatch from 'minimatch';
 import { Schema as AmpgularOptions } from '../lib/config/schema';
 import { AmpPage } from '../models/amp-page';
 import { AmpgularCommand } from '../models/ampgular-command';
 import { BaseCommandOptions, Command } from '../models/command';
-import { AmpDescription, Arguments } from '../models/interface';
+import {
+  AmpDescription, AmpRoute, Arguments, CommandDescription,
+  CommandDescriptionMap, CommandInterface, CommandWorkspace,
+  DynamicSchema, StateSchema,
+} from '../models/interface';
 import { Schema as AmpOptions } from '../schemas/amp';
-import { AmpRoute, Schema as StateSchema } from '../schemas/state-definition';
-import { Version } from '../upgrade/version';
+import { getWorkspaceDetails } from '../utilities/project';
 import { getRoutes } from '../utilities/utils';
+import { runOptionsBuild } from '../utilities/workspace-extensions';
+import { Schema as DeployCommandSchema } from './deploy';
 import { Schema as MeCommandSchema } from './me';
-
-interface stateMap {
+import { getCommandDescription } from './deploy-impl';
+interface StateMap {
 
 }
-interface dynamicMap {
+interface DynamicMap {
 
 }
 
@@ -33,15 +44,16 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
   private ROUTES: string[];
   private _toAmpROUTES: string[];
   private _ampRoutesConfig: AmpRoute[];
-  private stateFilesMap: stateMap = {
+  private stateFilesMap: StateMap = {
   };
-  private dynamicFilesMap: dynamicMap = {
+  private dynamicFilesMap: DynamicMap = {
   };
-  private pluginsFilesMap: dynamicMap = {
+  private pluginsFilesMap: DynamicMap = {
   };
   private _myPageState: StateSchema;
-  private _myPageDynamic: any;
+  private _myPageDynamic: DynamicSchema;
   private _myPagePlugins: any;
+  private prerender: CommandInterface;
 
   public async initialize(options: MeCommandSchema & Arguments): Promise<void> {
     await super.initialize(options);
@@ -77,7 +89,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
     });
 
     for (const stateFilePath of this.commandConfigOptions.stateFiles) {
-      const stateContent: stateMap = this._readFile(stateFilePath) as stateMap;
+      const stateContent: StateMap = this._readFile(stateFilePath) as StateMap;
       this.stateFilesMap = {
         ...this.stateFilesMap,
         ...stateContent,
@@ -85,9 +97,9 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
     }
 
     for (const dynamicFilePath of this.commandConfigOptions.dynamicFiles) {
-      const dynamicContent: stateMap = this._readFile(
+      const dynamicContent: StateMap = this._readFile(
         dynamicFilePath,
-      ) as stateMap;
+      ) as StateMap;
       this.dynamicFilesMap = {
         ...this.dynamicFilesMap,
         ...dynamicContent,
@@ -95,15 +107,23 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
     }
 
     for (const plugginsFilePath of this.commandConfigOptions.pluginsFiles) {
-      const plugginContent: stateMap = this._readFile(
+      const plugginContent: StateMap = this._readFile(
         plugginsFilePath,
-      ) as stateMap;
+      ) as StateMap;
       this.pluginsFilesMap = {
         ...this.dynamicFilesMap,
         ...plugginContent,
       };
     }
 
+    if (this.commandConfigOptions.build) {
+      //// run amp build
+      await runOptionsBuild(
+        { configuration: 'amp', target: this._ampgularConfig.target }, this.logger);
+    }
+
+
+    await this._callPrerender();
 
     for (const ampRoute of this._toAmpROUTES) {
 
@@ -115,6 +135,9 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
       // create pluggin associated to routes
       this._myPagePlugins = await this._buildPluginsSpec(ampRoute);
+
+         ///// Prerender AMP ROUTES
+
 
       // create an instance of AMP PAGE
       const myAMPPage = new AmpPage(ampRoute, '');
@@ -154,9 +177,9 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
   }
 
 
-  private _buildDynamicSpec = async (route: string): Promise<StateSchema> => {
-    const dynamic = this.dynamicFilesMap as any;
-    const myPageDynamic: any = {};
+  private _buildDynamicSpec = async (route: string): Promise<DynamicSchema> => {
+    const dynamic = this.dynamicFilesMap as DynamicSchema;
+    const myPageDynamic: DynamicSchema = {};
     Object.keys(dynamic).forEach(singleDynamic => {
       if (
         dynamic[singleDynamic].routes.length == undefined &&
@@ -166,7 +189,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
       ) {
         myPageDynamic[singleDynamic] = dynamic[singleDynamic];
       } else if (
-        dynamic[singleDynamic].routes['match'].some((patternAr: any) =>
+        dynamic[singleDynamic].routes['match'].some((patternAr: string) =>
           minimatch(route, patternAr, {}),
         ) &&
         route.split('/').length == dynamic[singleDynamic].routes['length']
@@ -182,8 +205,8 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
   private _buildPageStateSpec = async (route: string,
   ): Promise<StateSchema> => {
     /// READ STATE
-    const state = this.stateFilesMap as any;
-    const myPageState: any = {};
+    const state = this.stateFilesMap as StateSchema;
+    const myPageState: StateSchema = {};
     Object.keys(state).forEach((singleState: string) => {
       if (
         state[singleState].routes.length == undefined &&
@@ -231,5 +254,17 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
     return myPagePlugin;
 
+  }
+
+
+  async _callPrerender() {
+    const workspace: CommandWorkspace = getWorkspaceDetails() as CommandWorkspace;
+    const descriptionPrerender = await getCommandDescription('prerender', this._registry);
+    this.prerender =
+      new descriptionPrerender.impl({ workspace }, descriptionPrerender, this.logger);
+
+    return await this.prerender.validateAndRun(
+      { configuration: 'amp', target: this._ampgularConfig.target,
+        routes: this._toAmpROUTES, path: 'src' });
   }
 }

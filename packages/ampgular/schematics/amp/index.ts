@@ -20,11 +20,8 @@ import { throws } from 'assert';
 import * as ts from 'typescript';
 import { getWorkspace, getWorkspacePath } from './utility';
 import {
-  // getDecoratorMetadata,
-  // findNode,
   addImportToModule,
-} from './utility';
-import { InsertChange } from './utility';
+InsertChange } from './utility';
 // import { JsonObject } from "../core/src";
 
 export interface test {

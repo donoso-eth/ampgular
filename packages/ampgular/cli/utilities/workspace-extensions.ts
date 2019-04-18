@@ -1,41 +1,40 @@
 
 import {
-    BaseException,
-    JsonObject,
-    JsonParseMode,
-    Path,
-    dirname,
-    experimental,
     getSystemPath,
     join,
     json,
     logging,
     normalize,
-    schema,
-    tags,
     virtualFs,
 
   } from '@angular-devkit/core';
 import * as child_process from 'child_process';
-import { CoreSchemaRegistry } from 'packages/angular_devkit/core/src/json/schema';
+import { readFileSync } from 'fs';
+import { Schema as AmpgularConfig } from '../lib/config/schema';
+import { Arguments } from '../models/interface';
 import { Workspace } from '../models/workspace';
 import { WorkspaceLoader } from '../models/workspace-loader';
-import { loadJsonFile } from './utils';
+import { Schema as BuildOptions } from '../schemas/build';
 
-export async function loadWorkspaceAndAmpgular(workspacePath: string, host: virtualFs.Host, registry: json.schema.CoreSchemaRegistry): Promise<[Workspace, any]> {
+
+export async function loadWorkspaceAndAmpgular(
+  workspacePath: string, host: virtualFs.Host,
+  registry: json.schema.CoreSchemaRegistry): Promise<[Workspace, AmpgularConfig ]> {
 
     const workspaceLoader = new WorkspaceLoader(host, registry);
     const workspace = await workspaceLoader.loadWorkspace(workspacePath);
 
     const basedir = getSystemPath(workspace.root);
     const ampgularPath = join(normalize(basedir), 'ampgular', 'ampgular.json');
-    const ampgularConfig = await loadJsonFile(
-      ampgularPath,
-      host,
-    ).toPromise();
+    // const ampgularConfig = await loadJsonFile(
+    //   ampgularPath,
+    //   host,
+    // ).toPromise();
 
-    return [workspace , ampgularConfig];
+    const ampgularConfig = JSON.parse(
+      readFileSync(ampgularPath).toString('utf-8')) as AmpgularConfig;
 
+    return [workspace , ampgularConfig ];
   }
 
 export async function getProjectName(workspace: Workspace): Promise<string> {
@@ -67,14 +66,16 @@ export async function getProjectName(workspace: Workspace): Promise<string> {
 
   }
 
-export async function runOptionsBuild(options: any, logger: logging.Logger ): Promise<0|1> {
+export async function runOptionsBuild(
+  options: any, logger: logging.Logger ): Promise<0|1> {
 
     if (options.target == 'node') {
 
       logger.warn(`....starting BUILDDING SERVER APPLICATON..... this make take several minutes`);
       logger.warn(`Target is ${options.target}  configuration is ${options.configuration} `);
 
-      await _exec('ng', ['run', options.projectName + ':server', '--configuration=' + options.configuration], {}, logger);
+      await _exec('ng', ['run', options.projectName + ':server',
+                         '--configuration=' + options.configuration], {}, logger);
 
       return  0;
 
@@ -93,7 +94,7 @@ function _exec(
     opts: { cwd?: string },
     logger: logging.Logger,
   ): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const { status, error, stderr, stdout, output } = child_process.spawnSync(
         command,
         args,

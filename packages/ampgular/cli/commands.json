@@ -4,6 +4,6 @@
   "spider":"./commands/spider.json",
   "build":"./commands/build.json",
   "deploy":"./commands/deploy.json",
-  "amp":"./commands/me.json",
+  "me":"./commands/me.json",
   "sitemap":"./commands/sitemap.json"
 }

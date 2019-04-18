@@ -1,7 +1,7 @@
 {
   "name": "@ampgular/common",
   "version": "0.0.0",
-  "description": "Common Dunctions and Schemas for AMpgular",
+  "description": "Common Dunctions and Schemas for AMPgular",
   "experimental": true,
   "main": "src/index.js",
   "keywords": [
@@ -11,5 +11,8 @@
     "schematic"
   ],
   "dependencies": {
+    "@angular-devkit/core": "^7.3.8",
+    "@angular-devkit/schematics": "^7.3.8",
+    "typescript": "3.2.4"
   }
 }

@@ -5,6 +5,15 @@
   "extends": [
     "tslint-no-circular-imports"
   ],
+  "linterOptions": {
+    "exclude": [
+        "packages/ampgular/cli/tests/**",
+        "packages/ampgular/cli/utilities/**",
+        "packages/ampgular/schematics/**",
+        "packages/ampgular/common/**",
+        "packages/ampgular/cli/lib/init.ts"
+    ]
+},
   "rulesDirectory": [
     "dist/etc/rules",
     "node_modules/tslint-sonarts/lib/rules"
@@ -124,7 +133,7 @@
     ],
     "curly": true,
     "file-header": [
-      true,
+      false,
       "Copyright Google Inc\\. All Rights Reserved\\."
     ],
     "variable-name": [

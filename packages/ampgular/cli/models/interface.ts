@@ -5,13 +5,10 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+
+
 import { json, logging } from '@angular-devkit/core';
 import { Schema as AmpOptions } from '../schemas/amp';
-
-/**
- * Value type of arguments.
- */
-export type Value = number | string | boolean | (number | string | boolean)[];
 
 
 // export interface AmpRouteDefinition {
@@ -21,12 +18,14 @@ export type Value = number | string | boolean | (number | string | boolean)[];
 
 export class MiniCheerioElement {
   protected tagname: string;
+  // tslint:disable-next-line:no-any
   protected attribs: any;
   toXString(): string {
       return '<' + this.tagname + Object.keys(this.attribs).reduce((prev, x) =>
       prev = prev + ' ' + x + '=\''  +  this.attribs[x] + '\' ' , ' ') + '>';
 
   }
+  // tslint:disable-next-line:no-any
   constructor(tagname: string, attribs: any) {
       this.tagname = tagname;
       this.attribs = attribs;
@@ -57,12 +56,90 @@ export interface AmpDescription {
 }
 
 export interface AmpPageConstructor {
-  pageState: any;
-  pageDynamic: any;
+  pageState: StateSchema;
+  pageDynamic: DynamicSchema;
   pagePluggins: any;
   globalCss: string;
 
 }
+
+export type StateSchema  = {
+
+  [key: string]: State,
+ };
+
+
+export interface State {
+     css?:    Css;
+     events:  AmpEvent[];
+     routes: AmpRoute[];
+     type:    ComponentType;
+ }
+
+export type Css =  { [key: string]: PurpleAmpClass[] };
+
+export interface AmpClass {
+     class: Class;
+     id:    string;
+ }
+
+export type Class = string[] | string;
+
+export interface PurpleAmpClass {
+     class: string;
+     id:    string;
+ }
+
+export interface AmpEvent {
+     duration?: number;
+     event?:    string;
+     id:        string;
+     state?:    string;
+     target?:   string;
+ }
+
+export interface AmpRoute {
+     length?: number;
+     match:   string[];
+ }
+
+export enum ComponentType {
+     ListBind = 'list-bind',
+     ListSingle = 'list-single',
+     MultiBind = 'multi-bind',
+     Scroll = 'scroll',
+     Simple = 'simple',
+ }
+export type DynamicSchema  = {
+
+  [key: string]: Dynamic,
+ };
+
+export interface Dynamic {
+  ampState?:   string;
+  api:         string;
+  height?:     string;
+  id:          string;
+  routes: AmpRoute[];
+  // tslint:disable-next-line:no-any
+  inputs:      any;
+  src?:        string;
+  state?:      string[];
+  submit?:     AmpEvent[];
+  type:        DynamicType;
+  validation?: boolean;
+}
+
+
+export enum DynamicType {
+  Get = 'get',
+  Post = 'post',
+}
+
+/**
+ * Value type of arguments.
+ */
+export type Value = number | string | boolean | (number | string | boolean)[];
 
 
 /**

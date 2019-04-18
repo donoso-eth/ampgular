@@ -22,6 +22,12 @@
           "description": "Ensure DryRun",
           "type": "boolean",
           "default": false
+        },
+        "routes":{
+          "type":"array",
+          "items": {
+            "type":"string"
+          }
         }
       },
       "required": ["namedFiles", "cssOptimize"]
