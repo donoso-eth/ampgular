@@ -110,7 +110,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "node ./bin/devkit-admin hooks/pre-push"
+      "pre-push": "node ./bin/devkit-admin hooks/pre-push"
     }
   }
 }

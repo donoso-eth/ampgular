@@ -101,6 +101,8 @@ export default function (argv: ValidateCommitsOptions, logger: logging.Logger) {
   let baseSha = '';
   let sha = '';
 
+  
+
   if (prNumber) {
     const url = `https://api.github.com/repos/angular/angular-cli/pulls/${prNumber}`;
     const prJson = JSON.parse(execSync(`curl "${url}"`, {
@@ -113,20 +115,23 @@ export default function (argv: ValidateCommitsOptions, logger: logging.Logger) {
     baseSha = argv.base;
     sha = argv.head || 'HEAD';
   } else {
-    console.log( process.env['GIT_REMOTE'] );
+
     const parentRemote = process.env['GIT_REMOTE'] ? process.env['GIT_REMOTE'] + '/' : '';
     const parentBranch = process.env['GIT_BRANCH'] || 'master';
+
+
     baseSha = execSync(`git merge-base --fork-point "${parentRemote}${parentBranch}"`)
       .toString().trim();
     sha = 'HEAD';
   }
 
-  console.log(baseSha);
+
+
   logger.createChild('sha').info(`Base: ${baseSha}\nHEAD: ${sha}`);
 
   const log = execSync(`git log --oneline "${baseSha}..${sha}"`).toString().trim();
 
-  console.log(log);
+
 
   logger.debug('Commits:');
   logger.createChild('commits').debug(log);

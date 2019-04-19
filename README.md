@@ -35,7 +35,7 @@ This is the home of the Ampgular ClI and the schematics packages for seo and amp
 |---|---|---|---|
 
 ### Quick Links Angular
-[Contributing](/CONTRIBUTING.md) | [Angular CLI Repo]() | [Angular Universal Gitter]() | [Angular CLI Gitter]() | 
+[Angular CLI Repo]() | [Angular Universal Gitter]() | [Angular CLI Gitter]() | 
 |---|---|---|---|
 
 
