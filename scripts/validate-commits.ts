@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+// tslint:disable
 // tslint:disable:no-implicit-dependencies
 import { logging } from '@angular-devkit/core';
 import { execSync } from 'child_process';
@@ -101,7 +102,7 @@ export default function (argv: ValidateCommitsOptions, logger: logging.Logger) {
   let baseSha = '';
   let sha = '';
 
-  
+
 
   if (prNumber) {
     const url = `https://api.github.com/repos/angular/angular-cli/pulls/${prNumber}`;
