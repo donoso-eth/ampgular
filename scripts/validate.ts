@@ -24,7 +24,7 @@ export default async function (options: { verbose: boolean }, logger: logging.Lo
     }
     error = true;
   }
-
+  //7 ok
   // logger.info('Running templates validation...');
   // const templateLogger = logger.createChild('templates');
   // await templates({}, templateLogger);
