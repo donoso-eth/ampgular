@@ -24,7 +24,7 @@ This is the home of the Ampgular ClI and the schematics packages for seo and amp
 
 
 
-[![CircleCI branch](https://img.shields.io/circleci/project/github/ampgular/ampgular/master.svg?label=circleci)](https://circleci.com/gh/ampgular/ampgular) [![Dependency Status](https://david-dm.org/ampgular.svg)](https://david-dm.org/ampgular) [![devDependency Status](https://david-dm.org/ampgular/dev-status.svg)](https://david-dm.org/ampgular?type=dev) 
+[![CircleCI branch](https://img.shields.io/circleci/project/github/ampgular/ampgular/master.svg?label=circleci)](https://circleci.com/gh/ampgular/ampgular) [![Dependency Status](https://david-dm.org/ampgular.svg)](https://david-dm.org/ampgular/ampgular.svg) [![devDependency Status](https://david-dm.org/ampgular/dev-status.svg)](https://david-dm.org/ampgular/ampgular/dev-status.svg) 
 
 [![License](https://img.shields.io/npm/l/@ampgular/cli.svg)](/LICENSE) 
 
@@ -77,13 +77,11 @@ This is a monorepo which contains many tools and packages:
 
 
 | Project | Package | Version | Links |
-|---|---|---|---|
 **Anmpgular Common Functions and Schemas** | [`@ampgular/common`](https://npmjs.com/package/@ampgular/common) | [![latest](https://img.shields.io/npm/v/%40ampgular%2Fcommon/latest.svg)](https://npmjs.com/package/@ampgular/common) | 
 
 #### Schematics
 
 | Project | Package | Version | Links |
-|---|---|---|---|
 **Anmpgular Schematics for generation AMP Pages** | [`@ampgular/amp`](https://npmjs.com/package/@ampgular/amp) | [![latest](https://img.shields.io/npm/v/%40ampgular%2Famp/latest.svg)](https://npmjs.com/package/@ampgular/amp) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/ampgular/amp/README.md)
 **Anmpgular Schematics for making Angular Pages SEO friendly with ease** | [`@ampgular/seo`](https://npmjs.com/package/@ampgular/seo) | [![latest](https://img.shields.io/npm/v/%40ampgular%2Fseo/latest.svg)](https://npmjs.com/package/@ampgular/seo) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/ampgular/seo/README.md)
 
