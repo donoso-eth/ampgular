@@ -28,8 +28,10 @@ export default function (_: {}, logger: logging.Logger) {
   console.log('javier');
   rl.on('line', line => {
     console.log(line);
+    console.log(line);
     const [, localSha, , remoteSha] = line.split(/\s+/);
-
+    console.log(localSha);
+    console.log(remoteSha);
     if (localSha == emptySha) {
       // Deleted branch.
       return;
