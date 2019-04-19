@@ -14,7 +14,8 @@
     "fix": "npm run admin -- lint --fix",
     "templates": "node ./bin/devkit-admin templates",
     "test": "node ./bin/devkit-admin test",
-     "validate-commits": "./bin/devkit-admin validate-commits"
+    "validate": "node ./bin/devkit-admin validate",
+    "validate-commits": "./bin/devkit-admin validate-commits"
   
   },
   "repository": {
