@@ -25,19 +25,19 @@ export default async function (options: { verbose: boolean }, logger: logging.Lo
     error = true;
   }
 
-  logger.info('Running templates validation...');
-  const templateLogger = logger.createChild('templates');
-  await templates({}, templateLogger);
-  if (execSync(`git status --porcelain`).toString()) {
-    logger.error(tags.oneLine`
-      Running templates updated files... Please run "devkit-admin templates" before submitting
-      a PR.
-    `);
-    if (!options.verbose) {
-      process.exit(2);
-    }
-    error = true;
-  }
+  // logger.info('Running templates validation...');
+  // const templateLogger = logger.createChild('templates');
+  // await templates({}, templateLogger);
+  // if (execSync(`git status --porcelain`).toString()) {
+  //   logger.error(tags.oneLine`
+  //     Running templates updated files... Please run "devkit-admin templates" before submitting
+  //     a PR.
+  //   `);
+  //   if (!options.verbose) {
+  //     process.exit(2);
+  //   }
+  //   error = true;
+  // }
 
   logger.info('');
   logger.info('Running commit validation...');
