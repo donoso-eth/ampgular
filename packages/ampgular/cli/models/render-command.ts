@@ -31,6 +31,7 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
   public options: RenderCommandOptions & Arguments;
   // If this command supports running multiple targets.
   private _bundlePath: string;
+  private _workingFolder: string;
   command: string | undefined;
 
 
@@ -46,7 +47,8 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
     options: RenderCommandOptions & Arguments,
   ): Promise<void> {
     await super.initialize(options);
-    this._bundlePath = 'src';
+    this._bundlePath = 'server';
+    this._workingFolder = 'src';
 
 
     this.target = this._ampgularConfig.target;
@@ -76,6 +78,10 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
       ...this.overrides,
     } ;
 
+    if(this.commandConfigOptions.configuration=='amp'){
+      this._workingFolder = 'amp';
+    }
+
 
   }
 
@@ -91,6 +97,7 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
         this.context,
         this._workspace,
         this.commandConfigOptions,
+        this._workingFolder,
         this._bundlePath,
       );
 
@@ -107,10 +114,10 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
   }
 
   protected async renderUrl(url: string): Promise<string> {
-    return await this.renderFunction({ url: url }, this._bundlePath);
+    return await this.renderFunction({ url: url }, this._workingFolder, this._bundlePath);
   }
 
-  public async run(options: RenderCommandOptions & Arguments): Promise<0|1> {
+  public async run(options: RenderCommandOptions & Arguments): Promise<number> {
    return await super.run(options);
 
   }

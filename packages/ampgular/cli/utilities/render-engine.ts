@@ -50,6 +50,7 @@ export class RenderEngine {
   _context: CommandContext;
   projectName: any;
   localhost: any;
+  _workingFolder: string;
   _bundlePath: string;
   public _options: any;
   constructor(
@@ -60,7 +61,9 @@ export class RenderEngine {
     context: CommandContext,
     workspace: Workspace,
     options: any,
+    workingFolder: string,
     bundlePath: string,
+
   ) {
     this._ampgularConfig = ampgularConfig;
     this._target = ampgularConfig.target;
@@ -71,7 +74,9 @@ export class RenderEngine {
 
     this._workspace = workspace;
     this._options = options;
+    this._workingFolder = workingFolder;
     this._bundlePath = bundlePath;
+
   }
 
   public async initialize() {
@@ -97,7 +102,6 @@ export class RenderEngine {
         await this.newCrome.initialize();
       }
 
-
     if (this._target == 'node' && this._options.webpack) {
       //
       await webpackRun('render', this._logger);
@@ -105,17 +109,18 @@ export class RenderEngine {
         await webpackRun('server', this._logger);
         const serverClass = require(basedir + '/ampgular/seo/server_webpack');
         this.localhost = new serverClass.ExpressNodeServer();
-        await this.localhost.bootstrapServer(this._bundlePath);
+        const returnSever = await this.localhost.bootstrapServer(this._workingFolder,this._bundlePath);
+        this._logger.info(returnSever)
 
-        require(basedir + '/ampgular/seo/server_webpack');
+       // require(basedir + '/ampgular/seo/server_webpack');
       }
     }
-    if (this._target == 'node' && this._options.localhost) {
+    if (this._target == 'node' && this._options.localhost && !this._options.webpack ) {
       //
       const serverClass = require(basedir + '/ampgular/seo/server');
       this.localhost = new serverClass.ExpressNodeServer();
-      await this.localhost.bootstrapServer(this._bundlePath);
-
+      const returnSever = await this.localhost.bootstrapServer(this._workingFolder,this._bundlePath);
+      this._logger.info(returnSever)
       // await this.renderWepack(basedir + '/ampgular/seo/server')
     }
 
@@ -142,11 +147,13 @@ export class RenderEngine {
 
     const newOptions = {
       target: 'node',
-      configuration: 'seo',
+      configuration: this._options.configuration,
       projectName: this.projectName,
     };
 
     await runOptionsBuild(newOptions, this._logger);
+    await _exec('node-sass',[ 'src/styles.scss', '-o', 'dist/amp/css'],{},this._logger)
+
   }
 
   public async renderUrl(): Promise<Function> {

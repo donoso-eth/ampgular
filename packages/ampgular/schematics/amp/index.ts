@@ -110,7 +110,7 @@ function changeConfigPaths(options: AmpOptions, host: Tree): Rule {
         ];
       clientProject.architect.server.configurations['amp'][
           'outputPath'
-        ] =  'dist/server';
+        ] =  'dist/amp';
 
 
     } else {
@@ -128,7 +128,7 @@ function changeConfigPaths(options: AmpOptions, host: Tree): Rule {
         ];
       clientProject.architect.build.configurations['amp'][
           'outputPath'
-        ] =  'dist/server';
+        ] =  'dist/amp';
 
     }
 

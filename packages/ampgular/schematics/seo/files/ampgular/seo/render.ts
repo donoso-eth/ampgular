@@ -1,11 +1,9 @@
-import 'zone.js/dist/zone-node';
-import 'reflect-metadata';
-
-import { renderModuleFactory } from '@angular/platform-server';
-
-import {join, normalize} from 'path';
-import { readFileSync } from 'fs';
 import { enableProdMode } from '@angular/core';
+import { renderModuleFactory } from '@angular/platform-server';
+import { readFileSync } from 'fs';
+import { join, normalize } from 'path';
+import 'reflect-metadata';
+import 'zone.js/dist/zone-node';
 
 
 // Faster server renders w/ Prod mode (dev mode never needed)
@@ -17,30 +15,26 @@ import { enableProdMode } from '@angular/core';
 
 // * NOTE :: leave this as require() since this file is built Dynamically from webpack
 
-export async function renderserver(options: any, path: string): Promise<any> {
+export async function renderserver(
+  options: any, path: string, configuration: string): Promise<string> {
 
-  const basedir = normalize(process.cwd());
-  const WORKING_FOLDER = join(basedir, path);
-
-  // Our index.html we'll use as our template
+  const WORKING_FOLDER = join(process.cwd(), path);
 
 
   const indexTemplate = readFileSync(
     join(WORKING_FOLDER, 'index.html')).toString();
 
 
-  // * NOTE :: leave this as require() since this file is built Dynamically from webpack
-  const {
-    // tslint:disable-next-line:no-shadowed-variable
-    AppServerModuleNgFactory,
-    // tslint:disable-next-line:no-shadowed-variable
-    LAZY_MODULE_MAP
-  } = require('../../dist/server/main');
-  const {
-    // tslint:disable-next-line:no-shadowed-variable
-    provideModuleMap
-  } = require('@nguniversal/module-map-ngfactory-loader');
+ // const REQUIRE_PATH = '../../dist/' + configuration + '/main';
 
+  const {
+      AppServerModuleNgFactory,
+      LAZY_MODULE_MAP,
+    } = require(`../../dist/${configuration}/main`);
+  const {
+    // tslint:disable-next-line:no-shadowed-variable
+    provideModuleMap,
+  } = require('@nguniversal/module-map-ngfactory-loader');
 
 
   return new Promise((resolve, reject) => {
@@ -49,7 +43,7 @@ export async function renderserver(options: any, path: string): Promise<any> {
  renderModuleFactory(AppServerModuleNgFactory, {
     document: indexTemplate,
     url: options.url,
-    extraProviders: [provideModuleMap(LAZY_MODULE_MAP)]
+    extraProviders: [provideModuleMap(LAZY_MODULE_MAP)],
   }).then(html => resolve(html))
     .catch(err => console.log(err));
 

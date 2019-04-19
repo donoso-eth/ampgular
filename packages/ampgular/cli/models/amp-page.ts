@@ -5,6 +5,8 @@ import { BeReadySpec } from '../helpers-amp/amp-1-be-spec-ready';
 import { Schema as AmpOptions } from '../schemas/amp';
 import { AmpDescription, StateSchema, DynamicSchema } from './interface';
 import { consoleTestResultHandler } from 'tslint/lib/test';
+import { BeJustAmp } from '../helpers-amp/amp-3-be-just-AMP';
+import { BeSmart } from '../helpers-amp/amp-2-be-smart';
 
 export class AmpPage {
 
@@ -67,15 +69,23 @@ export class AmpPage {
         this._args = updatedArgs;
     }
 
-    private _loadCSS() {
-
-    }
-
     public async AmpToSpec() {
 
         this._args = await BeReadySpec(this._args);
 
     }
+
+    public async AmpToSmart() {
+
+      this._args = await BeSmart(this._args);
+
+  }
+
+    public async AmpToJustAmp() {
+
+      this._args = await BeJustAmp(this._args);
+
+  }
 
     public AmpToFile(test: boolean) {
 

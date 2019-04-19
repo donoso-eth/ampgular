@@ -32,6 +32,9 @@ import { runOptionsBuild } from '../utilities/workspace-extensions';
 import { Schema as DeployCommandSchema } from './deploy';
 import { getCommandDescription } from './deploy-impl';
 import { Schema as MeCommandSchema } from './me';
+
+const open = require('open');
+
 interface StateMap {
 
 }
@@ -56,6 +59,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
   private _myPagePlugins: any;
   private prerender: CommandInterface;
   appServerNew: ExpressServer;
+  private _globalCss: string;
 
   public async initialize(options: MeCommandSchema & Arguments): Promise<void> {
     await super.initialize(options);
@@ -67,7 +71,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
     } as AmpOptions;
   }
 
-  public async run(options: MeCommandSchema & Arguments): Promise< 0 | 1> {
+  public async run(options: MeCommandSchema & Arguments): Promise<number> {
     await super.run(options);
 
 
@@ -135,6 +139,10 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
     await this._callPrerender();
 
+
+    this._globalCss= readFileSync(join(normalize(process.cwd()),'/dist/amp/css/styles.css')).toString('utf-8')
+
+
     for (const ampRoute of this._toAmpROUTES) {
 
       // create state associated to Route
@@ -150,12 +158,14 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
 
       // create an instance of AMP PAGE
-      const myAMPPage = new AmpPage(ampRoute, '');
+      const myAMPPage = new AmpPage(ampRoute, this._globalCss);
 
       myAMPPage.initialize(this.commandConfigOptions,
         this._myPageState, this._myPageDynamic, this._myPagePlugins);
 
       await myAMPPage.AmpToSpec();
+
+      await myAMPPage.AmpToJustAmp();
 
       await myAMPPage.AmpToFile(this.commandConfigOptions.test as boolean);
 
@@ -163,14 +173,15 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
     }
 
     if (this.commandConfigOptions.test) {
-      this.appServerNew = new ExpressServer(normalize('src/assets'));
+      this.appServerNew = new ExpressServer(normalize('dist/amp'));
       await this.appServerNew.LaunchServer();
-      while (this.appServerNew.server.listening) {
-
-      }
+      await open('http://localhost:5000#development=1');
 
 
-      return 0;
+
+       // /#development=1
+
+      return 55;
     } else {
     return 0;
     }
@@ -182,7 +193,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
   _getAmpRoutesConfig() {
     return JSON.parse(
-      readFileSync(join(this.basedir, 'ampgular/amp_routes.json')).toString(
+      readFileSync(join(this.basedir, 'ampgular/amp/amp_routes.json')).toString(
         'utf-8',
       ),
     ).ampRoutes;

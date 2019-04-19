@@ -177,7 +177,10 @@ cli({
   outputStream: process.stdout,
 })
   .then((exitCode: number) => {
-    process.exit(exitCode);
+    if(exitCode!==55){
+      process.exit(exitCode);
+    }
+
   })
   .catch((err: Error) => {
     console.error('Unknown error: ' + err.toString());

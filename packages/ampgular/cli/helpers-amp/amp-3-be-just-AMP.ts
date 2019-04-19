@@ -94,7 +94,7 @@ const embedScripts = async (args: AmpDescription): Promise<AmpDescription> => {
    .after(`<script async custom-element="amp-install-serviceworker"
    src="https://cdn.ampproject.org/v0/amp-install-serviceworker-0.1.js"></script>`);
 
-   args = await installServiceWorker(args);
+   //args = await installServiceWorker(args);
  }
 
   $('head').append(JSONLD);
@@ -109,7 +109,7 @@ const embedScripts = async (args: AmpDescription): Promise<AmpDescription> => {
 
  };
 
-export const BeReadySpec = async (
+export const BeJustAmp = async (
   args: AmpDescription,
 ): Promise<AmpDescription> => {
   args = await embedScripts(args);

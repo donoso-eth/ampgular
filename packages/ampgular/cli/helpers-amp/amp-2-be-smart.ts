@@ -116,11 +116,14 @@ const recreatePluggins = async (args: AmpDescription): Promise<AmpDescription> =
 export const BeSmart = async (
   args: AmpDescription,
 ): Promise<AmpDescription> => {
+
+  console.log(args.pageState);
+
   args = await recreateState(args);
 
-  args = await recreateDynamicData(args);
+  //args = await recreateDynamicData(args);
 
-  args = await recreatePluggins(args);
+ // args = await recreatePluggins(args);
 
   return args;
 };

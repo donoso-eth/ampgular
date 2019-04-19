@@ -8,7 +8,7 @@ import { Path, join, normalize } from '@angular-devkit/core';
 export class ExpressServer {
   private app:  Express;
   public server: Server;
-  constructor(public assetsPath: Path) {
+  constructor(public indexPath: Path) {
     this.app = express();
   }
 
@@ -20,18 +20,22 @@ export class ExpressServer {
     return new Promise((resolve, reject) => {
       try {
         const PORT = process.env.PORT || 5000;
-        const DIST_FOLDER = join(normalize(process.cwd()), this.assetsPath);
+        const DIST_FOLDER = join(normalize(process.cwd()), this.indexPath);
 
         const ASSETS_FOLDER = join(normalize(process.cwd()), 'src/assets');
 
-        this.app.get('*.*', express.static(join(ASSETS_FOLDER)));
+
+        this.app.use('/assets', express.static(ASSETS_FOLDER))
+
+
+     //   this.app.get('*.*', express.static(join(ASSETS_FOLDER)));
         this.app.get('*',  (req: any, res: any) => {
           res.sendFile(join(DIST_FOLDER, 'index.html')); // load the single view file (angular will handle the page changes on the front-end)
         });
 
-        console.log(this.server);
+       
         this.server = this.app.listen(PORT, async () => {
-          console.log('server test launched on localhost:5000')
+          console.log('Server test launched on localhost:5000')
 
           resolve(true);
 

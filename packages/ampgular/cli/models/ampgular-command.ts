@@ -130,7 +130,7 @@ export abstract class AmpgularCommand<
 
     }
 
-    public async run(options: T & Arguments): Promise<0 | 1> {
+    public async run(options: T & Arguments): Promise<number> {
         return this.checkOptions();
     }
 

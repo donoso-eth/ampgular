@@ -2,6 +2,7 @@ import { parse } from 'postcss';
 import { AmpDescription } from '../models/interface';
 import { cleanHtml } from './clean-custom-tags';
 import { OptimizeCSS } from './optimize-css';
+import { load } from 'cheerio';
 
 const addAngTags = [{ selector: 'app-root' }, { selector: 'router-outlet' }];
 
@@ -72,29 +73,41 @@ const AngularComponentCheck = (args: AmpDescription): AmpDescription => {
   const hostRegex = /(_nghost)-sc([0-9]+)/g;
   const matchHost: string[] = [];
   let angCompo: any[] = [];
-  indexHtml.replace(hostRegex, function(id: string) {
+  let check1 =indexHtml.replace(hostRegex, function (match, code, id) {
+
     if (matchHost.indexOf(id) == -1) {
-      matchHost.push(id);
-      const appCustom = $('[' + id + ']')[0];
-    //  let aqui = $("[_nghost-sc" + id + "]")[0];
-      angCompo.push({ selector: appCustom.tagName, id: id });
+        matchHost.push(
+            id
+        );
+     let aqui = $ ('[_nghost-sc' + id + ']')[0]
+     angCompo.push(
+         {'selector':aqui.tagName,
+        'id':id });
     }
 
-    return '';
-  });
+    return "";
+});
+    const matchCompo:any = [];
+    const compoRegex = /(_ngcontent)-sc([0-9]+)/g;
 
-  const compoRegex = /(_ngcontent)-sc([0-9]+)/g;
-  const matchComponent: string[] = [];
 
-  indexHtml.replace(compoRegex, (id: string) => {
-    if (matchComponent.indexOf(id) == -1) {
-      matchComponent.push(id);
+let check2 = indexHtml.replace(compoRegex, function (match, code, id) {
+
+    if (matchCompo.indexOf(id) == -1) {
+        matchCompo.push(
+            id
+        );
+
     }
 
-    return '';
-  });
+    return "";
+});
+
+
+
 
   angCompo = angCompo.concat(addAngTags);
+ 
   angCompo.forEach(index => {
     const regExp = new RegExp('\\[_nghost-sc' + index.id + '\\]', 'gi');
     args['singleUniStyle'] = args['singleUniStyle'].replace(
@@ -151,8 +164,11 @@ const AngularComponentCheck = (args: AmpDescription): AmpDescription => {
         }
       });
     });
+
+    const adaptedCheerio = load(indexHtml)
+
   args['angCompo'] = angCompo;
-  args['cheerio'] = $;
+  args['cheerio'] = $ //adaptedCheerio;
 
   return args;
 };
