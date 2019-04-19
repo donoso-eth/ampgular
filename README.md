@@ -35,8 +35,8 @@ This is the home of the Ampgular ClI and the schematics packages for seo and amp
 |---|---|---|---|
 
 ### Quick Links Angular
-[Angular CLI Repo]() | [Angular Universal Gitter]() | [Angular CLI Gitter]() | 
-|---|---|---|---|
+[Angular CLI Repo](http://github.com/angular/angular-cli) | [Angular Universal Gitter](http://github.com/ampgular/ampgular-cli) | [Angular CLI Gitter](http://github.com/ampgular/ampgular-cli) | 
+|---|---|---|
 
 
 
@@ -77,11 +77,13 @@ This is a monorepo which contains many tools and packages:
 
 
 | Project | Package | Version | Links |
+|---|---|---|---|
 **Anmpgular Common Functions and Schemas** | [`@ampgular/common`](https://npmjs.com/package/@ampgular/common) | [![latest](https://img.shields.io/npm/v/%40ampgular%2Fcommon/latest.svg)](https://npmjs.com/package/@ampgular/common) | 
 
 #### Schematics
 
 | Project | Package | Version | Links |
+|---|---|---|---|
 **Anmpgular Schematics for generation AMP Pages** | [`@ampgular/amp`](https://npmjs.com/package/@ampgular/amp) | [![latest](https://img.shields.io/npm/v/%40ampgular%2Famp/latest.svg)](https://npmjs.com/package/@ampgular/amp) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/ampgular/amp/README.md)
 **Anmpgular Schematics for making Angular Pages SEO friendly with ease** | [`@ampgular/seo`](https://npmjs.com/package/@ampgular/seo) | [![latest](https://img.shields.io/npm/v/%40ampgular%2Fseo/latest.svg)](https://npmjs.com/package/@ampgular/seo) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/ampgular/seo/README.md)
 
