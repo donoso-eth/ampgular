@@ -110,8 +110,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run test",
-      "pre-push": "node ./bin/devkit-admin hooks/pre-push"
+      "pre-commit": "node ./bin/devkit-admin hooks/pre-push"
     }
   }
 }
