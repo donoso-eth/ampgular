@@ -25,7 +25,7 @@ export default function (_: {}, logger: logging.Logger) {
     terminal: false,
   });
 
-
+  console.log('javier');
   rl.on('line', line => {
     console.log(line);
     const [, localSha, , remoteSha] = line.split(/\s+/);
