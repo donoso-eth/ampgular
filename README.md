@@ -24,7 +24,7 @@ This is the home of the Ampgular ClI and the schematics packages for seo and amp
 
 
 
-[![CircleCI branch](https://img.shields.io/circleci/project/github/ampgular/ampgular/master.svg?label=circleci)](https://circleci.com/gh/ampgular/ampgular) [![Dependency Status](https://david-dm.org/ampgular.svg)](https://david-dm.org/ampgular/ampgular.svg) [![devDependency Status](https://david-dm.org/ampgular/dev-status.svg)](https://david-dm.org/ampgular/ampgular/dev-status.svg) 
+[![CircleCI branch](https://img.shields.io/circleci/project/github/ampgular/ampgular/master.svg?label=circleci)](https://circleci.com/gh/ampgular/ampgular) [![](https://david-dm.org/ampgular/ampgular.svg)](https://david-dm.org/ampgular/ampgular) [![](https://david-dm.org/ampgular/ampgular/dev-status.svg)](https://david-dm.org/angular/angular-cli?type=dev) 
 
 [![License](https://img.shields.io/npm/l/@ampgular/cli.svg)](/LICENSE) 
 

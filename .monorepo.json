@@ -7,12 +7,12 @@
         "url": "https://circleci.com/gh/ampgular/ampgular"
       },
       {
-        "title": "![Dependency Status](https://david-dm.org/ampgular.svg)",
-        "url": "https://david-dm.org/ampgular/ampgular.svg"
+        "image":"https://david-dm.org/ampgular/ampgular.svg",
+        "url": "https://david-dm.org/ampgular/ampgular"
       },
       {
-        "title": "![devDependency Status](https://david-dm.org/ampgular/dev-status.svg)",
-        "url": "https://david-dm.org/ampgular/ampgular/dev-status.svg"
+        "image":"https://david-dm.org/ampgular/ampgular/dev-status.svg",
+        "url": "https://david-dm.org/angular/angular-cli?type=dev"
       }
     ],
     [
