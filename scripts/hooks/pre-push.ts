@@ -25,13 +25,15 @@ export default function (_: {}, logger: logging.Logger) {
     terminal: false,
   });
 
-  console.log('javier');
+  console.log('javierXXXXXXXXX');
+  let shay = '';
+  let reshay = '';
   rl.on('line', line => {
-    console.log(line);
-    console.log(line);
+
     const [, localSha, , remoteSha] = line.split(/\s+/);
-    console.log(localSha);
-    console.log(remoteSha);
+
+    shay = localSha;
+    reshay = remoteSha;
     if (localSha == emptySha) {
       // Deleted branch.
       return;
@@ -44,5 +46,8 @@ export default function (_: {}, logger: logging.Logger) {
       validateCommitResult = validateCommits({ base: remoteSha, head: localSha }, logger);
     }
   });
-  rl.on('end', () => process.exit(validateCommitResult));
+  rl.on('end', () => {
+    console.log(reshay, shay);
+    process.exit(validateCommitResult);
+});
 }
