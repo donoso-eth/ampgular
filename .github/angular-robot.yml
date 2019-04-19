@@ -7,7 +7,7 @@ merge:
     # set to true to disable
     disabled: false
     # the name of the status
-    context: "ci/angular: merge status"
+    context: "ci/ampgular: merge status"
     # text to show when all checks pass
     successText: "All checks passed!"
     # text to show when some checks are failing
@@ -41,14 +41,12 @@ merge:
 
     # list of PR statuses that need to be successful
     requiredStatuses:
-      - "continuous-integration/appveyor/pr"
       - "ci/circleci: build"
-      - "ci/circleci: build-bazel"
       - "ci/circleci: install"
       - "ci/circleci: lint"
       - "ci/circleci: validate"
       - "ci/circleci: test"
-      - "ci/circleci: test-large"
+  
 
   # the comment that will be added when the merge label is added despite failing checks, leave empty or set to false to disable
   # {{MERGE_LABEL}} will be replaced by the value of the mergeLabel option
