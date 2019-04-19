@@ -38,6 +38,10 @@
       "description": "Add Service Worker",
       "type": "string"
     },
+    "localhost": {
+      "description": "In Node taargettig do we nned ot spi a server to render the path, the classical use case es json in assets folder",
+      "type": "boolean"
+    },
     "stateFiles": {
       "description": "Path to state config Files, per default the main state",
       "type": "array",

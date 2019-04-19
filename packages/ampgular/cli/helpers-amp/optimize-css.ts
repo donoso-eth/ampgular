@@ -28,7 +28,7 @@ export const OptimizeCSS = async (
 ): Promise<AmpDescription> => {
   const whiteListed: any[] = [];
   Object.keys(args.pageState as any).forEach(key => {
-    (args.pageState as any)['events'].forEach((event: any) => {
+    (args.pageState as any)[key]['events'].forEach((event: any) => {
       if (event['id'].substr(0, 1) == '.') {
         whiteListed.push(event['id'].substr(1, event['id'].length - 1));
       }

@@ -15,7 +15,7 @@ import {
   readFileSync,
 } from 'fs';
 import * as minimatch from 'minimatch';
-import { Schema as AmpgularOptions } from '../lib/config/schema';
+import { Schema as AmpgularOptions, Prerender } from '../lib/config/schema';
 import { AmpPage } from '../models/amp-page';
 import { AmpgularCommand } from '../models/ampgular-command';
 import { BaseCommandOptions, Command } from '../models/command';
@@ -32,6 +32,8 @@ import { runOptionsBuild } from '../utilities/workspace-extensions';
 import { Schema as DeployCommandSchema } from './deploy';
 import { getCommandDescription } from './deploy-impl';
 import { Schema as MeCommandSchema } from './me';
+import { Configuration, Schema as PrerenderOptions } from '../schemas/prerender';
+import { TargetApp } from 'dist-schema/packages/ampgular/cli/schemas/deploy';
 
 const open = require('open');
 
@@ -165,6 +167,8 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
       await myAMPPage.AmpToSpec();
 
+      await myAMPPage.AmpToSmart();
+
       await myAMPPage.AmpToJustAmp();
 
       await myAMPPage.AmpToFile(this.commandConfigOptions.test as boolean);
@@ -202,11 +206,11 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
   _readFile = (path: string): Object => {
 
-    const file = JSON.parse(
+    let file = JSON.parse(
       readFileSync(join(normalize(process.cwd()), path)).toString('utf-8'),
     );
-
-    return delete file['$schema'];
+      delete file['$schema'];
+    return  file
   }
 
 
@@ -296,9 +300,18 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
     this.prerender =
       new descriptionPrerender.impl({ workspace }, descriptionPrerender, this.logger);
 
+
+    const prerenderOptions: any= {
+      configuration: 'amp', target: this._ampgularConfig.target,
+        routes: this._toAmpROUTES, path: 'src'
+    }
+
+    if(this.commandConfigOptions.localhost){
+      prerenderOptions.localhost = true;
+    }
+
     return await this.prerender.validateAndRun(
-      { configuration: 'amp', target: this._ampgularConfig.target,
-        routes: this._toAmpROUTES, path: 'src' });
+      prerenderOptions);
   }
 
 

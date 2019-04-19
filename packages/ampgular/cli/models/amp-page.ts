@@ -89,7 +89,7 @@ export class AmpPage {
 
     public AmpToFile(test: boolean) {
 
-      const myAMPHtml = this._args.cheerio.html();
+      const myAMPHtml = this._args.cheerio.html().replace('<html', '<html amp')
       if (test) {
           writeFileSync(join(this.AMP_FOLDER, '/index.html'), myAMPHtml
           , 'utf-8');

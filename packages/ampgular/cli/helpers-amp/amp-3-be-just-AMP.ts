@@ -105,6 +105,9 @@ const embedScripts = async (args: AmpDescription): Promise<AmpDescription> => {
    ele.attribs['href'] = ele.attribs['href'] + '/amp';
  });
 
+
+
+
   return args;
 
  };

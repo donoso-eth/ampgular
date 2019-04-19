@@ -42,7 +42,7 @@ export const createComponentDefault = async (
     classId.each((index, idEle) => {
       const styleId = new String(idEle.attribs['class']).toString();
       idEle['attribs']['[class]'] =
-        state +
+        stateName +
         "==true? '" +
         css['class'] +
         ' ' +
@@ -82,7 +82,7 @@ export const createComponentListSingle = async (
   classId.each(async (index, idEle) => {
     // tslint:disable-next-line:no-any
     const obj: any = {};
-    obj['current' + state + index] = stateName + index + 0;
+    obj['current' + stateName + index] = stateName + index + 0;
     const stylesbefore: string[] = [];
     const stylesAfter: string[] = [];
     const i = 0;
@@ -100,7 +100,7 @@ export const createComponentListSingle = async (
     const classId = $(myEvent['id']);
     classId.each((index, idEle) => {
       const tap =
-        'tap:AMP.setState({' + state + index + ':!' + state + index + '})';
+        'tap:AMP.setState({' + stateName + index + ':!' + stateName + index + '})';
 
       idEle['attribs']['on'] = tap;
       if (idEle.tagName != 'button') {
@@ -127,7 +127,7 @@ export const createComponentListBind = async (
     const classId = $(myID);
     if (classId.length > 0) {
       classId.each((index, idEle) => {
-        const tap = 'tap:AMP.setState({' + state + ':' + index + '})';
+        const tap = 'tap:AMP.setState({' + stateName + ':' + index + '})';
 
         idEle['attribs']['on'] = tap;
         if (idEle.tagName != 'button') {
@@ -154,7 +154,7 @@ export const createComponentListBind = async (
             eleClass = eleClass.replace(x, '');
           });
         idEle['attribs']['[class]'] =
-          state +
+          stateName +
           '<' +
           index +
           "? '" +
@@ -162,7 +162,7 @@ export const createComponentListBind = async (
           ' ' +
           classIndex[0] +
           "' :(" +
-          state +
+          stateName +
           '==' +
           index +
           "? '" +
@@ -231,7 +231,7 @@ export const createComponentMultiBind = async (
 
         if (ii == 0) {
           const cla =
-            state + '[' + state + '.current' + stateName + '].style[' + i + ']';
+            stateName + '[' + stateName + '.current' + stateName + '].style[' + i + ']';
           idEle.attribs['[class]'] = cla;
         }
 
