@@ -100,9 +100,9 @@ workflows:
           requires:
             - install
 
-      - lint:
+      - validate:
           requires:
-            - validate      
+            - lint      
       - build:
           requires:
             - validate
