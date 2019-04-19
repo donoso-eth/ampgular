@@ -71,6 +71,11 @@ jobs:
       - attach_workspace: *attach_options
       - run: npm run lint
 
+  validate:
+    <<: *defaults
+    steps:
+      - attach_workspace: *attach_options
+      - run: npm run validate -- --ci
   test:
     <<: *defaults
     steps:
@@ -94,10 +99,13 @@ workflows:
       - lint:
           requires:
             - install
+
+      - lint:
+          requires:
+            - validate      
       - build:
           requires:
-            - install
-            - lint
+            - validate
           filters:
             branches:
               ignore:

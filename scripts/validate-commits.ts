@@ -9,6 +9,7 @@
 import { logging } from '@angular-devkit/core';
 import { execSync } from 'child_process';
 import { packages } from '../lib/packages';
+// import { consoleTestResultHandler } from 'tslint/lib/test';
 
 
 const ignoreCommitShaList = [
@@ -112,6 +113,7 @@ export default function (argv: ValidateCommitsOptions, logger: logging.Logger) {
     baseSha = argv.base;
     sha = argv.head || 'HEAD';
   } else {
+    console.log( process.env['GIT_REMOTE'] );
     const parentRemote = process.env['GIT_REMOTE'] ? process.env['GIT_REMOTE'] + '/' : '';
     const parentBranch = process.env['GIT_BRANCH'] || 'master';
     baseSha = execSync(`git merge-base --fork-point "${parentRemote}${parentBranch}"`)
@@ -119,9 +121,13 @@ export default function (argv: ValidateCommitsOptions, logger: logging.Logger) {
     sha = 'HEAD';
   }
 
+  console.log(baseSha);
   logger.createChild('sha').info(`Base: ${baseSha}\nHEAD: ${sha}`);
 
   const log = execSync(`git log --oneline "${baseSha}..${sha}"`).toString().trim();
+
+  console.log(log);
+
   logger.debug('Commits:');
   logger.createChild('commits').debug(log);
   logger.debug('');
