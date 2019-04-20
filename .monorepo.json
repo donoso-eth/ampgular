@@ -7,11 +7,11 @@
         "url": "https://circleci.com/gh/ampgular/ampgular"
       },
       {
-        "image":"https://david-dm.org/ampgular/ampgular.svg",
+        "image": "https://david-dm.org/ampgular/ampgular.svg",
         "url": "https://david-dm.org/ampgular/ampgular"
       },
       {
-        "image":"https://david-dm.org/ampgular/ampgular/dev-status.svg",
+        "image": "https://david-dm.org/ampgular/ampgular/dev-status.svg",
         "url": "https://david-dm.org/angular/angular-cli?type=dev"
       }
     ],
@@ -80,7 +80,7 @@
     }
   },
   "versions": {
-    "stable": "0.0.5",
-    "experimental": "0.0.5"
+    "stable": "0.0.3",
+    "experimental": "0.0.3"
   }
 }
