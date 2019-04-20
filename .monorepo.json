@@ -80,7 +80,7 @@
     }
   },
   "versions": {
-    "stable": "0.0.3",
-    "experimental": "0.0.3"
+    "stable": "0.0.4",
+    "experimental": "0.0.4"
   }
 }
