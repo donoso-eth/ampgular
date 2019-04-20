@@ -7,14 +7,19 @@
  */
 
 import { AmpDescription } from '../models/interface';
-import { Schema  as FormPostComponentSchema } from '../schemas/component-form-post';
-import { Schema  as ListGetComponentSchema } from '../schemas/component-list-get';
-import { Schema  as ListPostComponentSchema } from '../schemas/component-list-post';
-import { createFormPostComponent, createListGetComponent,
-  createListPostComponent } from './recreate-dynamic';
-import { createComponentDefault, createComponentListBind,
+import { Schema as FormPostComponentSchema } from '../schemas/component-form-post';
+import { Schema as ListGetComponentSchema } from '../schemas/component-list-get';
+import { Schema as ListPostComponentSchema } from '../schemas/component-list-post';
+import {
+  createFormPostComponent, createListGetComponent,
+  createListPostComponent
+} from './recreate-dynamic';
+import {
+  createComponentDefault, createComponentListBind,
   createComponentListSingle,
-  createComponentMultiBind, createComponentScroll } from './recreate-state';
+  createComponentMultiBind, createComponentScroll
+} from './recreate-state';
+import { join, normalize } from '@angular-devkit/core';
 
 
 const recreateState = async (args: AmpDescription): Promise<AmpDescription> => {
@@ -37,11 +42,11 @@ const recreateState = async (args: AmpDescription): Promise<AmpDescription> => {
         args = await createComponentListBind(args, myComponent, state);
         break;
       case 'multi-bind':
-        args = await createComponentMultiBind(args,  myComponent, state);
+        args = await createComponentMultiBind(args, myComponent, state);
         break;
 
       case 'scroll':
-        args = await createComponentScroll(args,  myComponent, state);
+        args = await createComponentScroll(args, myComponent, state);
         break;
 
       default:
@@ -98,15 +103,19 @@ const recreateDynamicData = async (args: AmpDescription): Promise<AmpDescription
   return args;
 };
 
-const recreatePluggins = async (args: AmpDescription): Promise<AmpDescription> => {
+const recreatePlugins = async (args: AmpDescription): Promise<AmpDescription> => {
 
   // tslint:disable-next-line:no-any
-  const myPagePlugin: any = args.pagePluggins;
+  const myPagePlugin: any = args.pagePlugins;
 
 
-  for (const myPlugin of  Object.keys(myPagePlugin)) {
-      args =  myPagePlugin[myPlugin]['plugin'](args);
-   }
+  for (const myPlugin of Object.keys(myPagePlugin)) {
+
+    const pluginFunctionPath = join(normalize(process.cwd()), 'ampgular/amp/plugins/' + myPagePlugin[myPlugin].plugin + '-plugin')
+    const myPluginFunction = require(pluginFunctionPath).default;
+
+    args = await myPluginFunction(args);
+  }
 
 
   return args;
@@ -117,13 +126,11 @@ export const BeSmart = async (
   args: AmpDescription,
 ): Promise<AmpDescription> => {
 
-  console.log(args.pageState);
-
   args = await recreateState(args);
 
-  //args = await recreateDynamicData(args);
+  args = await recreateDynamicData(args);
 
- // args = await recreatePluggins(args);
+  args = await recreatePlugins(args);
 
   return args;
 };

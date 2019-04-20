@@ -15,7 +15,6 @@ import {
   readFileSync,
 } from 'fs';
 import * as minimatch from 'minimatch';
-import { Schema as AmpgularOptions, Prerender } from '../lib/config/schema';
 import { AmpPage } from '../models/amp-page';
 import { AmpgularCommand } from '../models/ampgular-command';
 import { BaseCommandOptions, Command } from '../models/command';
@@ -24,16 +23,14 @@ import {
   CommandDescriptionMap, CommandInterface, CommandWorkspace,
   DynamicSchema, StateSchema,
 } from '../models/interface';
-import { Schema as AmpOptions } from '../schemas/amp';
+import { Schema as AmpOptions, Mode } from '../schemas/amp';
 import { ExpressServer } from '../utilities/expressserver';
 import { getWorkspaceDetails } from '../utilities/project';
 import { getRoutes } from '../utilities/utils';
 import { runOptionsBuild } from '../utilities/workspace-extensions';
-import { Schema as DeployCommandSchema } from './deploy';
 import { getCommandDescription } from './deploy-impl';
 import { Schema as MeCommandSchema } from './me';
-import { Configuration, Schema as PrerenderOptions } from '../schemas/prerender';
-import { TargetApp } from 'dist-schema/packages/ampgular/cli/schemas/deploy';
+
 
 const open = require('open');
 
@@ -78,10 +75,10 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
 
     if (this.overrides['route'] !== undefined) {
-     this.commandConfigOptions.test = true ;
+     this.commandConfigOptions.mode = Mode.Test;
     }
 
-    if (this.commandConfigOptions.test) {
+    if (this.commandConfigOptions.mode == Mode.Test) {
       this._toAmpROUTES = [];
       this._toAmpROUTES.push(this.commandConfigOptions.route as string);
     } else {
@@ -122,24 +119,25 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
       };
     }
 
-    for (const plugginsFilePath of this.commandConfigOptions.pluginsFiles) {
+    for (const pluginsFilePath of this.commandConfigOptions.pluginsFiles) {
       const plugginContent: StateMap = this._readFile(
-        plugginsFilePath,
+        pluginsFilePath,
       ) as StateMap;
       this.pluginsFilesMap = {
-        ...this.dynamicFilesMap,
+        ...this.pluginsFilesMap,
         ...plugginContent,
       };
     }
 
-    if (this.commandConfigOptions.build) {
-      //// run amp build
-      await runOptionsBuild(
-        { configuration: 'amp', target: this._ampgularConfig.target }, this.logger);
+
+    if (this.commandConfigOptions.mode!= Mode.Deploy){
+      if (this.commandConfigOptions.prerender){
+        await this._callPrerender();
+      }
+
     }
 
 
-    await this._callPrerender();
 
 
     this._globalCss= readFileSync(join(normalize(process.cwd()),'/dist/amp/css/styles.css')).toString('utf-8')
@@ -171,20 +169,20 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
       await myAMPPage.AmpToJustAmp();
 
-      await myAMPPage.AmpToFile(this.commandConfigOptions.test as boolean);
+      await myAMPPage.AmpToFile(this.commandConfigOptions.mode);
 
 
     }
 
-    if (this.commandConfigOptions.test) {
+    if (this.commandConfigOptions.mode == "test") {
       this.appServerNew = new ExpressServer(normalize('dist/amp'));
       await this.appServerNew.LaunchServer();
       await open('http://localhost:5000#development=1');
-
-
-
-       // /#development=1
-
+      return 55;
+    } else if (this.commandConfigOptions.mode == "test") {
+      this.appServerNew = new ExpressServer(normalize('dist/amp'));
+      await this.appServerNew.LaunchServer();
+      await open('http://localhost:5000');
       return 55;
     } else {
     return 0;

@@ -63,6 +63,14 @@ export const OptimizeCSS = async (
     }
   });
 
+  Object.keys(args.pagePlugins as any).forEach(key => {
+    (args.pagePlugins as any)[key]['whiteListed'].forEach((white:string)=> {
+      whiteListed.push(white)
+    })
+  })
+
+
+
   const whiteUniq = whiteListed
     .filter(x => x != '')
     .reduce(function(a, b) {

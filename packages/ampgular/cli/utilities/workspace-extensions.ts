@@ -71,16 +71,21 @@ export async function runOptionsBuild(
 
     if (options.target == 'node') {
 
-      logger.warn(`....starting BUILDDING SERVER APPLICATON..... this make take several minutes`);
+      logger.warn(`....starting BUILDDING SERVER APPLICATON..... this may take several minutes`);
       logger.warn(`Target is ${options.target}  configuration is ${options.configuration} `);
 
       await _exec('ng', ['run', options.projectName + ':server',
-                         '--configuration=' + options.configuration], {}, logger);
+                        '--configuration=' + options.configuration], {}, logger);
+
+      if(options.configuration == 'amp'){
+       // await _exec('npm',['run', 'node-sass',join(normalize(process.cwd()),'src/styles.scss'), '-o', join(normalize(process.cwd()),'dist/amp/css')],{},logger)
+      }
+
 
       return  0;
 
   } else {
-    logger.warn(`....starting BUILDDING CLEINT APPLICATON..... this make take several minutes`);
+    logger.warn(`....starting BUILDDING CLEINT APPLICATON..... this may take several minutes`);
     logger.warn(`Target is ${options.target}  configuration is ${options.configuration} `);
     await _exec('ng', ['build', '--configuration=' + options.configuration], {}, logger);
 

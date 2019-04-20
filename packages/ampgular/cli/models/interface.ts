@@ -51,14 +51,14 @@ export interface AmpDescription {
   route?: string;
   pageState: {};
   pageDynamic: {};
-  pagePluggins: {};
+  pagePlugins: {};
   options: AmpOptions;
 }
 
 export interface AmpPageConstructor {
   pageState: StateSchema;
   pageDynamic: DynamicSchema;
-  pagePluggins: any;
+  pagePlugins: any;
   globalCss: string;
 
 }

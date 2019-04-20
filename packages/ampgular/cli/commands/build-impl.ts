@@ -17,6 +17,7 @@ import { WorkspaceLoader } from '../models/workspace-loader';
 import { Version } from '../upgrade/version';
 import { getProjectName, runOptionsBuild } from '../utilities/workspace-extensions';
 import { Schema as BuildCommandSchema } from './build';
+import { Schema as BuildOptions } from '../schemas/build';
 
 export class BuildCommand extends AmpgularCommand<BuildCommandSchema> {
   public readonly command = 'build';
@@ -28,6 +29,10 @@ export class BuildCommand extends AmpgularCommand<BuildCommandSchema> {
     options: BuildCommandSchema & Arguments,
   ): Promise<void> {
     await super.initialize(options);
+
+    this.commandConfigOptions = { ...this._ampgularConfig.buildConfig,
+      ...this.overrides} as BuildOptions;
+
   }
 
   public async run(options: BuildCommandSchema & Arguments): Promise<0|1> {
@@ -51,12 +56,12 @@ export class BuildCommand extends AmpgularCommand<BuildCommandSchema> {
 
    if (!this.projectName) {
 
-      options.projectName = await this.getProject();
+    this.commandConfigOptions.projectName = await this.getProject();
     }
 
 
-   options = {...this._ampgularConfig.buildConfig, ...{ target: this._ampgularConfig.target}, ...options};
-  
+   options = {...this.commandConfigOptions, ...{ target: this._ampgularConfig.target}};
+
 
    return await runOptionsBuild(options, this.logger);
 

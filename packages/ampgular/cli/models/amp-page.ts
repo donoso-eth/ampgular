@@ -37,7 +37,7 @@ export class AmpPage {
 
     public initialize(
       options: AmpOptions, pageState: StateSchema,
-      pageDynamic: DynamicSchema, pagePluggins: any) {
+      pageDynamic: DynamicSchema, pagePlugins: any) {
 
         // this._angularString =
         // readFileSync(join(this.PUBLIC_FOLDER, (options as any).route
@@ -57,7 +57,7 @@ export class AmpPage {
             options: options,
             pageState: pageState,
             pageDynamic: pageDynamic,
-            pagePluggins: pagePluggins,
+            pagePlugins: pagePlugins,
         };
     }
 
@@ -87,10 +87,10 @@ export class AmpPage {
 
   }
 
-    public AmpToFile(test: boolean) {
+    public AmpToFile(mode:String) {
 
       const myAMPHtml = this._args.cheerio.html().replace('<html', '<html amp')
-      if (test) {
+      if (mode=='test') {
           writeFileSync(join(this.AMP_FOLDER, '/index.html'), myAMPHtml
           , 'utf-8');
 

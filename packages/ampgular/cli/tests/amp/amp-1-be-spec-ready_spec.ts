@@ -15,6 +15,7 @@ import { getCommandDescription } from '../../commands/deploy-impl';
 import { BeReadySpec } from '../../helpers-amp/amp-1-be-spec-ready';
 import { AmpDescription, CommandWorkspace } from '../../models/interface';
 import { TestBed } from '../mocks/test-bed';
+import { Mode } from '../../schemas/amp';
 
 describe('BE READY SPEC STYLES & COMPONENTS', () => {
   let logger: any;
@@ -51,6 +52,8 @@ describe('BE READY SPEC STYLES & COMPONENTS', () => {
         serviceWorker: true,
         pluginsFiles: [''],
         host: '',
+        mode: Mode.Render,
+        prerender:true
     };
 
     const BeReadySpecClass = jasmine.createSpy('BeReadySpec');

@@ -4,7 +4,23 @@
   "$id": "amp-cli://schemas/build.json",
   "description": "Build Configuration",
   "type": "object",
-  "allOf": [{
+  "allOf": [
+      {
+        "type":"object",
+        "properties": {
+          "projectname": {
+            "type": "string",
+            "description": "Optional, explicitly set the project name"
+           
+          }
+        }
+      },
+    {
       "$ref": "./definitions.json#/definitions/build"
-    }]
+    },
+    {
+      "$ref": "./definitions.json#/definitions/node"
+
+    }
+  ]
   }

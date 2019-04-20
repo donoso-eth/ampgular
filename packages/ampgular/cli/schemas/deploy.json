@@ -8,8 +8,16 @@
       "type": "string",
       "enum": ["spa", "prerender", "ssr"]
     },
+    "amp":{
+      "type":"boolean",
+      "default":false
+    },
     "sitemap": {
       "type": "boolean"
+    },
+    "serve": {
+      "type": "boolean",
+      "default":false
     },
     "robots": {
       "type": "boolean"
@@ -30,5 +38,5 @@
       }
     }
   },
-  "required": ["robots", "sitemap", "files","targetApp"]
+  "required": ["robots", "sitemap", "files","targetApp","amp"]
 }

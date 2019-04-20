@@ -9,7 +9,8 @@
     "serviceWorker":true,
     "stateFiles":["/ampgular/amp/main_state_config.json"],
     "dynamicFiles":["/ampgular/amp/main_dynamic_config.json"],
-    "pluginsFiles":["/ampgular/amp/plugins_config.json"]
+    "pluginsFiles":["/ampgular/amp/plugins_config.json"],
+    "mode":"render"
   },
   "buildConfig": {
     "configuration": "production",
@@ -26,6 +27,7 @@
   },
   "deploy": {
     "targetApp": "prerender",
+    "amp":false,
     "sitemap": true,
     "robots": true,
     "files": [

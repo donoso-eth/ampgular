@@ -107,7 +107,7 @@ let check2 = indexHtml.replace(compoRegex, function (match, code, id) {
 
 
   angCompo = angCompo.concat(addAngTags);
- 
+
   angCompo.forEach(index => {
     const regExp = new RegExp('\\[_nghost-sc' + index.id + '\\]', 'gi');
     args['singleUniStyle'] = args['singleUniStyle'].replace(
@@ -165,7 +165,7 @@ let check2 = indexHtml.replace(compoRegex, function (match, code, id) {
       });
     });
 
-    const adaptedCheerio = load(indexHtml)
+ 
 
   args['angCompo'] = angCompo;
   args['cheerio'] = $ //adaptedCheerio;

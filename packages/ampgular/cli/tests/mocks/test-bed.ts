@@ -5,8 +5,8 @@ import { load } from 'cheerio';
 import { readFileSync } from 'fs';
 import { getCommandDescription } from '../../commands/deploy-impl';
 import { AmpDescription, CommandConstructor, CommandInterface, CommandWorkspace } from '../../models/interface';
-
-export const ampgularWorkspace = {
+import {Mode} from '../../schemas/amp'
+ export const ampgularWorkspace = {
     '$schema': '../node_modules/@ampgular/cli/lib/config/schema.json',
     'version': 1,
     'target': 'node',
@@ -165,7 +165,7 @@ export class TestBed {
          angCompo: [],
          pageDynamic: {},
          pageState: {},
-         pagePluggins: {},
+         pagePlugins: {},
          options: {
            cssOptimize: true,
            ampValidation: true,
@@ -174,6 +174,8 @@ export class TestBed {
            host: '',
            pluginsFiles: [],
            stateFiles: [],
+           mode: Mode.Render,
+           prerender:true
 
          },
         };

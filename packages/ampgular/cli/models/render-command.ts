@@ -79,7 +79,8 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
     } ;
 
     if(this.commandConfigOptions.configuration=='amp'){
-      this._workingFolder = 'amp';
+      this._workingFolder = 'src';
+      this._bundlePath = 'amp';
     }
 
 

@@ -9,32 +9,6 @@
   "$type": "build",
   "$impl": "./build-impl#BuildCommand",
   "allOf": [
-    {
-      "type": "object",
-      "properties": {
-        "target": {
-          "type": "string",
-          "description": "Type of Application to be built: client(browser) or server(node)",
-          "$default": "client"
-        },
-        "configuration": {
-          "type": "string",
-          "description": "Building for Production/Prerender or AMP Pages",
-          "$default": "prerender"
-        },
-        "projectname": {
-          "type": "string",
-          "description": "Optional, explicitly set the project name"
-         
-        },
-        "webpack": {
-          "type": "boolean",
-          "description": "When buildding target server application, set if webpack bundling is required",
-          "$defautl":false
-         
-        }
-      }
-    },
     { "$ref": "./definitions.json#/definitions/base" }
    
   ]

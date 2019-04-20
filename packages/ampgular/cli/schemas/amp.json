@@ -14,10 +14,16 @@
       "default": false,
       "description": "Prebuil the application priot to AMP"
     },
-    "test": {
-      "description": "Create only one AMp Page (route porperty) and spin a loclaserver to easy the devs process",
+    "prerender": {
       "type": "boolean",
-      "default": false
+      "default":true,
+      "description": "Prerender the "
+    },
+    "mode": {
+      "description": "Create only one AMp Page (route porperty) and spin a loclaserver to easy the devs process",
+      "type": "string",
+      "default": "render",
+      "enum": ["test","render","deploy"]
     },
     "ampValidation": {
       "description": "Launch the amp validation function",
@@ -74,6 +80,8 @@
     "stateFiles",
     "dynamicFiles",
     "pluginsFiles",
-    "host"
+    "host",
+    "mode",
+    "prerender"
   ]
 }

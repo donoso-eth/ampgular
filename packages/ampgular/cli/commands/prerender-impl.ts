@@ -81,7 +81,7 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
 
       let html = await this.renderUrl(route);
 
-      if ((this.commandConfigOptions as PrerenderOptions).cssOptimize) {
+      if ((this.commandConfigOptions as PrerenderOptions).cssOptimize && this.commandConfigOptions.configuration!='amp') {
         html = await optimizeStatic(html);
       }
       /// writing index
