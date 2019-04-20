@@ -31,8 +31,8 @@ anchor_2: &post_checkout
     command: >
       if [[ -n "${CIRCLE_PR_NUMBER}" ]]; then
         # User is required for rebase.
-        git config user.name "ampgular-ci"	
-        git config user.email "ampgular-ci"      
+        git config user.name "ampgular"	
+        git config user.email "ampgular"      
         # Rebase PR on top of target branch.
         node tools/rebase-pr.js ampgular/ampgular ${CIRCLE_PR_NUMBER}
       else
@@ -54,6 +54,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - *post_checkout
       - *restore_cache
       - run: yarn install --frozen-lockfile
       - persist_to_workspace:
@@ -95,11 +96,11 @@ workflows:
   version: 2
   default_workflow:
     jobs:
-      - install:
-          filters:  # using regex filters requires the entire branch to match
-            branches:
-              only:  # only branches matching the below regex filters will run
-                - master    
+      - install
+          # filters:  # using regex filters requires the entire branch to match
+          #   branches:
+          #     only:  # only branches matching the below regex filters will run
+          #       - master    
       - lint:
           requires:
             - install
