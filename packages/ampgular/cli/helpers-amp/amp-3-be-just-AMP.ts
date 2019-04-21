@@ -1,6 +1,6 @@
 import { AmpDescription } from '../models/interface';
 import { installServiceWorker } from './install-service-worker';
-import { Mode } from 'dist-schema/packages/ampgular/cli/schemas/amp';
+import { Mode } from '../schemas/amp';
 import { AmpComponents } from './whitelistedtags';
 
 
