@@ -16,7 +16,12 @@ import {
   template,
   url,
 } from '@angular-devkit/schematics';
-import { WorkspaceProject, WorkspaceSchema, getWorkspace, getWorkspacePath } from './utility';
+import * as ts from 'typescript';
+import {
+  WorkspaceProject, WorkspaceSchema,
+  getSourceNodes, getWorkspace, getWorkspacePath
+} from './utility';
+import { UpdateEnvironmentFile } from './utility/ng-ast-utils';
 
 // import { JsonObject } from "../core/src";
 
@@ -102,6 +107,20 @@ function externalUniversal(options: SeoOptions, host: Tree): Rule {
   }
 }
 
+function updateTarget(options: SeoOptions, tree: Tree): Rule {
+  return (tree: Tree) => {
+    const { target } = options;
+    const content = tree.read('ampgular/ampgular.json');
+
+    if (!content) {
+      throw new SchematicsException(`ampgular.json not found.`);
+    }
+    const sourceText = JSON.parse(content.toString('utf-8'));
+    sourceText['target'] = target;
+
+    tree.overwrite('ampgular/ampgular.json', JSON.stringify(sourceText, null, 2));
+  };
+}
 
 function changeConfigPaths(options: SeoOptions, host: Tree): Rule {
   return (host: Tree) => {
@@ -115,7 +134,7 @@ function changeConfigPaths(options: SeoOptions, host: Tree): Rule {
     if (target == 'node') {
 
       clientProject.architect.server.configurations['seo'] =
-      Object.assign({}, clientProject.architect.server.configurations['production'])
+        Object.assign({}, clientProject.architect.server.configurations['production'])
         ;
       clientProject.architect.server.configurations['seo'][
         'fileReplacements'
@@ -128,7 +147,7 @@ function changeConfigPaths(options: SeoOptions, host: Tree): Rule {
     } else {
 
       clientProject.architect.build.configurations['seo'] =
-      Object.assign({}, clientProject.architect.build.configurations['production'])
+        Object.assign({}, clientProject.architect.build.configurations['production'])
         ;
       clientProject.architect.build.configurations['seo'][
         'fileReplacements'
@@ -230,38 +249,42 @@ function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
 //   };
 // }
 
+
 function updteEnvironmentFiles(options: SeoOptions, tree: Tree): Rule {
   return (tree: Tree) => {
 
-    const envDev = tree.read('src/environments/environment.ts') as Buffer;
-    const myBuffer = envDev.toString('utf8');
-    const evDevConfig = JSON.parse(myBuffer);
-    evDevConfig.seo = false;
-    tree.overwrite('src/environments/environment.ts', JSON.stringify(evDevConfig, null, 2));
-
+    const changeEnvFile = new UpdateEnvironmentFile();
+    tree = changeEnvFile.changeEnvFile(
+      { name: 'seo', initiator: false },
+      'src/environments/environment.ts', tree);
+    let originalPath: string;
     if (options.target == 'browser') {
-      const envProd = tree.read('src/environments/environment.prod.ts') as Buffer;
-      const enProdConfig = JSON.parse(envProd.toString());
-      enProdConfig.seo = true;
-
-      tree.overwrite('src/environments/environment.seo.ts', JSON.stringify(enProdConfig, null, 2));
-      enProdConfig.seo = false;
-      tree.overwrite('src/environments/environment.prod.ts', JSON.stringify(enProdConfig, null, 2));
+      originalPath = 'src/environments/environment.prod.ts';
     } else {
-      const envProd = tree.read('src/environments/environment.server.ts') as Buffer;
-      const enProdConfig = JSON.parse(envProd.toString());
-      enProdConfig.seo = true;
-
-      tree.overwrite('src/environments/environment.seo.ts', JSON.stringify(enProdConfig, null, 2));
-      enProdConfig.seo = false;
-      tree.overwrite('src/environments/environment.server.ts',
-      JSON.stringify(enProdConfig, null, 2));
+      originalPath = 'src/environments/environment.server.ts';
     }
+    const seoPath = 'src/environments/environment.seo.ts';
+    const existsSeoFile = tree.exists(seoPath);
+    const seoFileBuffer = tree.read(originalPath) as Buffer;
+    const seoFileString = seoFileBuffer.toString('utf-8');
+    if (existsSeoFile) {
+      tree.overwrite(seoPath, seoFileString);
+    } else {
+      tree.create(seoPath, seoFileString);
+    }
+    tree = changeEnvFile.changeEnvFile(
+      { name: 'seo', initiator: true },
+      seoPath, tree);
+
+    tree = changeEnvFile.changeEnvFile(
+      { name: 'seo', initiator: false },
+      originalPath, tree);
 
 
     return tree;
   };
 }
+
 
 function addDependenciesandCreateScripts(options: SeoOptions): Rule {
   return (host: Tree) => {
@@ -290,8 +313,8 @@ export function seo(options: SeoOptions): Rule {
       createFiles(options, tree),
       changeConfigPaths(options, tree),
       addDependenciesandCreateScripts(options),
-      // addConfigurationToConfig(options),
-    //  updteEnvironmentFiles(options,tree)
+      updateTarget(options, tree),
+      updteEnvironmentFiles(options, tree),
     ])(tree, context);
   };
 }
