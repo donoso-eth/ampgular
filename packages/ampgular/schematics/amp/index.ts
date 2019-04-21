@@ -20,6 +20,7 @@ import {
 import { WorkspaceProject, WorkspaceSchema,
   getWorkspace,
   getWorkspacePath } from './utility';
+import { UpdateEnvironmentFile } from './utility/ng-ast-utils';
 
 export interface Test {
   // tslint:disable-next-line:no-any
@@ -186,30 +187,37 @@ function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
 function updteEnvironmentFiles(options: AmpOptions, tree: Tree): Rule {
   return (tree: Tree) => {
 
-    const envDev = tree.read('src/environments/environment.ts') as Buffer;
-    const myBuffer = envDev.toString('utf8');
-    const evDevConfig = JSON.parse(myBuffer);
-    evDevConfig.seo = false;
-    tree.overwrite('src/environments/environment.ts', JSON.stringify(evDevConfig, null, 2));
-
+    const changeEnvFile = new UpdateEnvironmentFile();
+    tree = changeEnvFile.changeEnvFile(
+      { name: 'amp', initiator: false },
+      'src/environments/environment.ts', tree);
+    let originalPath: string;
     if (options.target == 'browser') {
-      const envProd = tree.read('src/environments/environment.prod.ts') as Buffer;
-      const enProdConfig = JSON.parse(envProd.toString());
-      enProdConfig.seo = true;
-
-      tree.overwrite('src/environments/environment.seo.ts', JSON.stringify(enProdConfig, null, 2));
-      enProdConfig.seo = false;
-      tree.overwrite('src/environments/environment.prod.ts', JSON.stringify(enProdConfig, null, 2));
+      originalPath = 'src/environments/environment.prod.ts';
     } else {
-      const envProd = tree.read('src/environments/environment.server.ts') as Buffer;
-      const enProdConfig = JSON.parse(envProd.toString());
-      enProdConfig.seo = true;
-
-      tree.overwrite('src/environments/environment.seo.ts', JSON.stringify(enProdConfig, null, 2));
-      enProdConfig.seo = false;
-      tree.overwrite('src/environments/environment.server.ts',
-       JSON.stringify(enProdConfig, null, 2));
+      originalPath = 'src/environments/environment.server.ts';
     }
+    const seoPath = 'src/environments/environment.seo.ts';
+    const ampPath = 'src/environments/environment.amp.ts';
+    const existsAmpFile = tree.exists(ampPath);
+    const ampFileBuffer = tree.read(originalPath) as Buffer;
+    const ampFileString = ampFileBuffer.toString('utf-8');
+    if (existsAmpFile) {
+      tree.overwrite(ampPath, ampFileString);
+    } else {
+      tree.create(ampPath, ampFileString);
+    }
+    tree = changeEnvFile.changeEnvFile(
+      { name: 'amp', initiator: true },
+      ampPath, tree);
+
+    tree = changeEnvFile.changeEnvFile(
+      { name: 'amp', initiator: false },
+      seoPath, tree);
+
+    tree = changeEnvFile.changeEnvFile(
+      { name: 'amp', initiator: false },
+      originalPath, tree);
 
 
     return tree;
@@ -233,9 +241,7 @@ export function amp(options: AmpOptions): Rule {
       externalSeo(options, tree),
       createFiles(options, tree),
       changeConfigPaths(options, tree),
-      // addDependenciesandCreateScripts(options),
-      // addConfigurationToConfig(options),
-    //  updteEnvironmentFiles(options,tree)
+      updteEnvironmentFiles(options, tree),
     ])(tree, context);
   };
 }

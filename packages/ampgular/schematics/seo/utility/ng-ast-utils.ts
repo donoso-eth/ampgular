@@ -88,7 +88,6 @@ export interface ParamEnv {
   initiator: boolean;
 }
 
-
 export class UpdateEnvironmentFile {
 
   private  _param: ParamEnv;

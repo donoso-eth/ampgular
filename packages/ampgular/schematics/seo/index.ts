@@ -23,10 +23,8 @@ import {
 } from './utility';
 import { UpdateEnvironmentFile } from './utility/ng-ast-utils';
 
-// import { JsonObject } from "../core/src";
-
 export interface Test {
-  // tslint:disable-next-line:no-any
+
   architect?: any;
 }
 
@@ -192,8 +190,6 @@ function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
         forEach((fileEntry) => {
 
           if (tree.exists(fileEntry.path)) {
-
-            // tree.overwrite(fileEntry.path, fileEntry.content);
             return null;
           } else {
             tree.create(fileEntry.path, fileEntry.content);
@@ -208,47 +204,6 @@ function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
     return rule(tree, _context);
   };
 }
-
-// function addModuleLoader(): Rule {
-//   return (host: Tree) => {
-//     host.getDir('src').visit(filePath => {
-//       if (!filePath.endsWith('app.server.module.ts')) {
-//         return;
-//       }
-//       const content = host.read(filePath);
-
-//       if (!content) {
-//         throw new SchematicsException(`app.server.modulets does not exist.`);
-//       }
-//       const sourceText = content.toString('utf-8');
-
-//       const source = ts.createSourceFile(
-//         filePath,
-//         sourceText,
-//         ts.ScriptTarget.Latest,
-//         true,
-//       );
-
-//       const importRecorder = host.beginUpdate(filePath);
-//       const importChanges = addImportToModule(
-//         source,
-//         filePath,
-//         'ModuleMapLoaderModule',
-//         '@nguniversal/module-map-ngfactory-loader',
-//       );
-
-//       for (const change of importChanges) {
-//         if (change instanceof InsertChange) {
-//           importRecorder.insertLeft(change.pos, change.toAdd);
-//         }
-//       }
-//       host.commitUpdate(importRecorder);
-
-//       return host;
-//     });
-//   };
-// }
-
 
 function updteEnvironmentFiles(options: SeoOptions, tree: Tree): Rule {
   return (tree: Tree) => {
@@ -284,7 +239,6 @@ function updteEnvironmentFiles(options: SeoOptions, tree: Tree): Rule {
     return tree;
   };
 }
-
 
 function addDependenciesandCreateScripts(options: SeoOptions): Rule {
   return (host: Tree) => {
