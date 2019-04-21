@@ -97,10 +97,10 @@ workflows:
   default_workflow:
     jobs:
       - install
-          # filters:  # using regex filters requires the entire branch to match
-          #   branches:
-          #     only:  # only branches matching the below regex filters will run
-          #       - master    
+          filters:  # using regex filters requires the entire branch to match
+            branches:
+              only:  # only branches matching the below regex filters will run
+                - master    
       - lint:
           requires:
             - install

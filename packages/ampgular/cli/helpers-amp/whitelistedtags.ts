@@ -180,6 +180,16 @@ export const cleanAttributes = [
   { tag: '*', attr: 'cass' },
 ];
 
+export const AmpComponents:any = {
+    "amp-list": "0.1",
+    "amp-mustache":"0.2",
+    "amp-analytics":"0.1",
+    "amp-form":"0.1",
+    "amp-bind":"0.1",
+    "amp-install-serviceworker":"0.1"
+}
+
+
 export const htagElements = {
   A: 0,
   ABBR: 0,
