@@ -23,15 +23,16 @@ export class ExpressServer {
         const DIST_FOLDER = join(normalize(process.cwd()), this.indexPath);
 
         const ASSETS_FOLDER = join(normalize(process.cwd()), 'src/assets');
-
+        const CSS_FOLDER = join(normalize(process.cwd()), 'dist/server/css');
 
         this.app.use('/assets', express.static(ASSETS_FOLDER))
 
+        this.app.use('/css', express.static(CSS_FOLDER))
 
 
 
         this.app.get('*',  (req: any, res: any) => {
-          console.log(req.url);
+
           res.sendFile(join(DIST_FOLDER, req.url, 'index.html')); // load the single view file (angular will handle the page changes on the front-end)
         });
 
