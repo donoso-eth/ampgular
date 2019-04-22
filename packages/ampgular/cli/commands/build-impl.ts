@@ -60,7 +60,7 @@ export class BuildCommand extends AmpgularCommand<BuildCommandSchema> {
     }
 
 
-   options = {...this.commandConfigOptions, ...{ target: this._ampgularConfig.target}};
+   options = {...this.commandConfigOptions, ...{ target: this._ampgularConfig.target},...options};
 
 
    return await runOptionsBuild(options, this.logger);

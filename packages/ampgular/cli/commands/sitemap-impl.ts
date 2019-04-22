@@ -32,7 +32,7 @@ export class SitemapCommand extends AmpgularCommand<SitemapCommandSchema> {
     .sitemap,                     ...this.overrides} as SitemapOptions;
 
 
-    // STOP Initialization when --help once the help has been loaded
+
 
 
   }
@@ -59,14 +59,14 @@ export class SitemapCommand extends AmpgularCommand<SitemapCommandSchema> {
       };
       routesObj.push(obj);
     });
-    if (this.commandConfigOptions.custom != undefined) {
-    this.commandConfigOptions.custom.forEach((pattern: any) => {
-      routesObj.filter((route: any) => pattern.urls.some((patternAr: string) => minimatch(route.url, patternAr, {})) == true).map((route: any) => {
-        route.priority = pattern.priority;
-        route.frecuency = pattern.frecuency;
-      });
-    });
-  }
+  //   if (this.commandConfigOptions.custom != undefined) {
+  //   this.commandConfigOptions.custom.forEach((pattern: any) => {
+  //     routesObj.filter((route: any) => pattern.urls.some((patternAr: string) => minimatch(route.url, patternAr, {})) == true).map((route: any) => {
+  //       route.priority = pattern.priority;
+  //       route.frecuency = pattern.frecuency;
+  //     });
+  //   });
+  // }
 
 
     const xmlintro = `<?xml version="1.0" encoding="UTF-8"?>

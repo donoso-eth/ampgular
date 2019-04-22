@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "amp-cli://commands/config.json",
+  "description": "Outputs Angular Ampgular.json file.",
+  "$longDescription": "",
+
+  "$aliases": [ "c" ],
+  "$scope": "all",
+  "$impl": "./config-impl#ConfigCommand",
+
+  "type": "object",
+  "allOf": [
+    { "$ref": "./definitions.json#/definitions/base" }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Print out current AMP configuration",
+  "$id": "amp-cli://schemas/config.json",
+  "description": "Print out current AMP configuration",
+  "type": "object"
+  }

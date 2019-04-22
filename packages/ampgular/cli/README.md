@@ -65,7 +65,7 @@ npm install -g @angular/cli@6.1.1
 ## Usage
 
 ```bash
-ng help
+amp help
 ```
 
 ### Generating and serving an Angular project via a development server

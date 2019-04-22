@@ -91,7 +91,7 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
     if (this.commandConfigOptions.mode == 'deploy') {
       this._cssString =  readFileSync(join(this.PUBLIC_PATH, 'styles.css')).toString();
     }
-      this._cssString =  readFileSync(join(this.PRERENDER_PATH, 'css/styles.css')).toString();
+      this._cssString =  readFileSync(join(this.PRERENDER_PATH, 'styles.css')).toString();
     }
 
 
@@ -100,10 +100,9 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
 
       let html = await this.renderUrl(route);
 
-      if (this.commandConfigOptions.configuration != 'amp') {
         html = await prepareCss(html,this.commandConfigOptions.cssOptimize,
-          this._cssString,this.commandConfigOptions.mode as Mode);
-      }
+          this._cssString,this.commandConfigOptions.mode as Mode, this.commandConfigOptions.configuration);
+
       /// writing index
       if (route == '' || route == '/') {
         this._prepareWriting(route, 'index.html', html);
@@ -178,7 +177,7 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
 
   _getAmpRoutesConfig() {
     return JSON.parse(
-      readFileSync(join(this.basedir, 'ampgular/amp_routes.json')).toString(
+      readFileSync(join(this.basedir, 'ampgular/amp/amp_routes.json')).toString(
         'utf-8',
       ),
     ).ampRoutes;

@@ -10,10 +10,16 @@ const PUBLIC_FOLDER = join(process.cwd(), 'dist/public');
 // const indexHtml = readFileSync(join(PUBLIC_FOLDER, 'index.html')).toString();
 const globalCss = ''; // readFileSync(join(PUBLIC_FOLDER, "styles.css")).toString();
 
-export async function prepareCss(html: string, optimize:boolean,globalCss:string, mode:Mode ): Promise<string> {
+export async function prepareCss(html: string, optimize:boolean,globalCss:string, mode:Mode , configuration:string ): Promise<string> {
   /* Read HTML in CHEERIO*/
   const $ = load(html);
 
+
+  if (configuration == 'amp') {
+    $('head').append('<link rel="stylesheet" href="styles.css">');
+
+    return $.html()
+  }
 
   if (!optimize && mode == 'render') {
 

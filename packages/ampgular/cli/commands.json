@@ -3,7 +3,9 @@
   "prerender":"./commands/prerender.json",
   "spider":"./commands/spider.json",
   "build":"./commands/build.json",
+  "config":"./commands/config.json",
   "deploy":"./commands/deploy.json",
   "me":"./commands/me.json",
-  "sitemap":"./commands/sitemap.json"
+  "sitemap":"./commands/sitemap.json",
+  "version":"./commands/version.json"
 }

@@ -1,0 +1,7 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Version properties",
+  "$id": "amp-cli://schemas/version.json",
+  "description": "Amp cnfiguration for Amp Pages Workflow",
+  "type": "object"
+}

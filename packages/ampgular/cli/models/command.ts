@@ -45,7 +45,7 @@ export abstract class Command<T extends BaseCommandOptions = BaseCommandOptions>
   }
 
   async initialize(options: T & Arguments): Promise<void> {
-    console.log('çeSTOY íniTIALIZE EN command.ts');
+
 
   }
 

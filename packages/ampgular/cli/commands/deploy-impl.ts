@@ -9,7 +9,7 @@
 
 import {
   JsonParseMode, dirname, isJsonObject,
-  join, json, logging, normalize, path, relative, resolve
+  join, json, logging, normalize, path, relative, resolve, Path
 } from '@angular-devkit/core';
 import * as child_process from 'child_process';
 import {
@@ -54,10 +54,10 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
     await super.initialize(options);
 
-
-    // this.commandConfigOptions = { ...this._ampgularConfig.deploy,
-    //                               ...this.overrides} as DeployOptions;
-
+    this.commandConfigOptions = {
+      ...this._ampgularConfig.deploy,
+      ...this.overrides
+    } as DeployOptions;
 
   }
 
@@ -67,23 +67,22 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
     const targetApp = (this.commandConfigOptions as DeployOptions).targetApp;
 
 
-    try {
-
 
       this.logger.info('........  BROWSER APP ....... FOR  DEPLOYING');
       await this._createClientBundle();
 
+      await this._copyFilestoPublic();
 
       if ((this.commandConfigOptions as DeployOptions).sitemap) {
-        this._createSiteMap();
+        await this._createSiteMap();
       }
 
       if ((this.commandConfigOptions as DeployOptions).robots) {
-        this._copyRobots();
+        await this._copyRobots();
       }
 
       if ((this.commandConfigOptions as DeployOptions).files.length > 0) {
-        this._copyCustom((this.commandConfigOptions as DeployOptions).files);
+       await  this._copyCustom((this.commandConfigOptions as DeployOptions).files);
       }
 
 
@@ -114,9 +113,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
 
 
-    } catch (error) {
 
-    }
 
     if ((this.commandConfigOptions as DeployOptions).serve) {
       this.appServerNew = new ExpressServer(normalize('dist/public'));
@@ -125,7 +122,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
       return 55;
     }
     else {
-    return 0;
+      return 0;
     }
 
   }
@@ -134,7 +131,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
   async _copyCustom(copyList: Array<FileMove>) {
 
     copyList.forEach(element => {
-      _copy(element.from, element.to);
+      _copy(join(this.basedir, element.from),join(this.basedir,element.to));
     });
 
 
@@ -142,7 +139,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
 
   async _copyRobots() {
-    _copy('ampgular/robots.txt', 'dist/public/robots.txt');
+    _copy( join(this.basedir,'ampgular/robots.txt'), join(this.basedir,'dist/public/robots.txt'));
 
     return;
   }
@@ -205,7 +202,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
     this.amp =
       new descriptionPrerender.impl({ workspace }, descriptionPrerender, this.logger);
 
-         return await this.amp.validateAndRun({  mode: 'deploy' });
+    return await this.amp.validateAndRun({ mode: 'deploy' });
 
 
   }
@@ -214,11 +211,11 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
   async _copyFilestoPublic() {
 
 
-    _rimraf('dist/public');
+    _rimraf(join(this.basedir,'dist/public'));
 
     // copy the dist Folder to Public
 
-    _recursiveCopy('dist/browser', 'dist/public', this.logger);
+    _recursiveCopy(join(this.basedir,'dist/browser'), join(this.basedir,'dist/public'), this.logger);
 
     // copy user files defined in ampgular.json
     // TODO Options sitemap
@@ -232,7 +229,7 @@ const filterFunc = (src: string, dest: string) => {
   return src.indexOf('index.html') === -1 ? true : false;
 };
 
-function _rimraf(p: string) {
+function _rimraf(p: Path) {
   glob.sync(join(normalize(p), '**/*'), { dot: true, nodir: true })
     .forEach(p => unlinkSync(p));
   glob.sync(join(normalize(p), '**/*'), { dot: true })

@@ -5,6 +5,7 @@ import {
   logging,
   normalize,
   virtualFs,
+  terminal,
 } from '@angular-devkit/core';
 import { NgClass } from '@angular/common';
 import { ApplicationRef, NgZone, enableProdMode } from '@angular/core';
@@ -95,6 +96,7 @@ export class RenderEngine {
     }
 
     if (this._target == 'browser') {
+      this._logger.info(terminal.blue('Launching Puppeteer for Browser Render'))
         this.newCrome = new ChromeRenderer();
         // Launchin PUOETTER  FOR ALTER RENDER
         this.appServerNew = await Launchserver();
@@ -185,6 +187,7 @@ export class RenderEngine {
   }
 
   async renderclient(): Promise<Function> {
+    this._logger.info(terminal.blue('Rendering routes through Puppeteer'))
 
     return async (options: BrowserRenderOptions): Promise<string> => {
       const html = await this.newCrome.render({
@@ -263,18 +266,3 @@ function _exec(
   });
 }
 
- // OLD SPAWN to EXECUTE SERVER
-  // async renderWepack(path:string):Promise<boolean> {
-  //   const { spawn } = require("child_process");
-  //   return new Promise((resolve,reject) =>{
-  //     let child = spawn('ts-node',['ampgular/seo/server.ts']);
-
-  //     child.stdout.on("data", (data:any) => {
-  //     this._logger.info(data.toString('utf-8'))
-  //     resolve(true)
-
-  //     });
-
-
-  //   })
-  // }
