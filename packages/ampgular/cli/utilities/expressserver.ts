@@ -23,11 +23,11 @@ export class ExpressServer {
         const DIST_FOLDER = join(normalize(process.cwd()), this.indexPath);
 
         const ASSETS_FOLDER = join(normalize(process.cwd()), 'src/assets');
-        const CSS_FOLDER = join(normalize(process.cwd()), 'dist/server/css');
+        const CSS_FOLDER = join(normalize(process.cwd()), 'dist/server/css/styles.css');
 
         this.app.use('/assets', express.static(ASSETS_FOLDER))
 
-        this.app.use('/css', express.static(CSS_FOLDER))
+        this.app.use('/css/styles.css', express.static(CSS_FOLDER))
 
 
 
