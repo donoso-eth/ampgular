@@ -10,6 +10,7 @@ import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import { dirname } from 'path';
 import * as ts from 'typescript';
 import { findNode, getSourceNodes } from '../utility/ast-utils';
+import { SinglePropOffsetValuesIndex } from '@angular/core/src/render3/interfaces/styling';
 
 export function findBootstrapModuleCall(host: Tree, mainPath: string): ts.CallExpression | null {
   const mainBuffer = host.read(mainPath);
@@ -124,6 +125,13 @@ export class UpdateEnvironmentFile {
     && ts.isIdentifier(node.parent.getChildAt(0))
 
     && node.parent.getChildAt(0).getFullText().trim() == 'environment' ) {
+
+
+
+      if(node.properties.some( (prop:ts.PropertyAssignment) => prop.name.getFullText().trim() == 'seo')){
+        return node
+      }
+
       const newProp =  [
         ts.createPropertyAssignment(this._param.name, this._flag) as ts.ObjectLiteralElementLike
       , ...node.properties];

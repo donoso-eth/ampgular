@@ -100,10 +100,16 @@ extends RenderCommand<SpiderCommandSchema> {
           error => { },
           () => {
 
+            if ((this.commandConfigOptions as SpiderOptions).dryRun){
+            this._writeVerbose(this._routesDone,'dry-run')
+
+            } else {
             this._writeSummary();
+            }
+
             if ((this.commandConfigOptions as SpiderOptions).verbose) {
-              this._writeVerbose(this._routesNoIndex, 'noIndex');
-              this._writeVerbose(this._routesQueryExcluded, 'queryExcluded');
+              this._writeVerbose(this._routesNoIndex, 'no-index');
+              this._writeVerbose(this._routesQueryExcluded, 'query-excluded');
               if ((this.commandConfigOptions as SpiderOptions).ensureCanonical) {
                 this._writeVerbose(this._routesCanonical, 'canonical');
                 this._writeVerbose(this._routesNoCanonical, 'noCanonical');

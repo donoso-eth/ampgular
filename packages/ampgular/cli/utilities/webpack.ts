@@ -53,8 +53,10 @@ export async function webpackcss(entryPoints:Array<string>) {
    const AMP_FOLDER = join(normalize(process.cwd()), 'dist/amp');
 
 
-   const webpackConfig: any =  {
-     entry: { entry: './src/styles.scss', },
+   const webpackConfig: any = Object.assign({}, webpackConfigTemplate, {
+     entry: { command: './src/styles.scss'},
+     resolve: { extensions: ['.scss'] },
+     target: 'web',
      output: {
        path: AMP_FOLDER,
        filename: 'noop.js',
@@ -77,6 +79,7 @@ export async function webpackcss(entryPoints:Array<string>) {
       ]
     }
   }
+   )
 
 
    const webpackCompiler = webpack(webpackConfig);

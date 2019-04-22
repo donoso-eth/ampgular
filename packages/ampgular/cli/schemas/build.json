@@ -8,6 +8,18 @@
       {
         "type":"object",
         "properties": {
+          "mode": {
+            "description": "Create only one AMp Page (route porperty) and spin a loclaserver to easy the devs process",
+            "type": "string",
+            "default": "render",
+            "hidden" :true,
+            "enum": ["test","render","deploy"]
+          }
+        }
+      },
+      {
+        "type":"object",
+        "properties": {
           "projectname": {
             "type": "string",
             "description": "Optional, explicitly set the project name"

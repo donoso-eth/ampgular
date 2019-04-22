@@ -6,15 +6,19 @@ import {
     logging,
     normalize,
     virtualFs,
+    dirname,
+    relative,
 
   } from '@angular-devkit/core';
 import * as child_process from 'child_process';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { Schema as AmpgularConfig } from '../lib/config/schema';
 import { Arguments } from '../models/interface';
 import { Workspace } from '../models/workspace';
 import { WorkspaceLoader } from '../models/workspace-loader';
 import { Schema as BuildOptions } from '../schemas/build';
+import { webpackcss } from './webpack';
+import { Mode } from '../schemas/amp';
 
 
 export async function loadWorkspaceAndAmpgular(
@@ -71,27 +75,63 @@ export async function runOptionsBuild(
 
     if (options.target == 'node') {
 
-      logger.warn(`....starting BUILDDING SERVER APPLICATON..... this may take several minutes`);
+      logger.warn(`BUILDING SERVER APPLICATON..... this may take several minutes`);
       logger.warn(`Target is ${options.target}  configuration is ${options.configuration} `);
 
       await _exec('ng', ['run', options.projectName + ':server',
                         '--configuration=' + options.configuration], {}, logger);
 
-      if(options.configuration == 'amp'){
-       // await _exec('npm',['run', 'node-sass',join(normalize(process.cwd()),'src/styles.scss'), '-o', join(normalize(process.cwd()),'dist/amp/css')],{},logger)
+
+      if (options.mode == Mode.Render){
+      /* Hack precompiling the scss t the render Folder until we achieve to progamatically launch the node-sass..... */
+
+        if (existsSync(join(normalize(process.cwd()),'src/styles.css'))){
+
+            if(options.configuration == 'amp'){
+              _copy(join(normalize(process.cwd()),'src/styles.css'),join(normalize(process.cwd()),'dist/amp/styles.css'))
+            }
+            else {
+              _copy(join(normalize(process.cwd()),'src/styles.css'),join(normalize(process.cwd()),'dist/server/styles.css'))
+
+            }
+
+        }
+        else  if (existsSync(join(normalize(process.cwd()),'src/styles.scss'))){
+
+
+          if(options.configuration == 'amp'){
+            await _exec('npm',['run','build-amp-css'], {}, logger);
+
+          }
+          else {
+            await _exec('npm',['run','build-server-css'], {}, logger);
+          }
+        }
+
       }
+
+
 
 
       return  0;
 
   } else {
-    logger.warn(`....starting BUILDDING CLEINT APPLICATON..... this may take several minutes`);
+    logger.warn(`BUILDING CLIENT APPLICATON..... this may take several minutes`);
     logger.warn(`Target is ${options.target}  configuration is ${options.configuration} `);
     await _exec('ng', ['build', '--configuration=' + options.configuration], {}, logger);
 
     return 0;
   }
   }
+  function _copy(from: string, to: string) {
+
+
+    from = relative(normalize(process.cwd()), normalize(from));
+    to = relative(normalize(process.cwd()), normalize(to));
+    const buffer = readFileSync(from);
+    writeFileSync(to, buffer);
+  }
+
 
 function _exec(
     command: string,

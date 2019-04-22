@@ -19,12 +19,13 @@ import {
 import * as ts from 'typescript';
 import {
   WorkspaceProject, WorkspaceSchema,
-  getSourceNodes, getWorkspace, getWorkspacePath
+ getWorkspace, getWorkspacePath,
 } from './utility';
 import { UpdateEnvironmentFile } from './utility/ng-ast-utils';
 
 export interface Test {
 
+  // tslint:disable-next-line:no-any
   architect?: any;
 }
 
@@ -251,6 +252,12 @@ function addDependenciesandCreateScripts(options: SeoOptions): Rule {
     const pkg = JSON.parse(buffer.toString());
     pkg.dependencies['@nguniversal/module-map-ngfactory-loader'] = '^7.1.1';
     pkg.dependencies['@nguniversal/express-engine'] = '^7.1.1';
+
+    const scssPath = 'srs/styles.scss';
+
+    if (host.exists(scssPath)) {
+       pkg.scripts['build-server-css'] = 'node-sass src/styles.scss -o dist/server/css';
+    }
 
     host.overwrite(pkgPath, JSON.stringify(pkg, null, 2));
 

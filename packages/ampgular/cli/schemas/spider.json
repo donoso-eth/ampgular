@@ -8,7 +8,7 @@
       "type": "object",
       "properties": {
         "entryPaths": {
-          "description": "Entry Paths for ",
+          "description": "Entry paths array to start crawling the app, it will be required more then one when there are pages not refenrenced from the app, like for instance ads",
           "type": "array",
           "default": ["/"],
           "alias": "en",
@@ -17,7 +17,7 @@
           }
         },
         "includePaths": {
-          "description": "Ensure this url's are included",
+          "description": "Ensure these paths are included in the paths array",
           "type": "array",
           "default": [],
           "alias": "in",
@@ -26,7 +26,7 @@
           }
         },
         "excludePaths": {
-          "description": "Excluded following url's",
+          "description": "Excluded these paths from crawling, input data following glob patterns",
           "type": "array",
           "default": [],
           "alias": "ex",
@@ -35,29 +35,29 @@
           }
         },
         "excludeQuery": {
-          "description": "When true, indocate the routes are going to fight",
+          "description": "This flag tells Ampgular cli whether the queries have to be included in the crawed paths arrray",
           "type": "boolean",
           "default": false,
-          "alias": "r"
+          "alias": "q"
         },
         "ensureCanonical": {
-          "description": "Ensure Canonical",
+          "description": "This flag ensures that only the pages/paths with a valid canonical definition will be added to the paths array",
           "type": "boolean",
           "default": true
         },
         "dryRun": {
-          "description": "Ensure DryRun",
+          "description": "This flag ensures that the crawling app results wont´t overwrite the routes file for testing purposes.",
           "type": "boolean",
           "default": false
         },
         "verbose": {
-          "description": "When true, print out the exluded and discarded paths",
+          "description": "When true, print out the exluded and discarded paths with additional files",
           "type": "boolean",
           "default": false
         }
 
       },
-      "required": ["entryPaths"]
+      "required": ["entryPaths","ensureCanonical"]
     },
     {
   

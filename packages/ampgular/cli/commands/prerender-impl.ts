@@ -9,14 +9,16 @@ import { Path, basename, dirname, join, normalize, resolve, terminal } from '@an
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import minimatch = require('minimatch');
 import { runInThisContext } from 'vm';
-import { optimizeStatic } from '../helpers-seo/optimize-css';
+import { prepareCss } from '../helpers-seo/optimize-css';
 import { BaseCommandOptions } from '../models/command';
 import { AmpRoute, Arguments } from '../models/interface';
 import { RenderCommand } from '../models/render-command';
 import { Configuration, Schema as PrerenderOptions } from '../schemas/prerender';
 import { getRoutes } from '../utilities/utils';
 import { Schema as PrerenderCommandSchema } from './prerender';
-
+import { Mode } from '../schemas/amp';
+import { ExpressServer } from '../utilities/expressserver';
+const open = require('open');
 
 export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
   extends RenderCommand<PrerenderCommandSchema> {
@@ -25,11 +27,13 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
   private ROUTES: string[];
   private _ampRoutesConfig: AmpRoute[];
   private PRERENDER_PATH: Path;
-
-  public async run(options: PrerenderOptions & Arguments): Promise<0 | 1> {
+  private _cssString:string;
+  appServerNew: ExpressServer;
+  public async run(options: PrerenderOptions & Arguments): Promise<number> {
     this.commandConfigOptions = {
+      ...{ mode: 'render' },
       ...this._ampgularConfig.prerender as PrerenderOptions,
-      ...this.commandConfigOptions,
+      ...this.commandConfigOptions, ...this.overrides
     } as PrerenderOptions;
     await super.run(options);
     await this.validateAndLaunch();
@@ -40,7 +44,6 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
     } else {
       this.ROUTES = this._getRoutes();
       if (this.commandConfigOptions.configuration == Configuration.Amp) {
-        this.PRERENDER_PATH = this.AMP_PATH;
         this._ampRoutesConfig = this._getAmpRoutesConfig();
         this.ROUTES = this.ROUTES.filter(route => {
           return this._ampRoutesConfig.some((config: AmpRoute) => {
@@ -57,8 +60,6 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
             }
           });
         });
-      } else {
-        this.PRERENDER_PATH = this.PUBLIC_PATH;
       }
 
     }
@@ -67,8 +68,16 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
     if (this.commandConfigOptions.configuration == Configuration.Amp) {
       this.PRERENDER_PATH = this.AMP_PATH;
     } else {
-      this.PRERENDER_PATH = this.PUBLIC_PATH;
+      if (this.commandConfigOptions.mode == Mode.Deploy) {
+        this.PRERENDER_PATH = this.PUBLIC_PATH;
+      } else {
+        this.PRERENDER_PATH = this.SERVER_PATH;
+      }
+
+
     }
+
+
     this.logger.info(`Starting Prerendering of ${this.ROUTES.length} routes/paths`);
 
 
@@ -77,12 +86,23 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
     }
     let i = 1;
 
+    if (this.commandConfigOptions.configuration != 'amp') {
+
+    if (this.commandConfigOptions.mode == 'deploy') {
+      this._cssString =  readFileSync(join(this.PUBLIC_PATH, 'styles.css')).toString();
+    }
+      this._cssString =  readFileSync(join(this.PRERENDER_PATH, 'css/styles.css')).toString();
+    }
+
+
+
     for (const route of this.ROUTES) {
 
       let html = await this.renderUrl(route);
 
-      if ((this.commandConfigOptions as PrerenderOptions).cssOptimize && this.commandConfigOptions.configuration!='amp') {
-        html = await optimizeStatic(html);
+      if (this.commandConfigOptions.configuration != 'amp') {
+        html = await prepareCss(html,this.commandConfigOptions.cssOptimize,
+          this._cssString,this.commandConfigOptions.mode as Mode);
       }
       /// writing index
       if (route == '' || route == '/') {
@@ -102,6 +122,23 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
       i++;
 
     }
+
+    if (this.ROUTES.length>0 && this.commandConfigOptions.serve && this.commandConfigOptions.mode == Mode.Render) {
+
+      if (this.commandConfigOptions.configuration== 'amp'){
+        this.appServerNew = new ExpressServer(normalize('dist/amp'));
+        await this.appServerNew.LaunchServer();
+      }
+      else {
+        this.appServerNew = new ExpressServer(normalize('dist/server'));
+        await this.appServerNew.LaunchServer();
+      }
+      await open('http://localhost:5000');
+
+      return 55;
+    }
+
+
 
     return 0;
   }

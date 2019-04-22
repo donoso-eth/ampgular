@@ -179,7 +179,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
       await this.appServerNew.LaunchServer();
       await open('http://localhost:5000#development=1');
       return 55;
-    } else if (this.commandConfigOptions.mode == "test") {
+    } else if (this.commandConfigOptions.mode == "render") {
       this.appServerNew = new ExpressServer(normalize('dist/amp'));
       await this.appServerNew.LaunchServer();
       await open('http://localhost:5000');

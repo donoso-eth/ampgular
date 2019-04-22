@@ -30,6 +30,7 @@ export abstract class AmpgularCommand<
     public PUBLIC_PATH = join(this.basedir, 'dist/public');
     public AMP_PATH = join(this.basedir, 'dist/amp');
     public BROWSER_PATH = join(this.basedir, 'dist/browser');
+    public SERVER_PATH = join(this.basedir, 'dist/server');
 
     async initialize(options: T & Arguments): Promise<void> {
 

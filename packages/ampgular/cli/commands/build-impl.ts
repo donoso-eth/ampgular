@@ -30,7 +30,7 @@ export class BuildCommand extends AmpgularCommand<BuildCommandSchema> {
   ): Promise<void> {
     await super.initialize(options);
 
-    this.commandConfigOptions = { ...this._ampgularConfig.buildConfig,
+    this.commandConfigOptions = { ...{ mode:'render' }, ...this._ampgularConfig.buildConfig,
       ...this.overrides} as BuildOptions;
 
   }
@@ -38,7 +38,7 @@ export class BuildCommand extends AmpgularCommand<BuildCommandSchema> {
   public async run(options: BuildCommandSchema & Arguments): Promise<0|1> {
     await super.run(options);
 
-    // [this._workspace,this._ampgularConfig] = await loadWorkspaceAndAmpgular(this.workspace.root,this._host);
+
     return this.runBuild(options);
 
   }

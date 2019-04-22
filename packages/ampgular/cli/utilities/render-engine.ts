@@ -149,10 +149,11 @@ export class RenderEngine {
       target: 'node',
       configuration: this._options.configuration,
       projectName: this.projectName,
+      mode: this._options.mode
     };
 
     await runOptionsBuild(newOptions, this._logger);
-    await _exec('node-sass',[ 'src/styles.scss', '-o', 'dist/amp/css'],{},this._logger)
+   // await _exec('node-sass',[ 'src/styles.scss', '-o', 'dist/amp/css'],{},this._logger)
 
   }
 

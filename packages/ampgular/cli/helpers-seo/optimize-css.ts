@@ -3,15 +3,31 @@ import { mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { basename, join, resolve } from 'path';
 import { atRule, decl, parse, root, rule, stringify } from 'postcss';
 import * as purify from 'purify-css';
+import { Mode } from '../schemas/amp';
 
 
 const PUBLIC_FOLDER = join(process.cwd(), 'dist/public');
 // const indexHtml = readFileSync(join(PUBLIC_FOLDER, 'index.html')).toString();
 const globalCss = ''; // readFileSync(join(PUBLIC_FOLDER, "styles.css")).toString();
 
-export async function optimizeStatic(html: string): Promise<string> {
+export async function prepareCss(html: string, optimize:boolean,globalCss:string, mode:Mode ): Promise<string> {
   /* Read HTML in CHEERIO*/
   const $ = load(html);
+
+
+  if (!optimize && mode == 'render') {
+
+    $('head').append('<link rel="stylesheet" href="/css/styles.css">');
+
+    return $.html()
+  }
+
+
+  if (!optimize && mode == 'deploy') {
+
+
+    return $.html()
+  }
 
   /* PREPPEND GLOBAL STYLES*/
   let singleUniStyle = globalCss;
@@ -56,9 +72,11 @@ export async function optimizeStatic(html: string): Promise<string> {
             // rejected: true
         });
 
+   $('head').append('<style  ng-transition="serverApp">' + newcss + '</style>');
+  if (mode =='deploy') {
 
-  $('head').append('<style  ng-transition="serverApp">' + newcss + '</style>');
-  $('body').append('<link rel="stylesheet" href="styles.css">');
+    $('body').append('<link rel="stylesheet" href="styles.css">');
+  }
 
 
   return $.html();

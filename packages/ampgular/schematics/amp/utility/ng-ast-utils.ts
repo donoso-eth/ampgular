@@ -124,6 +124,14 @@ export class UpdateEnvironmentFile {
     && ts.isIdentifier(node.parent.getChildAt(0))
 
     && node.parent.getChildAt(0).getFullText().trim() == 'environment' ) {
+
+
+      if(node.properties.some( (prop:ts.PropertyAssignment) => prop.name.getFullText().trim() == 'amp')){
+        return node
+      }
+
+
+
       const newProp =  [
         ts.createPropertyAssignment(this._param.name, this._flag) as ts.ObjectLiteralElementLike
       , ...node.properties];

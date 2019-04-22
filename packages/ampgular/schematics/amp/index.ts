@@ -224,6 +224,29 @@ function updteEnvironmentFiles(options: AmpOptions, tree: Tree): Rule {
   };
 }
 
+function addDependenciesandCreateScripts(options: AmpOptions): Rule {
+  return (host: Tree) => {
+    const pkgPath = '/package.json';
+    const buffer = host.read(pkgPath);
+    if (buffer === null) {
+      throw new SchematicsException('Could not find package.json');
+    }
+
+
+    const scssPath = 'srs/styles.scss';
+
+    if (host.exists(scssPath)) {
+      const pkg = JSON.parse(buffer.toString());
+      pkg.scripts['build-amp-css'] = 'node-sass src/styles.scss -o dist/amp/css';
+      host.overwrite(pkgPath, JSON.stringify(pkg, null, 2));
+
+    }
+
+    return host;
+  };
+}
+
+
 function externalSeo(options: AmpOptions, host: Tree): Rule {
 
     return branchAndMerge(
