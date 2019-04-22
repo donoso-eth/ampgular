@@ -17,7 +17,7 @@ export async function prepareCss(html: string, optimize:boolean,globalCss:string
 
   if (!optimize && mode == 'render') {
 
-    $('head').append('<link rel="stylesheet" href="/css/styles.css">');
+    $('head').append('<link rel="stylesheet" href="styles.css">');
 
     return $.html()
   }

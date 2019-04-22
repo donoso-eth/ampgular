@@ -237,7 +237,7 @@ function addDependenciesandCreateScripts(options: AmpOptions): Rule {
 
     if (host.exists(scssPath)) {
       const pkg = JSON.parse(buffer.toString());
-      pkg.scripts['build-amp-css'] = 'node-sass src/styles.scss -o dist/amp/css';
+      pkg.scripts['build-amp-css'] = 'node-sass src/styles.scss -o dist/amp';
       host.overwrite(pkgPath, JSON.stringify(pkg, null, 2));
 
     }

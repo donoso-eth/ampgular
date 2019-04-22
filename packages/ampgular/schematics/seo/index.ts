@@ -256,7 +256,7 @@ function addDependenciesandCreateScripts(options: SeoOptions): Rule {
     const scssPath = 'srs/styles.scss';
 
     if (host.exists(scssPath)) {
-       pkg.scripts['build-server-css'] = 'node-sass src/styles.scss -o dist/server/css';
+       pkg.scripts['build-server-css'] = 'node-sass src/styles.scss -o dist/server';
     }
 
     host.overwrite(pkgPath, JSON.stringify(pkg, null, 2));
