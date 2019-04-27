@@ -8,9 +8,10 @@
 
 
 import {
-  JsonParseMode, dirname, isJsonObject,
-  join, json, logging, normalize, path, relative, resolve, Path
+  JsonParseMode, isJsonObject,
+ json, logging,
 } from '@angular-devkit/core';
+import { join, dirname, normalize,  relative, resolve} from 'path';
 import * as child_process from 'child_process';
 import {
   existsSync, mkdirSync, readFileSync,
@@ -32,6 +33,7 @@ import glob = require('glob');
 import { AmpgularCommand } from '../models/ampgular-command';
 import { Schema as DeployOptions, TargetApp } from '../schemas/deploy';
 import { ExpressServer, ExpressConfig } from '../utilities/expressserver';
+import { Mode } from '../schemas/prerender';
 
 interface FileMove {
   from: string;
@@ -170,6 +172,10 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
 
   async _createServerBundle(ampVersion: boolean) {
+    const workspace: CommandWorkspace = getWorkspaceDetails() as CommandWorkspace;
+    const descriptionBuild = await getCommandDescription('build', this._registry);
+    this.build = new descriptionBuild.impl({ workspace }, descriptionBuild, this.logger);
+
     if (ampVersion) {
       return await
         this.build.validateAndRun({
@@ -197,7 +203,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
     if (ampVersion) {
       return await this.prerender.validateAndRun({ localhost: true, path: 'amp', configuration: 'amp' });
     } else {
-      return await this.prerender.validateAndRun({ localhost: true, path: 'dist/browser' });
+      return await this.prerender.validateAndRun({ localhost: true, path: 'dist/browser',mode: Mode.Deploy });
     }
 
   }
@@ -234,7 +240,7 @@ const filterFunc = (src: string, dest: string) => {
   return src.indexOf('index.html') === -1 ? true : false;
 };
 
-function _rimraf(p: Path) {
+function _rimraf(p: string) {
   glob.sync(join(normalize(p), '**/*'), { dot: true, nodir: true })
     .forEach(p => unlinkSync(p));
   glob.sync(join(normalize(p), '**/*'), { dot: true })

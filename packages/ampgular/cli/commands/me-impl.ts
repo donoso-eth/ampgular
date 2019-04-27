@@ -6,11 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-
 import {
-  JsonParseMode, dirname, isJsonObject,
-  join, json, logging, normalize, path, relative, resolve,
-} from '@angular-devkit/core';
+
+  join,  normalize
+} from 'path';
 import {
   readFileSync,
 } from 'fs';

@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import { terminal, logging, join, normalize } from '@angular-devkit/core';
+
 import * as child_process from 'child_process';
 import * as fs from 'fs';
-import * as path from 'path';
+import { normalize, join } from 'path';
 import { Command } from '../models/command';
 import { findUp } from '../utilities/find-up';
 import { Schema as VersionCommandSchema } from './version';
@@ -20,7 +20,7 @@ export class ConfigCommand extends Command<VersionCommandSchema> {
 
   async run() {
 
-
+    console.log(join(normalize(process.cwd()),'ampgular/ampgular.json'));
     const ampJson =  readFileSync(join(normalize(process.cwd()),'ampgular/ampgular.json'));
 
     this.logger.info(ampJson.toString('utf-8'));

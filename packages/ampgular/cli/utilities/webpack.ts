@@ -1,6 +1,6 @@
 
 import * as webpack from 'webpack';
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+//const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const nodeExternals = require('webpack-node-externals');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 import { logging, join, normalize, path } from '@angular-devkit/core';
@@ -44,61 +44,61 @@ export async function webpackRun(command: string, logger: logging.Logger) {
 
 
 
-export async function webpackcss(entryPoints:Array<string>) {
+// export async function webpackcss(entryPoints:Array<string>) {
 
-  return new Promise((resolve, reject) => {
-
-
-   const SRC_FOLDER = join(normalize(process.cwd()), 'src');
-   const AMP_FOLDER = join(normalize(process.cwd()), 'dist/amp');
+//   return new Promise((resolve, reject) => {
 
 
-   const webpackConfig: any = Object.assign({}, webpackConfigTemplate, {
-     entry: { command: './src/styles.scss'},
-     resolve: { extensions: ['.scss'] },
-     target: 'web',
-     output: {
-       path: AMP_FOLDER,
-       filename: 'noop.js',
-     },
-     plugins: [
-      new MiniCssExtractPlugin({
-        filename: "styles.css"
-      })
-    ],
-    module: {
-      rules: [
-        {
-          test: /\.s?css$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            'css-loader',
-            'sass-loader'
-          ]
-        }
-      ]
-    }
-  }
-   )
+//    const SRC_FOLDER = join(normalize(process.cwd()), 'src');
+//    const AMP_FOLDER = join(normalize(process.cwd()), 'dist/amp');
 
 
-   const webpackCompiler = webpack(webpackConfig);
-   const statsConfig = getWebpackStatsConfig(false);
-   let i = 0;
-   const callback: webpack.compiler.CompilerCallback = (err, stats) => {
-     i = i + 1;
-     if (err) {
-       reject(err);
-       console.error(err);
-     }
-     console.log('webpack run scss');
-     resolve(true);
+//    const webpackConfig: any = Object.assign({}, webpackConfigTemplate, {
+//      entry: { command: './src/styles.scss'},
+//      resolve: { extensions: ['.scss'] },
+//      target: 'web',
+//      output: {
+//        path: AMP_FOLDER,
+//        filename: 'noop.js',
+//      },
+//      plugins: [
+//       new MiniCssExtractPlugin({
+//         filename: "styles.css"
+//       })
+//     ],
+//     module: {
+//       rules: [
+//         {
+//           test: /\.s?css$/,
+//           use: [
+//             MiniCssExtractPlugin.loader,
+//             'css-loader',
+//             'sass-loader'
+//           ]
+//         }
+//       ]
+//     }
+//   }
+//    )
 
 
-   };
-   webpackCompiler.run(callback);
- });
- }
+//    const webpackCompiler = webpack(webpackConfig);
+//    const statsConfig = getWebpackStatsConfig(false);
+//    let i = 0;
+//    const callback: webpack.compiler.CompilerCallback = (err, stats) => {
+//      i = i + 1;
+//      if (err) {
+//        reject(err);
+//        console.error(err);
+//      }
+//      console.log('webpack run scss');
+//      resolve(true);
+
+
+//    };
+//    webpackCompiler.run(callback);
+//  });
+//  }
 
 
 const webpackConfigTemplate = {

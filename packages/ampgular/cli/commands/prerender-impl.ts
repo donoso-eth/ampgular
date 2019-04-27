@@ -5,7 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Path, basename, dirname, join, normalize, resolve, terminal } from '@angular-devkit/core';
+import { join, dirname, normalize, basename} from 'path';
+import { Path,  resolve, terminal } from '@angular-devkit/core';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
 import minimatch = require('minimatch');
 import { runInThisContext } from 'vm';
@@ -27,7 +28,7 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
   private _commandptions: PrerenderOptions;
   private ROUTES: string[];
   private _ampRoutesConfig: AmpRoute[];
-  private PRERENDER_PATH: Path;
+  private PRERENDER_PATH: string;;
   private _cssString: string;
   appServerNew: ExpressServer;
   public async run(options: PrerenderOptions & Arguments): Promise<number> {
@@ -80,7 +81,7 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
       JsFIles = readdirSync(this.BROWSER_PATH)
         .filter((item: Path) => item.endsWith('.js'))
     }
-    console.log(JsFIles)
+   
 
     this.logger.info(`Starting Prerendering of ${this.ROUTES.length} routes/paths`);
 

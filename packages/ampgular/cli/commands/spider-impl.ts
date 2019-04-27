@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import { join, normalize, resolve } from '@angular-devkit/core';
+import { join, normalize, resolve } from 'path';
 import { createDocument, createWindow } from 'domino';
 import { writeFileSync } from 'fs';
 import * as minimatch from 'minimatch';

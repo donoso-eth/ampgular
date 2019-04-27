@@ -1,4 +1,6 @@
-import { Path, experimental, join, json, normalize, terminal } from '@angular-devkit/core';
+
+import { join,  normalize} from 'path';
+
 import { NodeJsSyncHost } from '@angular-devkit/core/node';
 import chalk from 'chalk';
 import { readFileSync } from 'fs';
@@ -12,6 +14,7 @@ import { BaseCommandOptions, Command } from './command';
 import { Arguments } from './interface';
 import { parseArguments } from './parser';
 import { Workspace } from './workspace';
+import { json, terminal } from '@angular-devkit/core';
 export abstract class AmpgularCommand<
     T extends BaseCommandOptions = BaseCommandOptions
     > extends Command<BaseCommandOptions> {
@@ -26,7 +29,7 @@ export abstract class AmpgularCommand<
     // tslint:disable-next-line:no-any
     PrerenderDesc: any;
     overrides: Arguments;
-    public basedir: Path = normalize(process.cwd());
+    public basedir: string = normalize(process.cwd());
     public PUBLIC_PATH = join(this.basedir, 'dist/public');
     public AMP_PATH = join(this.basedir, 'dist/amp');
     public BROWSER_PATH = join(this.basedir, 'dist/browser');

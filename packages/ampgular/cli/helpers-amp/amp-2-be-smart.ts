@@ -19,7 +19,7 @@ import {
   createComponentListSingle,
   createComponentMultiBind, createComponentScroll
 } from './recreate-state';
-import { join, normalize } from '@angular-devkit/core';
+import { join, normalize } from 'path';
 
 
 const recreateState = async (args: AmpDescription): Promise<AmpDescription> => {

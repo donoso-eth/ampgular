@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {  join, json, normalize } from '@angular-devkit/core';
+import {  join,  normalize } from 'path';
 import { readFileSync, writeFileSync } from 'fs';
 import { BaseCommandOptions, Command } from '../models/command';
 import { Arguments } from '../models/interface';

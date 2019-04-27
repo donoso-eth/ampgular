@@ -1,15 +1,16 @@
 
 import {
     getSystemPath,
-    join,
+
     json,
     logging,
-    normalize,
+
     virtualFs,
     dirname,
-    relative,
+
 
   } from '@angular-devkit/core';
+import {  relative,  join,  normalize} from 'path';
 import * as child_process from 'child_process';
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'fs';
 import { Schema as AmpgularConfig } from '../lib/config/schema';
@@ -17,7 +18,7 @@ import { Arguments } from '../models/interface';
 import { Workspace } from '../models/workspace';
 import { WorkspaceLoader } from '../models/workspace-loader';
 import { Schema as BuildOptions } from '../schemas/build';
-import { webpackcss } from './webpack';
+//import { webpackcss } from './webpack';
 import { Mode } from '../schemas/amp';
 
 
@@ -77,6 +78,7 @@ export async function runOptionsBuild(
 
       logger.warn(`BUILDING SERVER APPLICATON..... this may take several minutes`);
       logger.warn(`Target is ${options.target}  configuration is ${options.configuration} `);
+
 
       await _exec('ng', ['run', options.projectName + ':server',
                         '--configuration=' + options.configuration], {}, logger);
@@ -146,6 +148,8 @@ function _exec(
     opts: { cwd?: string },
     logger: logging.Logger,
   ): Promise<string> {
+
+
     return new Promise((resolve) => {
       const { status, error, stderr, stdout, output } = child_process.spawnSync(
         command,
@@ -153,6 +157,9 @@ function _exec(
         {
           stdio: 'inherit',
           ...opts,
+
+            shell: true
+
         },
       );
 

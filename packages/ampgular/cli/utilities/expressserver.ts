@@ -2,7 +2,8 @@ import  { Express }from 'express';
 const bodyParser = require('body-parser');
 import express = require('express');
 import { Server } from 'http';
-import { Path, join, normalize, logging } from '@angular-devkit/core';
+import { Path, logging } from '@angular-devkit/core';
+import { join, normalize } from 'path';
 const open = require('open');
 
 export interface ExpressConfig {

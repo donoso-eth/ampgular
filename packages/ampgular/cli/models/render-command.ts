@@ -18,6 +18,7 @@ import { RenderEngine } from '../utilities/render-engine';
 import { AmpgularCommand } from './ampgular-command';
 import { BaseCommandOptions } from './command';
 import { Arguments } from './interface';
+import { Mode } from '../schemas/amp';
 export interface RenderCommandOptions extends BaseCommandOptions {
   // project?: string;
   // configuration?: string;
@@ -61,6 +62,8 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
 
     const extra = this.overrides['--'] as string[] || [];
 
+
+
     if (extra.filter(x => x.indexOf('--path') != -1).length == 1) {
       const path = extra.filter(x => x.indexOf('--path') != -1)[0];
       this._bundlePath = path.replace('--path=', '');
@@ -68,6 +71,11 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
     } else if (this.target == 'browser') {
       this._bundlePath = 'dist/browser';
     }
+   else if (this.options.mode== Mode.Deploy) {
+    this._bundlePath = 'dist/browser';
+    this._workingFolder = 'dist/browser';
+  }
+
 
 
     this.commandConfigOptions = {
