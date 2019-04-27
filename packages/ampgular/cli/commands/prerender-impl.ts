@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Path, basename, dirname, join, normalize, resolve, terminal } from '@angular-devkit/core';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
 import minimatch = require('minimatch');
 import { runInThisContext } from 'vm';
 import { prepareCss } from '../helpers-seo/optimize-css';
@@ -17,7 +17,8 @@ import { Configuration, Schema as PrerenderOptions } from '../schemas/prerender'
 import { getRoutes } from '../utilities/utils';
 import { Schema as PrerenderCommandSchema } from './prerender';
 import { Mode } from '../schemas/amp';
-import { ExpressServer } from '../utilities/expressserver';
+import { ExpressServer, ExpressConfig } from '../utilities/expressserver';
+import { load } from 'cheerio';
 const open = require('open');
 
 export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
@@ -27,7 +28,7 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
   private ROUTES: string[];
   private _ampRoutesConfig: AmpRoute[];
   private PRERENDER_PATH: Path;
-  private _cssString:string;
+  private _cssString: string;
   appServerNew: ExpressServer;
   public async run(options: PrerenderOptions & Arguments): Promise<number> {
     this.commandConfigOptions = {
@@ -73,10 +74,13 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
       } else {
         this.PRERENDER_PATH = this.SERVER_PATH;
       }
-
-
     }
-
+    let JsFIles: any = [];
+    if (this._ampgularConfig.target == 'browser') {
+      JsFIles = readdirSync(this.BROWSER_PATH)
+        .filter((item: Path) => item.endsWith('.js'))
+    }
+    console.log(JsFIles)
 
     this.logger.info(`Starting Prerendering of ${this.ROUTES.length} routes/paths`);
 
@@ -88,10 +92,10 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
 
     if (this.commandConfigOptions.configuration != 'amp') {
 
-    if (this.commandConfigOptions.mode == 'deploy') {
-      this._cssString =  readFileSync(join(this.PUBLIC_PATH, 'styles.css')).toString();
-    }
-      this._cssString =  readFileSync(join(this.PRERENDER_PATH, 'styles.css')).toString();
+      if (this.commandConfigOptions.mode == 'deploy') {
+        this._cssString = readFileSync(join(this.PUBLIC_PATH, 'styles.css')).toString();
+      }
+      this._cssString = readFileSync(join(this.PRERENDER_PATH, 'styles.css')).toString();
     }
 
 
@@ -100,8 +104,36 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
 
       let html = await this.renderUrl(route);
 
-        html = await prepareCss(html,this.commandConfigOptions.cssOptimize,
-          this._cssString,this.commandConfigOptions.mode as Mode, this.commandConfigOptions.configuration);
+      const $ = load(html)
+
+      if (this.commandConfigOptions.configuration == 'amp') {
+        $('head').append('<link rel="stylesheet" href="styles.css">');
+      }
+
+      else if (!this.commandConfigOptions.cssOptimize && this.commandConfigOptions.mode == 'render') {
+
+        $('head').append('<link rel="stylesheet" href="styles.css">');
+
+      }
+      if (this.commandConfigOptions.mode == 'deploy') {
+
+        $('body').append('<link rel="stylesheet" href="styles.css">');
+      }
+
+      for (const file of JsFIles){
+
+        $('script').remove(`[src=\'${file}\']`);
+      }
+
+
+      if (!this.commandConfigOptions.cssOptimize) {
+        html = await prepareCss($,
+          this._cssString);
+
+      }
+
+
+
 
       /// writing index
       if (route == '' || route == '/') {
@@ -122,17 +154,30 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
 
     }
 
-    if (this.ROUTES.length>0 && this.commandConfigOptions.serve && this.commandConfigOptions.mode == Mode.Render) {
+    if (this.ROUTES.length > 0 && this.commandConfigOptions.serve && this.commandConfigOptions.mode == Mode.Render) {
 
-      if (this.commandConfigOptions.configuration== 'amp'){
-        this.appServerNew = new ExpressServer(normalize('dist/amp'));
+      const SERVER_CONFIG:ExpressConfig = {
+        assetsPath: 'src/assets',
+        launchPath: 'dist/amp',
+        message: 'Express Server on Localhost:5000 from Prerender Check ',
+        url:'http://localhost:5000'
+      }
+      if (this.commandConfigOptions.configuration == 'amp') {
+
+        SERVER_CONFIG.launchPath = 'dist/amp';
+        SERVER_CONFIG.message =  SERVER_CONFIG.message + 'for AMP-version prerendered pages without AMP-TRANSFORM '
+
+        this.appServerNew = new ExpressServer(SERVER_CONFIG,this.logger);
         await this.appServerNew.LaunchServer();
       }
       else {
-        this.appServerNew = new ExpressServer(normalize('dist/server'));
+
+        SERVER_CONFIG.launchPath = 'dist/server';
+        SERVER_CONFIG.message =  SERVER_CONFIG.message + 'for prerendered pages'
+        this.appServerNew = new ExpressServer(SERVER_CONFIG,this.logger);
         await this.appServerNew.LaunchServer();
       }
-      await open('http://localhost:5000');
+
 
       return 55;
     }

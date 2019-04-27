@@ -24,7 +24,7 @@ import {
   DynamicSchema, StateSchema,
 } from '../models/interface';
 import { Schema as AmpOptions, Mode } from '../schemas/amp';
-import { ExpressServer } from '../utilities/expressserver';
+import { ExpressServer, ExpressConfig } from '../utilities/expressserver';
 import { getWorkspaceDetails } from '../utilities/project';
 import { getRoutes } from '../utilities/utils';
 import { runOptionsBuild } from '../utilities/workspace-extensions';
@@ -32,7 +32,7 @@ import { getCommandDescription } from './deploy-impl';
 import { Schema as MeCommandSchema } from './me';
 
 
-const open = require('open');
+
 
 interface StateMap {
 
@@ -174,15 +174,23 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
     }
 
+    const SERVER_CONFIG:ExpressConfig = {
+      assetsPath: 'src/assets',
+      launchPath: 'dist/amp',
+      message: 'Express Server on Localhost:5000 from AMP testing purposes',
+      url:'http://localhost:5000#development=1'
+    }
     if (this.commandConfigOptions.mode == "test") {
-      this.appServerNew = new ExpressServer(normalize('dist/amp'));
+      SERVER_CONFIG.url = 'http://localhost:5000#development=1';
+      this.appServerNew = new ExpressServer(SERVER_CONFIG,this.logger);
       await this.appServerNew.LaunchServer();
-      await open('http://localhost:5000#development=1');
       return 55;
     } else if (this.commandConfigOptions.mode == "render") {
-      this.appServerNew = new ExpressServer(normalize('dist/amp'));
+
+      SERVER_CONFIG.url = 'http://localhost:5000';
+      SERVER_CONFIG.message = 'Express Server on Localhost:5000 from pre-rende check pages',
+      this.appServerNew = new ExpressServer(SERVER_CONFIG,this.logger);
       await this.appServerNew.LaunchServer();
-      await open('http://localhost:5000');
       return 55;
     } else {
     return 0;

@@ -11,7 +11,7 @@ import {
 
   } from '@angular-devkit/core';
 import * as child_process from 'child_process';
-import { readFileSync, existsSync, writeFileSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'fs';
 import { Schema as AmpgularConfig } from '../lib/config/schema';
 import { Arguments } from '../models/interface';
 import { Workspace } from '../models/workspace';
@@ -120,6 +120,13 @@ export async function runOptionsBuild(
     logger.warn(`Target is ${options.target}  configuration is ${options.configuration} `);
     await _exec('ng', ['build', '--configuration=' + options.configuration], {}, logger);
 
+    // Coping css to server folder
+    if (options.mode == Mode.Render){
+      if (!existsSync(join(normalize(process.cwd()),'dist/server'))) {
+        mkdirSync(join(normalize(process.cwd()),'dist/server'));
+      }
+    _copy( join(normalize(process.cwd()),'dist/browser/styles.css'),join(normalize(process.cwd()),'dist/server/styles.css' ));
+    }
     return 0;
   }
   }

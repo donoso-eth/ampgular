@@ -1,39 +1,18 @@
 import { load } from 'cheerio';
-import { mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { mkdirSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { basename, join, resolve } from 'path';
 import { atRule, decl, parse, root, rule, stringify } from 'postcss';
 import * as purify from 'purify-css';
 import { Mode } from '../schemas/amp';
 
 
-const PUBLIC_FOLDER = join(process.cwd(), 'dist/public');
-// const indexHtml = readFileSync(join(PUBLIC_FOLDER, 'index.html')).toString();
-const globalCss = ''; // readFileSync(join(PUBLIC_FOLDER, "styles.css")).toString();
 
-export async function prepareCss(html: string, optimize:boolean,globalCss:string, mode:Mode , configuration:string ): Promise<string> {
+
+export async function prepareCss($: any,globalCss:string): Promise<string> {
   /* Read HTML in CHEERIO*/
-  const $ = load(html);
+  //const $ = load(html);
 
 
-  if (configuration == 'amp') {
-    $('head').append('<link rel="stylesheet" href="styles.css">');
-
-    return $.html()
-  }
-
-  if (!optimize && mode == 'render') {
-
-    $('head').append('<link rel="stylesheet" href="styles.css">');
-
-    return $.html()
-  }
-
-
-  if (!optimize && mode == 'deploy') {
-
-
-    return $.html()
-  }
 
   /* PREPPEND GLOBAL STYLES*/
   let singleUniStyle = globalCss;
@@ -41,7 +20,7 @@ export async function prepareCss(html: string, optimize:boolean,globalCss:string
    /* ADD COMPONENT STYLES*/
   const styleTags = $('style');
   let styleNr = 0;
-  styleTags.each(function(i, item) {
+  styleTags.each(function(i:number, item:CheerioElement) {
     singleUniStyle = item.firstChild.data + ' ' + singleUniStyle;
     styleNr = styleNr + 1;
   });
@@ -51,7 +30,7 @@ export async function prepareCss(html: string, optimize:boolean,globalCss:string
 
   const inlineStyle = $('[style]');
 
-  inlineStyle.each(function (i, inline: CheerioElement) {
+  inlineStyle.each(function (i:Number, inline: CheerioElement) {
 
       inlineStyle.filter(inline).attr('id', '_ng-i' + i);
       inlineStyle.filter(inline).addClass('_ng-i' + i);
@@ -79,10 +58,6 @@ export async function prepareCss(html: string, optimize:boolean,globalCss:string
         });
 
    $('head').append('<style  ng-transition="serverApp">' + newcss + '</style>');
-  if (mode =='deploy') {
-
-    $('body').append('<link rel="stylesheet" href="styles.css">');
-  }
 
 
   return $.html();

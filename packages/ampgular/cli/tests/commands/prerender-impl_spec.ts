@@ -13,6 +13,7 @@ import {  createDocument } from 'domino';
 import { prepareCss } from '../../helpers-seo/optimize-css';
 import { TestBed, ampgularWorkspace } from '../mocks/test-bed';
 import { Mode } from '../../schemas/prerender';
+import { load } from 'cheerio';
 
 
 describe ('OPTIMIZE CSS', () => {
@@ -23,7 +24,8 @@ describe ('OPTIMIZE CSS', () => {
      <style>  .test1 { color:red;} .testDelete:{background:yellow}</style>
      <style> .test3 { color:green;} .test2Delete:{background:red}</style>
     </head> <body> <h2 class="test1">  <p class="test3"> Madrid Day Spa test</p>  </body> </html>`;
-    const htmlOptimized = await prepareCss(html,true,'', Mode.Render,"production");
+    const $ = load (html)
+    const htmlOptimized = await prepareCss($,'');
 
     const document = createDocument(htmlOptimized);
     const head = document.querySelector(

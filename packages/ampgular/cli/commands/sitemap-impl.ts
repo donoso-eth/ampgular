@@ -113,7 +113,7 @@ export class SitemapCommand extends AmpgularCommand<SitemapCommandSchema> {
 
     xmlUrl = xmlintro + xmlUrl + xmlend;
 
-    writeFileSync(join(basedir, 'dist/public', '/sitemap.xml'), xmlUrl);
+    writeFileSync(join(basedir, 'dist/public', 'sitemap.xml'), xmlUrl);
 
     return 0;
   } catch (e) {

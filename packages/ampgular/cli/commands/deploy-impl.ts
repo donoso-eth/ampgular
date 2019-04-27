@@ -31,7 +31,7 @@ import glob = require('glob');
 
 import { AmpgularCommand } from '../models/ampgular-command';
 import { Schema as DeployOptions, TargetApp } from '../schemas/deploy';
-import { ExpressServer } from '../utilities/expressserver';
+import { ExpressServer, ExpressConfig } from '../utilities/expressserver';
 
 interface FileMove {
   from: string;
@@ -68,57 +68,63 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
 
 
-      this.logger.info('........  BROWSER APP ....... FOR  DEPLOYING');
-      await this._createClientBundle();
+    this.logger.info('........  BROWSER APP ....... FOR  DEPLOYING');
+    await this._createClientBundle();
 
-      await this._copyFilestoPublic();
+    await this._copyFilestoPublic();
 
-      if ((this.commandConfigOptions as DeployOptions).sitemap) {
-        await this._createSiteMap();
+    if ((this.commandConfigOptions as DeployOptions).sitemap) {
+      await this._createSiteMap();
+    }
+
+    if ((this.commandConfigOptions as DeployOptions).robots) {
+      await this._copyRobots();
+    }
+
+    if ((this.commandConfigOptions as DeployOptions).files.length > 0) {
+      await this._copyCustom((this.commandConfigOptions as DeployOptions).files);
+    }
+
+
+    if (targetApp == TargetApp.Prerender || targetApp == TargetApp.Ssr) {
+      this.logger.info('........ NODE APP .......  FOR RENDERING ');
+      await this._createServerBundle(false);
+      switch (targetApp) {
+        case TargetApp.Prerender:
+          this.logger.info('PRERENDERING THE SITE .......  FOR DEPLOYING');
+          await this._callPrerender(false);
+          break;
+        case TargetApp.Ssr:
+          this.logger.info('PREPARING SERVER SIDE THE SITE .......  FOR DEPLOYING');
+          break;
+        default:
+          break;
       }
 
-      if ((this.commandConfigOptions as DeployOptions).robots) {
-        await this._copyRobots();
-      }
+    }
 
-      if ((this.commandConfigOptions as DeployOptions).files.length > 0) {
-       await  this._copyCustom((this.commandConfigOptions as DeployOptions).files);
-      }
-
-
-      if (targetApp == TargetApp.Prerender || targetApp == TargetApp.Ssr) {
-        this.logger.info('........ NODE APP .......  FOR RENDERING ');
-        await this._createServerBundle(false);
-        switch (targetApp) {
-          case TargetApp.Prerender:
-            this.logger.info('PRERENDERING THE SITE .......  FOR DEPLOYING');
-            await this._callPrerender(false);
-            break;
-          case TargetApp.Ssr:
-            this.logger.info('PREPARING SERVER SIDE THE SITE .......  FOR DEPLOYING');
-            break;
-          default:
-            break;
-        }
-
-      }
-
-      if ((this.commandConfigOptions as DeployOptions).amp == true) {
-        this.logger.info('BUNDLING AMP APP .......  FOR DEPLOYING');
-        await this._createServerBundle(true);
-        this.logger.info('PRERENDERING AMP APP .......  FOR DEPLOYING');
-        await this._callPrerender(true);
-        this.logger.info('CREATING AMP PAGES .......  FOR DEPLOYING');
-      }
+    if ((this.commandConfigOptions as DeployOptions).amp == true) {
+      this.logger.info('BUNDLING AMP APP .......  FOR DEPLOYING');
+      await this._createServerBundle(true);
+      this.logger.info('PRERENDERING AMP APP .......  FOR DEPLOYING');
+      await this._callPrerender(true);
+      this.logger.info('CREATING AMP PAGES .......  FOR DEPLOYING');
+    }
 
 
 
 
 
     if ((this.commandConfigOptions as DeployOptions).serve) {
-      this.appServerNew = new ExpressServer(normalize('dist/public'));
+      const SERVER_CONFIG: ExpressConfig = {
+        assetsPath: 'dist/public/assets',
+        launchPath: 'dist/public',
+        message: 'Express Server on Localhost:5000 from DEPLOY CHECK',
+        url: 'http://localhost:5000'
+      }
+      this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
       await this.appServerNew.LaunchServer();
-      await open('http://localhost:5000');
+
       return 55;
     }
     else {
@@ -131,7 +137,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
   async _copyCustom(copyList: Array<FileMove>) {
 
     copyList.forEach(element => {
-      _copy(join(this.basedir, element.from),join(this.basedir,element.to));
+      _copy(join(this.basedir, element.from), join(this.basedir, element.to));
     });
 
 
@@ -139,7 +145,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
 
   async _copyRobots() {
-    _copy( join(this.basedir,'ampgular/robots.txt'), join(this.basedir,'dist/public/robots.txt'));
+    _copy(join(this.basedir, 'ampgular/robots.txt'), join(this.basedir, 'dist/public/robots.txt'));
 
     return;
   }
@@ -211,14 +217,13 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
   async _copyFilestoPublic() {
 
 
-    _rimraf(join(this.basedir,'dist/public'));
+    _rimraf(join(this.basedir, 'dist/public'));
 
-    // copy the dist Folder to Public
 
-    _recursiveCopy(join(this.basedir,'dist/browser'), join(this.basedir,'dist/public'), this.logger);
+    _mkdirp(join(this.basedir, 'dist/public'));
 
-    // copy user files defined in ampgular.json
-    // TODO Options sitemap
+
+    _recursiveCopy(join(this.basedir, 'dist/browser'), join(this.basedir, 'dist/public'), this.logger);
 
 
   }
@@ -238,11 +243,18 @@ function _rimraf(p: Path) {
 }
 
 function _recursiveCopy(from: string, to: string, logger: logging.Logger) {
+
+
+
   if (!existsSync(from)) {
     logger.error(`File "${from}" does not exist.`);
     process.exit(4);
   }
   if (statSync(from).isDirectory()) {
+    if (!existsSync(to)) {
+      mkdirSync(to);
+    }
+
     readdirSync(from).forEach(fileName => {
       _recursiveCopy(join(normalize(from), fileName), join(normalize(to), fileName), logger);
     });
@@ -250,21 +262,11 @@ function _recursiveCopy(from: string, to: string, logger: logging.Logger) {
     _copy(from, to);
   }
 }
-
 function _copy(from: string, to: string) {
-  // Create parent folder if necessary.
-  if (!existsSync(dirname(normalize(to)))) {
-    _mkdirp(dirname(normalize(to)));
-  }
 
-  // Error out if destination already exists.
-  if (existsSync(to)) {
-    throw new Error(`Path ${to} already exist...`);
-  }
 
   from = relative(normalize(process.cwd()), normalize(from));
   to = relative(normalize(process.cwd()), normalize(to));
-
   const buffer = readFileSync(from);
   writeFileSync(to, buffer);
 }
