@@ -71,11 +71,12 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
     } else if (this.target == 'browser') {
       this._bundlePath = 'dist/browser';
     }
-   else if (this.options.mode== Mode.Deploy) {
+
+   else if (this.overrides.mode== Mode.Deploy) {
     this._bundlePath = 'dist/browser';
     this._workingFolder = 'dist/browser';
   }
-
+  console.log(this.overrides)
 
 
     this.commandConfigOptions = {
@@ -123,6 +124,12 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
   }
 
   protected async renderUrl(url: string): Promise<string> {
+
+if ((this.commandConfigOptions as PrerenderOptions).mode == Mode.Deploy){
+  this._bundlePath = 'dist/browser';
+    this._workingFolder = 'dist/browser';
+}
+
     return await this.renderFunction({ url: url }, this._workingFolder, this._bundlePath);
   }
 
