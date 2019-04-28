@@ -17,7 +17,7 @@
     "prerender": {
       "type": "boolean",
       "default":true,
-      "description": "Prerender the "
+      "description": "Prerender the ap "
     },
     "mode": {
       "description": "Create only one AMp Page (route porperty) and spin a loclaserver to easy the devs process",

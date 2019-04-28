@@ -88,7 +88,7 @@ export class AmpPage {
   }
 
     public AmpToFile(mode:String) {
-
+      console.log(this._args.customScript)
       const myAMPHtml = this._args.cheerio.html().replace('<html', '<html amp')
       if (mode=='test') {
           writeFileSync(join(this.AMP_FOLDER, '/index.html'), myAMPHtml

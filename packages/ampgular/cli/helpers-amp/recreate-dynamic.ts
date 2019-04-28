@@ -148,7 +148,7 @@ export const createListPostComponent = async (
     loadingString = `<div submitting >  ${myLookID$.html()}  </div> `;
   }
   let emptyString = '';
-  if (list['state'].indexOf('loading') != -1) {
+  if (list['state'].indexOf('empty') != -1) {
     const myLookID$ = $(`[id='${list['id'] + 'Empty'}']`);
     emptyString = `<div submit-success [hidden]="${
       list['src']
@@ -201,7 +201,6 @@ export const createListGetComponent = async (
 
     const myIdList = `[id='${list['id'] + i + 'List'}']`;
 
-    const myIdForm = `${list['id'] + i + 'Form'}`;
 
     const listId$ = $(myIdList);
     const listAttr$ = listId$.get(0);
@@ -215,8 +214,20 @@ export const createListGetComponent = async (
 
     const content = listId$.html(); // .replace(new RegExp(),"");
 
+    let mySrc = "items." + list.src
+
+    let emptyString = '';
+    // if (list['state'].indexOf('empty') != -1) {
+    //   const myLookID$ = $(`[id='${list['id'] + 'Empty'}']`);
+    //   emptyString = `<div  [hidden]="${
+    //    mySrc
+    //   }.length >0" >  ${myLookID$.html()}  </div> `;
+    // }
+
+
+
     const classTop = '';
-    const listhtml = `<amp-list  items="items.hours" id="${list['id'] +
+    const listhtml = `<amp-list  items="${mySrc}" id="${list['id'] +
       i +
       'List'}" class="${classTop}"  width="auto"
         height="60"
@@ -226,7 +237,12 @@ export const createListGetComponent = async (
          ${content}
         </template>
 
-        </amp-list>\r`;
+        </amp-list>\r
+        ${emptyString}\r`;
+
+
+
+
 
     $(myIdSearch).after(listhtml);
     $(myIdSearch).remove();

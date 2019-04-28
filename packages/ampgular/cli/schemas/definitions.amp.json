@@ -164,6 +164,15 @@
         "api": {
           "type": "string"
         },
+        "state": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "src":{
+          "type":"string"
+        },
         "inputs": {
           "type": "object",
           "properties": {
@@ -176,7 +185,7 @@
           }
         }
       },
-      "required": ["type", "id", "api", "inputs"]
+      "required": ["type", "id", "api", "inputs","state","src"]
     },
     "listPostComponent": {
       "type": "object",

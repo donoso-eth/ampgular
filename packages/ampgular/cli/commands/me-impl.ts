@@ -139,7 +139,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
 
 
-    this._globalCss= readFileSync(join(normalize(process.cwd()),'/dist/amp/css/styles.css')).toString('utf-8')
+    this._globalCss= readFileSync(join(normalize(process.cwd()),'/dist/amp/styles.css')).toString('utf-8')
 
 
     for (const ampRoute of this._toAmpROUTES) {

@@ -10,7 +10,8 @@
     "stateFiles":["/ampgular/amp/main_state_config.json"],
     "dynamicFiles":["/ampgular/amp/main_dynamic_config.json"],
     "pluginsFiles":["/ampgular/amp/plugins_config.json"],
-    "mode":"render"
+    "mode":"render",
+    "prerender":false
   },
   "buildConfig": {
     "configuration": "production",

@@ -180,13 +180,40 @@ export const cleanAttributes = [
   { tag: '*', attr: 'cass' },
 ];
 
-export const AmpComponents:any = {
-    "amp-list": "0.1",
-    "amp-mustache":"0.2",
-    "amp-analytics":"0.1",
-    "amp-form":"0.1",
-    "amp-bind":"0.1",
-    "amp-install-serviceworker":"0.1"
+export interface AmpComponent {
+  version:string;
+  attrib:string;
+}
+
+export const AmpComponents:{[key:string]:AmpComponent} = {
+    "amp-list":  {
+      "version":"0.1",
+      "attrib":"custom-element"
+    },
+    "amp-state": {
+      "version":"0.1",
+      "attrib":"custom-element"
+    },
+    "amp-mustache":{
+      "version":"0.2",
+      "attrib":"custom-template"
+    },
+    "amp-analytics":{
+      "version":"0.1",
+      "attrib":"custom-element"
+    },
+    "amp-form":{
+      "version":"0.1",
+      "attrib":"custom-element"
+    },
+    "amp-bind":{
+      "version":"0.1",
+      "attrib":"custom-element"
+    },
+    "amp-install-serviceworker":{
+      "version":"0.1",
+      "attrib":"custom-element"
+    },
 }
 
 

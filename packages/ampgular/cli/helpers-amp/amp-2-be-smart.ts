@@ -30,9 +30,11 @@ const recreateState = async (args: AmpDescription): Promise<AmpDescription> => {
     return args;
   }
 
-  if(args.customScript.indexOf('amp-bind') !== -1){
+  if(args.customScript.indexOf('amp-bind') === -1){
     args.customScript.push('amp-bind')
   }
+
+
 
   Object.keys(myPageState).forEach(async state => {
     const myComponent = myPageState[state];
@@ -67,7 +69,7 @@ const recreateDynamicScripts = (
   args:AmpDescription,check:Array<string>):AmpDescription => {
 
   check.forEach(checky=> {
-    if(args.customScript.indexOf(checky) !== -1){
+    if(args.customScript.indexOf(checky) === -1){
       args.customScript.push(checky)
     }
   })
@@ -85,7 +87,7 @@ const recreateDynamicData = async (args: AmpDescription): Promise<AmpDescription
   }
 
 
-  if(args.customScript.indexOf('amp-bind') !== -1){
+  if(args.customScript.indexOf('amp-bind') === -1){
     args.customScript.push('amp-bind')
   }
 

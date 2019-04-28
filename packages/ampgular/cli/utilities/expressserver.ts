@@ -28,7 +28,7 @@ export class ExpressServer {
 
   async openServer(){
     await this.LaunchServer();
-    await open(this.config.url);
+
 
   }
 
@@ -55,8 +55,8 @@ export class ExpressServer {
 
 
         this.server = this.app.listen(PORT, async () => {
-
           this.logger.info(this.config.message)
+          await open(this.config.url);
 
           resolve(true);
 

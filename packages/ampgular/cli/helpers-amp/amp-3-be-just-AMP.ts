@@ -27,7 +27,25 @@ const embedScripts = async (args: AmpDescription): Promise<AmpDescription> => {
    * REMOVE SCRIPTS aand STYLES
    */
   $('link').remove('[rel=\'stylesheet\']');
-  $('script').remove();
+
+  const scriptTags = $('script');
+    scriptTags.each(function(i:number, item:CheerioElement) {
+      if (item.attribs['src'] !== undefined ) {
+        if( item.attribs['src'].match(/ampproject/)) {}
+        else {  $(item).remove();}
+      }
+      else if (item.attribs['type'] !== undefined ) {
+        if( item.attribs['type'].match(/application\/json|application\/ld\+json/g)) {}
+        else {  $(item).remove();}
+      }
+      else {
+        $(item).remove();
+      }
+
+
+
+  });
+  //$('script').remove();
   $('head').children().remove('style');
 
 
@@ -35,7 +53,7 @@ const embedScripts = async (args: AmpDescription): Promise<AmpDescription> => {
    * EMDEB MANDATORY AMP SCRIPTS AND BOILER PLATE
    */
   $('head').children('[charset="utf-8"]')
-    .after('<script async src="https://cdn.ampproject.org/v0.js"></script>');
+    .after('<script async src="https://cdn.ampproject.org/v0.js"></script>\r');
     $('head').append(`<style amp-boilerplate>body{-webkit-animation:
       -amp-start 8s steps(1,end) 0s 1 normal both;
       -moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:
@@ -61,15 +79,15 @@ const embedScripts = async (args: AmpDescription): Promise<AmpDescription> => {
    */
   args['customScript'].forEach(script => {
     $('head').children('[src="https://cdn.ampproject.org/v0.js"]')
-      .after(`<script async custom-element="${script}"
-     src="https://cdn.ampproject.org/v0/${script}-${AmpComponents[script]}.js"></script>`);
+      .after(`<script async ${AmpComponents[script].attrib}="${script}"
+     src="https://cdn.ampproject.org/v0/${script}-${AmpComponents[script].version}.js"></script>\r`);
 
   });
 
   /*
    * EMDEB CUSTOM JSON-LD
    */
-  $('head').append(JSONLD);
+  //$('head').append(JSONLD);
 
 
 
