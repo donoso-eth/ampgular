@@ -76,7 +76,7 @@ export abstract class Command<T extends BaseCommandOptions = BaseCommandOptions>
       ? ` [options]`
       : ``;
 
-    this.logger.info(`usage: ng ${name}${argDisplay}${optionsDisplay}`);
+    this.logger.info(`usage: amp ${name}${argDisplay}${optionsDisplay}`);
     this.logger.info('');
   }
 

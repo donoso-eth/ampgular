@@ -2,12 +2,11 @@ import { Path, dirname, join, normalize } from '@angular-devkit/core';
 import { load } from 'cheerio';
 import { readFileSync, writeFileSync, existsSync,  mkdirSync } from 'fs';
 import { BeReadySpec } from '../helpers-amp/amp-1-be-spec-ready';
-import { Schema as AmpOptions } from '../schemas/amp';
+import { Schema as AmpOptions, Mode } from '../schemas/amp';
 import { AmpDescription, StateSchema, DynamicSchema } from './interface';
 import { consoleTestResultHandler } from 'tslint/lib/test';
 import { BeJustAmp } from '../helpers-amp/amp-3-be-just-AMP';
 import { BeSmart } from '../helpers-amp/amp-2-be-smart';
-import { Mode } from 'dist-schema/packages/ampgular/cli/schemas/build';
 
 export class AmpPage {
 

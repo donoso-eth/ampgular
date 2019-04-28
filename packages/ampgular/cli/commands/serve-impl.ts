@@ -19,7 +19,7 @@ import { AmpgularCommand } from '../models/ampgular-command';
 import { ExpressConfig, ExpressServer } from '../utilities/expressserver';
 
 export class ServeCommand extends AmpgularCommand<ServeCommandSchema> {
-  public readonly command = 'servep';
+  public readonly command = 'serve';
   appServerNew: ExpressServer;
   public commandConfigOptions: ServeOptions;
 
@@ -27,8 +27,8 @@ export class ServeCommand extends AmpgularCommand<ServeCommandSchema> {
     options: ServeCommandSchema & Arguments,
   ): Promise<void> {
     await super.initialize(options);
-
-
+    console.log(this.overrides)
+    console.log(this.commandConfigOptions)
     this.commandConfigOptions = {command: this.overrides.command as Command}
 
 
@@ -36,6 +36,7 @@ export class ServeCommand extends AmpgularCommand<ServeCommandSchema> {
 
   async run() {
     let SERVER_CONFIG:ExpressConfig;
+    console.log(this.commandConfigOptions.command);
     if (this.commandConfigOptions.command=='deploy'){
       SERVER_CONFIG = {
         assetsPath: 'dist/public/assets',
@@ -44,6 +45,7 @@ export class ServeCommand extends AmpgularCommand<ServeCommandSchema> {
         url: 'http://localhost:5000'
       }
       this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
+      await this.appServerNew.LaunchServer();
     }
     else if (this.commandConfigOptions.command=='seo') {
       SERVER_CONFIG  = {
@@ -53,28 +55,33 @@ export class ServeCommand extends AmpgularCommand<ServeCommandSchema> {
         url: 'http://localhost:5000'
       }
       this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
-    }
-
-    else if (this.commandConfigOptions.command=='pre-amp') {
-      SERVER_CONFIG  = {
-        assetsPath: 'src',
-        launchPath: 'dist/amp',
-        message: 'Express Server on Localhost:5000 from AMP prerender Check',
-        url: 'http://localhost:5000'
-      }
-      this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
-    }
-    else if (this.commandConfigOptions.command=='pre-amp') {
-      SERVER_CONFIG  = {
-        assetsPath: 'src',
-        launchPath: 'dist/amp',
-        message: 'Express Server on Localhost:5000 from AMP prerender Check',
-        url: 'http://localhost:5000'
-      }
-      this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
-    }
-
       await this.appServerNew.LaunchServer();
+    }
+
+    else if (this.commandConfigOptions.command=='pre-amp') {
+      SERVER_CONFIG  = {
+        assetsPath: 'src',
+        launchPath: 'dist/amp',
+        message: 'Express Server on Localhost:5000 from AMP prerender Check',
+        url: 'http://localhost:5000'
+      }
+      this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
+      await this.appServerNew.LaunchServer();
+    }
+    else if (this.commandConfigOptions.command=='pre-amp') {
+      SERVER_CONFIG  = {
+        assetsPath: 'src',
+        launchPath: 'dist/amp',
+        message: 'Express Server on Localhost:5000 from AMP prerender Check',
+        url: 'http://localhost:5000'
+      }
+      this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
+      await this.appServerNew.LaunchServer();
+    }
+    else {
+      return 0
+    }
+
       return 55
 
   }
