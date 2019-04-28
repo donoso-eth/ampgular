@@ -10,10 +10,10 @@ import { terminal, logging } from '@angular-devkit/core';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Command } from '../models/command';
+
 import { findUp } from '../utilities/find-up';
 import { Schema as ServeCommandSchema } from './serve';
-import { Schema as ServeOptions } from '../schemas/serve';
+import { Schema as ServeOptions, Command } from '../schemas/serve';
 import { Arguments } from '../models/interface';
 import { AmpgularCommand } from '../models/ampgular-command';
 import { ExpressConfig, ExpressServer } from '../utilities/expressserver';
@@ -28,8 +28,9 @@ export class ServeCommand extends AmpgularCommand<ServeCommandSchema> {
   ): Promise<void> {
     await super.initialize(options);
 
-    this.commandConfigOptions = {
-                    ...this.overrides} as ServeOptions;
+
+    this.commandConfigOptions = {command: this.overrides.command as Command}
+
 
   }
 

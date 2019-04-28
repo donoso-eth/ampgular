@@ -5,7 +5,7 @@
   "type": "object",
   "properties": {
     "command": {
-      "title": "Command to serve once the building/prerendering, transform has been done",
+      "description": "Command to serve once the building/prerendering, transform has been done",
       "type": "string",
       "enum":["deploy","seo","pre-amp","amp"]
     }

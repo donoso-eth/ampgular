@@ -1,6 +1,6 @@
 import { Path, dirname, join, normalize } from '@angular-devkit/core';
 import { load } from 'cheerio';
-import { readFileSync, writeFileSync, existsSync, existsSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync,  mkdirSync } from 'fs';
 import { BeReadySpec } from '../helpers-amp/amp-1-be-spec-ready';
 import { Schema as AmpOptions } from '../schemas/amp';
 import { AmpDescription, StateSchema, DynamicSchema } from './interface';
