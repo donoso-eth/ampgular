@@ -107,10 +107,14 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
     if ((this.commandConfigOptions as DeployOptions).amp == true) {
       this.logger.info('BUNDLING AMP APP .......  FOR DEPLOYING');
-      await this._createServerBundle(true);
+    //  await this._createServerBundle(true);
       this.logger.info('PRERENDERING AMP APP .......  FOR DEPLOYING');
       await this._callPrerender(true);
       this.logger.info('CREATING AMP PAGES .......  FOR DEPLOYING');
+
+      await this._createAmpPages();
+
+
     }
 
 
@@ -150,6 +154,13 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
     _copy(join(this.basedir, 'ampgular/robots.txt'), join(this.basedir, 'dist/public/robots.txt'));
 
     return;
+  }
+
+  async _createAmpPages()  {
+    const workspace: CommandWorkspace = getWorkspaceDetails() as CommandWorkspace;
+    const descriptionBuild = await getCommandDescription('me', this._registry);
+    const amp= new descriptionBuild.impl({ workspace }, descriptionBuild, this.logger);
+    return await amp.validateAndRun({mode:Mode.Deploy});
   }
 
 
@@ -197,13 +208,13 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
   async _callPrerender(ampVersion: boolean) {
     const workspace: CommandWorkspace = getWorkspaceDetails() as CommandWorkspace;
     const descriptionPrerender = await getCommandDescription('prerender', this._registry);
-    this.prerender =
+    const prerender =
       new descriptionPrerender.impl({ workspace }, descriptionPrerender, this.logger);
 
     if (ampVersion) {
-      return await this.prerender.validateAndRun({ localhost: true, path: 'amp', configuration: 'amp' });
+      return await prerender.validateAndRun({ localhost: true, path: 'dist/amp', configuration: 'amp',mode: Mode.Deploy });
     } else {
-      return await this.prerender.validateAndRun({ localhost: true, path: 'dist/browser',mode: Mode.Deploy });
+      return await prerender.validateAndRun({ localhost: true, path: 'dist/browser',mode: Mode.Deploy });
     }
 
   }

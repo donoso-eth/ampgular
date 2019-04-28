@@ -126,8 +126,15 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
   protected async renderUrl(url: string): Promise<string> {
 
 if ((this.commandConfigOptions as PrerenderOptions).mode == Mode.Deploy){
-  this._bundlePath = 'server';
+  if(this.commandConfigOptions.configuration=='amp'){
+    this._bundlePath = 'amp';
     this._workingFolder = 'dist/browser';
+  } else {
+    this._bundlePath = 'server';
+    this._workingFolder = 'dist/browser';
+  }
+
+
 }
 
     return await this.renderFunction({ url: url }, this._workingFolder, this._bundlePath);

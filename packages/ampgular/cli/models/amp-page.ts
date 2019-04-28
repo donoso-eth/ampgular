@@ -1,4 +1,4 @@
-import { Path, dirname, join, normalize } from '@angular-devkit/core';
+import { join, normalize } from 'path';
 import { load } from 'cheerio';
 import { readFileSync, writeFileSync, existsSync,  mkdirSync } from 'fs';
 import { BeReadySpec } from '../helpers-amp/amp-1-be-spec-ready';
@@ -13,9 +13,9 @@ export class AmpPage {
     private _angularString: string;
     private _ampString: string;
 
-    private PUBLIC_FOLDER: Path =  join(normalize(process.cwd()), 'dist/public');
-    private BROWSER_FOLDER: Path =  join(normalize(process.cwd()), 'dist/browser');
-    private AMP_FOLDER: Path =  join(normalize(process.cwd()), 'dist/amp');
+    private PUBLIC_FOLDER: string =  join(normalize(process.cwd()), 'dist/public');
+    private BROWSER_FOLDER: string =  join(normalize(process.cwd()), 'dist/browser');
+    private AMP_FOLDER: string =  join(normalize(process.cwd()), 'dist/amp');
 
     private _args: AmpDescription;
     _$: CheerioStatic;
@@ -107,7 +107,7 @@ export class AmpPage {
           if (!existsSync(join(this.PUBLIC_FOLDER, this.route, 'amp'))) {
             mkdirSync(join(this.PUBLIC_FOLDER, this.route, 'amp'));
           }
-          writeFileSync(join(this.AMP_FOLDER, this.route, 'amp','/index.html'), myAMPHtml
+          writeFileSync(join(this.PUBLIC_FOLDER, this.route, 'amp','/index.html'), myAMPHtml
           , 'utf-8');
       }
     }

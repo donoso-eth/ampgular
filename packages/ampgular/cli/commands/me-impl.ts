@@ -70,8 +70,12 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
   }
 
   public async run(options: MeCommandSchema & Arguments): Promise<number> {
+
     await super.run(options);
 
+    if(options.mode==Mode.Deploy){
+      this.commandConfigOptions.mode = Mode.Deploy
+    }
 
     if (this.overrides['route'] !== undefined) {
      this.commandConfigOptions.mode = Mode.Test;
