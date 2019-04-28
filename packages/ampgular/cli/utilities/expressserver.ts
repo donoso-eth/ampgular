@@ -44,9 +44,12 @@ export class ExpressServer {
 
        // this.app.use('/css/styles.css', express.static(CSS_FOLDER))
 
+        this.app.get('*.*', express.static(join(DIST_FOLDER)));
 
 
         this.app.get('*',  (req: any, res: any) => {
+
+          console.log(req.url)
 
           res.sendFile(join(DIST_FOLDER, req.url, 'index.html')); // load the single view file (angular will handle the page changes on the front-end)
         });

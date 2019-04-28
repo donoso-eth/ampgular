@@ -126,7 +126,7 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
   protected async renderUrl(url: string): Promise<string> {
 
 if ((this.commandConfigOptions as PrerenderOptions).mode == Mode.Deploy){
-  this._bundlePath = 'dist/browser';
+  this._bundlePath = 'server';
     this._workingFolder = 'dist/browser';
 }
 

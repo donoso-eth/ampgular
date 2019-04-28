@@ -153,6 +153,7 @@ function _exec(
       {
         stdio: 'inherit',
         ...opts,
+        shell:true
       },
     );
 

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Serve",
+  "description": "ServeCommand",
+  "type": "object",
+  "properties": {
+    "command": {
+      "title": "Command to serve once the building/prerendering, transform has been done",
+      "type": "string",
+      "enum":["deploy","seo","pre-amp","amp"]
+    }
+  },
+  "required": ["command"],
+"additionalProperties": false
+}

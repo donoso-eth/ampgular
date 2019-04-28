@@ -1,12 +1,13 @@
 import { Path, dirname, join, normalize } from '@angular-devkit/core';
 import { load } from 'cheerio';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, existsSync, mkdirSync } from 'fs';
 import { BeReadySpec } from '../helpers-amp/amp-1-be-spec-ready';
 import { Schema as AmpOptions } from '../schemas/amp';
 import { AmpDescription, StateSchema, DynamicSchema } from './interface';
 import { consoleTestResultHandler } from 'tslint/lib/test';
 import { BeJustAmp } from '../helpers-amp/amp-3-be-just-AMP';
 import { BeSmart } from '../helpers-amp/amp-2-be-smart';
+import { Mode } from 'dist-schema/packages/ampgular/cli/schemas/build';
 
 export class AmpPage {
 
@@ -94,6 +95,21 @@ export class AmpPage {
           writeFileSync(join(this.AMP_FOLDER, '/index.html'), myAMPHtml
           , 'utf-8');
 
+      }
+       else if (mode== Mode.Render) {
+        if (!existsSync(join(this.AMP_FOLDER, this.route, 'amp'))) {
+          mkdirSync(join(this.AMP_FOLDER, this.route, 'amp'));
+        }
+
+          writeFileSync(join(this.AMP_FOLDER, this.route, 'amp','/index.html'), myAMPHtml
+          , 'utf-8');
+        }
+        else if (mode== Mode.Deploy) {
+          if (!existsSync(join(this.PUBLIC_FOLDER, this.route, 'amp'))) {
+            mkdirSync(join(this.PUBLIC_FOLDER, this.route, 'amp'));
+          }
+          writeFileSync(join(this.AMP_FOLDER, this.route, 'amp','/index.html'), myAMPHtml
+          , 'utf-8');
       }
     }
 
