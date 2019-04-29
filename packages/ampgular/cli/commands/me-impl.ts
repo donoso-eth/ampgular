@@ -29,6 +29,7 @@ import { getRoutes } from '../utilities/utils';
 import { runOptionsBuild } from '../utilities/workspace-extensions';
 import { getCommandDescription } from './deploy-impl';
 import { Schema as MeCommandSchema } from './me';
+import { terminal } from '@angular-devkit/core';
 
 
 
@@ -134,18 +135,25 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
 
     if (this.commandConfigOptions.mode!= Mode.Deploy){
+
+      this._globalCss= readFileSync(join(normalize(process.cwd()),'/dist/public/styles.css')).toString('utf-8')
+
       if (this.commandConfigOptions.prerender){
         await this._callPrerender();
       }
-
     }
 
+      else {
+        this._globalCss= readFileSync(join(normalize(process.cwd()),'/dist/amp/styles.css')).toString('utf-8')
+      }
 
 
 
-    this._globalCss= readFileSync(join(normalize(process.cwd()),'/dist/amp/styles.css')).toString('utf-8')
 
 
+
+
+    let k = 1;
     for (const ampRoute of this._toAmpROUTES) {
 
       // create state associated to Route
@@ -161,7 +169,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
 
       // create an instance of AMP PAGE
-      const myAMPPage = new AmpPage(ampRoute, this._globalCss);
+      const myAMPPage = new AmpPage(ampRoute, this._globalCss,this.logger);
 
       myAMPPage.initialize(this.commandConfigOptions,
         this._myPageState, this._myPageDynamic, this._myPagePlugins);
@@ -172,26 +180,34 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
       await myAMPPage.AmpToJustAmp();
 
+      const passValidation = await myAMPPage.AMPisValid();
+      if (passValidation==true){
+        await myAMPPage.AmpCanonical();
+      }
+
       await myAMPPage.AmpToFile(this.commandConfigOptions.mode);
+      this.loggingSameLine(`AMPing....nr:${k} page:${ampRoute} `);
 
 
+
+        k++;
     }
 
     const SERVER_CONFIG:ExpressConfig = {
       assetsPath: 'src/assets',
       launchPath: 'dist/amp',
-      message: 'Express Server on Localhost:5000 from AMP testing purposes',
-      url:'http://localhost:5000#development=1'
+      message: 'Express Server on localhost:6000 from AMP testing purposes',
+      url:'http://localhost:6000#development=1'
     }
     if (this.commandConfigOptions.mode == "test") {
-      SERVER_CONFIG.url = 'http://localhost:5000#development=1';
+      SERVER_CONFIG.url = 'http://localhost:6000#development=1';
       this.appServerNew = new ExpressServer(SERVER_CONFIG,this.logger);
       await this.appServerNew.LaunchServer();
       return 55;
     } else if (this.commandConfigOptions.mode == "render") {
 
-      SERVER_CONFIG.url = 'http://localhost:5000';
-      SERVER_CONFIG.message = 'Express Server on Localhost:5000 from pre-rende check pages',
+      SERVER_CONFIG.url = 'http://localhost:6000';
+      SERVER_CONFIG.message = 'Express Server on localhost:6000 from pre-rende check pages',
       this.appServerNew = new ExpressServer(SERVER_CONFIG,this.logger);
       await this.appServerNew.LaunchServer();
       return 55;

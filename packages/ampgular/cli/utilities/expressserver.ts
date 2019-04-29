@@ -36,7 +36,7 @@ export class ExpressServer {
   async LaunchServer(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       try {
-        const PORT = process.env.PORT || 5000;
+        const PORT = 6000;
         const DIST_FOLDER = join(normalize(process.cwd()), this.config.launchPath);
         const ASSETS_FOLDER = join(normalize(process.cwd()), this.config.assetsPath);
 

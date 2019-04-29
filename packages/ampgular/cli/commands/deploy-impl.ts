@@ -107,7 +107,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
     if ((this.commandConfigOptions as DeployOptions).amp == true) {
       this.logger.info('BUNDLING AMP APP .......  FOR DEPLOYING');
-    //  await this._createServerBundle(true);
+      await this._createServerBundle(true);
       this.logger.info('PRERENDERING AMP APP .......  FOR DEPLOYING');
       await this._callPrerender(true);
       this.logger.info('CREATING AMP PAGES .......  FOR DEPLOYING');
@@ -125,8 +125,8 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
       const SERVER_CONFIG: ExpressConfig = {
         assetsPath: 'dist/public/assets',
         launchPath: 'dist/public',
-        message: 'Express Server on Localhost:5000 from DEPLOY CHECK',
-        url: 'http://localhost:5000'
+        message: 'Express Server on localhost:6000 from DEPLOY CHECK',
+        url: 'http://localhost:6000'
       }
       this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
       await this.appServerNew.LaunchServer();

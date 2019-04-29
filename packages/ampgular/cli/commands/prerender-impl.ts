@@ -9,7 +9,7 @@ import { join, dirname, normalize, basename} from 'path';
 import { Path,  resolve, terminal } from '@angular-devkit/core';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
 import minimatch = require('minimatch');
-import { runInThisContext } from 'vm';
+
 import { prepareCss } from '../helpers-seo/optimize-css';
 import { BaseCommandOptions } from '../models/command';
 import { AmpRoute, Arguments } from '../models/interface';
@@ -20,7 +20,7 @@ import { Schema as PrerenderCommandSchema } from './prerender';
 import { Mode } from '../schemas/amp';
 import { ExpressServer, ExpressConfig } from '../utilities/expressserver';
 import { load } from 'cheerio';
-const open = require('open');
+
 
 export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
   extends RenderCommand<PrerenderCommandSchema> {
@@ -81,7 +81,7 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
       JsFIles = readdirSync(this.BROWSER_PATH)
         .filter((item: Path) => item.endsWith('.js'))
     }
-   
+
 
     this.logger.info(`Starting Prerendering of ${this.ROUTES.length} routes/paths`);
 
@@ -160,8 +160,8 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
       const SERVER_CONFIG:ExpressConfig = {
         assetsPath: 'src/assets',
         launchPath: 'dist/amp',
-        message: 'Express Server on Localhost:5000 from Prerender Check ',
-        url:'http://localhost:5000'
+        message: 'Express Server on localhost:6000 from Prerender Check ',
+        url:'http://localhost:6000'
       }
       if (this.commandConfigOptions.configuration == 'amp') {
 
@@ -183,7 +183,7 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
       return 55;
     }
 
-
+    await this.finalize()
 
     return 0;
   }

@@ -7,6 +7,8 @@ import { AmpDescription, StateSchema, DynamicSchema } from './interface';
 import { consoleTestResultHandler } from 'tslint/lib/test';
 import { BeJustAmp } from '../helpers-amp/amp-3-be-just-AMP';
 import { BeSmart } from '../helpers-amp/amp-2-be-smart';
+import { logging } from '@angular-devkit/core';
+const amphtmlValidator = require('amphtml-validator');
 
 export class AmpPage {
 
@@ -25,7 +27,7 @@ export class AmpPage {
     public readonly pluggingMap: {};
     public readonly globalCss: string;
 
-    constructor(public route: string,  globalCss: string) {
+    constructor(public route: string,  globalCss: string, public logger:logging.Logger) {
 
 
         this.globalCss = globalCss;
@@ -87,8 +89,51 @@ export class AmpPage {
 
   }
 
+  public AmpCanonical(){
+    // Embedding AMphtml tag in the canonical version of the page /////
+
+    const publicIndex = readFileSync(join(this.PUBLIC_FOLDER, this.route, 'index.html')).toString();
+    let only$ = load(publicIndex)
+    const canonicalLink = only$("[rel=\'canonical\']")
+    const amphtml = only$("[rel=\'amphtml\']")
+
+    // we only insert the amphtml tag when is nicht vorhanden
+    if (amphtml.length == 0) {
+      only$('head').children("[rel=\'canonical\']").after('<link rel="amphtml" href="' + canonicalLink.attr('href') + '/amp" />')
+      writeFileSync(join(this.PUBLIC_FOLDER, this.route, '/index.html'), only$.html(), 'utf-8');
+    }
+  }
+
+  public AMPisValid = async (): Promise<boolean> => {
+    const html = this.args.cheerio.html();
+    const route = this.route;
+    return new Promise((resolve, reject) => {
+      amphtmlValidator.getInstance().then( ((validator:any)=>  {
+        var result = validator.validateString(html);
+
+        if (result.status === 'PASS'){
+          this.logger.info(`Passing AMP VALIDATION: ${route}`)
+          resolve(true)
+        }
+        else {
+          this.logger.warn(result.status + ": " + route);
+          for (var ii = 0; ii < result.errors.length; ii++) {
+            var error = result.errors[ii];
+            var msg = 'line ' + error.line + ', col ' + error.col + ': ' + error.message;
+            if (error.specUrl !== null) {
+              msg += ' (see ' + error.specUrl + ')';
+            }
+            ((error.severity === 'ERROR') ? this.logger.error : this.logger.warn)(msg);
+          }
+          resolve(false)
+        }
+      }) )
+    })
+  }
+
+
     public AmpToFile(mode:String) {
-      console.log(this._args.customScript)
+
       const myAMPHtml = this._args.cheerio.html().replace('<html', '<html amp')
       if (mode=='test') {
           writeFileSync(join(this.AMP_FOLDER, '/index.html'), myAMPHtml
@@ -104,6 +149,7 @@ export class AmpPage {
           , 'utf-8');
         }
         else if (mode== Mode.Deploy) {
+
           if (!existsSync(join(this.PUBLIC_FOLDER, this.route, 'amp'))) {
             mkdirSync(join(this.PUBLIC_FOLDER, this.route, 'amp'));
           }
