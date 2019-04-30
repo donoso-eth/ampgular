@@ -77,11 +77,11 @@ jobs:
     steps:
       - attach_workspace: *attach_options
       - run: npm run validate -- --ci
-  test:
-    <<: *defaults
-    steps:
-      - attach_workspace: *attach_options
-      - run: npm run test 
+  # test:
+  #   <<: *defaults
+  #   steps:
+  #     - attach_workspace: *attach_options
+  #     - run: npm run test 
 
  
   build:
@@ -115,6 +115,6 @@ workflows:
             branches:
               ignore:
               - /docs-preview/
-      - test:
-          requires:
-            - build
+      # - test:
+      #     requires:
+      #       - build

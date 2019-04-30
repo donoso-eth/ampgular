@@ -31,7 +31,7 @@ This is the home of the Ampgular ClI and the schematics packages for seo and amp
 
 
 ### Quick Links Ampgular
-[Contributing](/CONTRIBUTING.md) | [Ampgular CLI Repo](http://github.com/ampgular/ampgular-cli) | [Ampgular SEO Repo](http://github.com/ampgular/ampgular-cli) | [Ampgular AMP Repo](http://github.com/ampgular/ampgular-cli) | 
+[Contributing](/CONTRIBUTING.md) | [Ampgular CLI Repo](http://github.com/ampgular/ampgular) | [Ampgular SEO Repo](/packages/ampgular/schematics/seo) | [Ampgular AMP Repo](/packages/ampgular/schematics/amp) | 
 |---|---|---|---|
 
 ### Quick Links Angular
@@ -84,7 +84,7 @@ This is a monorepo which contains many tools and packages:
 
 | Project | Package | Version | Links |
 |---|---|---|---|
-**Anmpgular Schematics for generation AMP Pages** | [`@ampgular/amp`](https://npmjs.com/package/@ampgular/amp) | [![latest](https://img.shields.io/npm/v/%40ampgular%2Famp/latest.svg)](https://npmjs.com/package/@ampgular/amp) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/ampgular/amp/README.md)
-**Anmpgular Schematics for making Angular Pages SEO friendly with ease** | [`@ampgular/seo`](https://npmjs.com/package/@ampgular/seo) | [![latest](https://img.shields.io/npm/v/%40ampgular%2Fseo/latest.svg)](https://npmjs.com/package/@ampgular/seo) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/ampgular/seo/README.md)
+**Anmpgular Schematics for generation AMP Pages** | [`@ampgular/amp`](https://npmjs.com/package/@ampgular/amp) | [![latest](https://img.shields.io/npm/v/%40ampgular%2Famp/latest.svg)](https://npmjs.com/package/@ampgular/amp) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/ampgular/schematics/amp/README.md)
+**Anmpgular Schematics for making Angular Pages SEO friendly with ease** | [`@ampgular/seo`](https://npmjs.com/package/@ampgular/seo) | [![latest](https://img.shields.io/npm/v/%40ampgular%2Fseo/latest.svg)](https://npmjs.com/package/@ampgular/seo) | [![README](https://img.shields.io/badge/README--green.svg)](/packages/ampgular/schematics/seo/README.md)
 
 
