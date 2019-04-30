@@ -28,7 +28,7 @@ import {
 } from '../models/interface';
 import { parseArguments } from '../models/parser';
 import { Workspace } from '../models/workspace';
-import { Launchserver } from './expressserver';
+import { Launchserver, ExpressConfig, ExpressServer } from './expressserver';
 import { webpackRun } from './webpack';
 import { getProjectName, runOptionsBuild } from './workspace-extensions';
 import { load } from 'cheerio';
@@ -46,7 +46,7 @@ export class RenderEngine {
   private _command: string;
   private _logger: logging.Logger;
   private _workspace: Workspace;
-  appServerNew: any;
+  appServerNew: ExpressServer;
   newCrome: ChromeRenderer;
   _context: CommandContext;
   projectName: any;
@@ -96,10 +96,18 @@ export class RenderEngine {
     }
 
     if (this._target == 'browser') {
-      this._logger.info(terminal.blue('Launching Puppeteer for Browser Render'))
-        this.newCrome = new ChromeRenderer();
+         this.newCrome = new ChromeRenderer();
         // Launchin PUOETTER  FOR ALTER RENDER
-        this.appServerNew = await Launchserver();
+
+        const SERVER_CONFIG: ExpressConfig = {
+          assetsPath: 'dist/public/assets',
+          launchPath: 'dist/public',
+          message: 'Launching Puppeteer for Browser Render Port 4200',
+          url: 'no',
+          port:4200
+        }
+        this.appServerNew = new ExpressServer(SERVER_CONFIG, this._logger);
+        await this.appServerNew.LaunchServerSPA();
 
         await this.newCrome.initialize();
       }
@@ -160,6 +168,9 @@ export class RenderEngine {
   }
 
   public async renderUrl(): Promise<Function> {
+
+
+
     switch (this._target) {
       case 'browser':
         return await this.renderclient();
@@ -190,8 +201,15 @@ export class RenderEngine {
     this._logger.info(terminal.blue('Rendering routes through Puppeteer'))
 
     return async (options: BrowserRenderOptions): Promise<string> => {
-      const html = await this.newCrome.render({
-        url: 'http://localhost:4200' + options.url,
+      let Route="";
+      if(options.url.substr(0,1)!="/"){
+          Route = "/" + options.url
+        }
+        else {
+          Route = options.url
+        }
+        const html = await this.newCrome.render({
+        url: 'http://localhost:4200' + Route,
       });
 
 
@@ -202,8 +220,8 @@ export class RenderEngine {
   public async clenUp() {
     switch (this._target) {
       case 'browser':
-        this._browser.close();
-        this.appServerNew.CloseServer();
+        this.newCrome.close();
+       this.appServerNew.CloseServer();
         break;
       case 'node':
         if (this._options.localhost) { this.localhost.shutdown(); }
@@ -216,14 +234,17 @@ class ChromeRenderer {
   private page: any;
 
   public async initialize() {
-    this.browser = await puppeteer.launch();
+    this.browser = await puppeteer.launch({defaultViewport: null});
     this.page = await this.browser.newPage();
   }
 
   public async render(options: BrowserRenderOptions) {
     await this.page.goto(options.url, { waitUntil: 'networkidle2' });
 
-    return await this.page.evaluate(() => document.documentElement.outerHTML);
+    return await this.page.content(() => {
+
+      return document.documentElement.outerHTML
+    });
   }
 
   async close() {

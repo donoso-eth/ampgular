@@ -1,0 +1,3 @@
+# Ampgule AM^ schematics
+
+WIP

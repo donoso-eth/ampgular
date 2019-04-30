@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/schema",
   "title": "Amp properties",
   "$id": "amp-cli://schemas/me.json",
-  "description": "Amp cnfiguration for Amp Pages Workflow",
+  "description": "Amp connfiguration for Amp Pages Workflow",
   "type": "object",
   "properties": {
     "route": {
@@ -17,10 +17,10 @@
     "prerender": {
       "type": "boolean",
       "default":true,
-      "description": "Prerender the ap "
+      "description": "Prerender the application prior ot AMP transformation "
     },
     "mode": {
-      "description": "Create only one AMp Page (route porperty) and spin a loclaserver to easy the devs process",
+      "description": "Mode",
       "type": "string",
       "default": "render",
       "hidden" :true,
@@ -42,11 +42,11 @@
       "default": false
     },
     "host": {
-      "description": "Add Service Worker",
+      "description": "Host required",
       "type": "string"
     },
     "localhost": {
-      "description": "In Node taargettig do we nned ot spi a server to render the path, the classical use case es json in assets folder",
+      "description": "In Node targetting, we need to spin a server to , the classical use case es json in assets folder",
       "type": "boolean"
     },
     "stateFiles": {
@@ -66,12 +66,17 @@
       "default": ["/ampgular/amp/main_dynamic_config"]
     },
     "pluginsFiles": {
-      "description": "Path to Pluggin File",
+      "description": "Path to Pluggin Files",
       "type": "array",
       "items": {
         "type": "string"
       },
       "default": ["/ampgular/amp/plugging_config"]
+    },
+    "serve": {
+      "description": "Lauch a server to test the rendered pages",
+      "type": "boolean",
+      "default": false
     }
   },
   "required": [

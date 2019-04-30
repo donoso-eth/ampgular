@@ -5,14 +5,17 @@
   "type": "object",
   "properties": {
     "defaultPriority": {
+      "description": "Default Prioruty for all routes",
       "type": "number",
       "default": 1
     },
     "defaultFrecuency": {
+      "description": "Default Frecuency for all routes",
       "type": "string",
       "default": "weekly"
     },
     "custom": {
+      "description": "Array of routes with custom priorities/frecuencies",
       "type": "array",
       "items": {
         "$ref": "#/definitions/custom"

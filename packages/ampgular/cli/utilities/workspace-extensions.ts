@@ -12,7 +12,7 @@ import {
   } from '@angular-devkit/core';
 import {  relative,  join,  normalize} from 'path';
 import * as child_process from 'child_process';
-import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
 import { Schema as AmpgularConfig } from '../lib/config/schema';
 import { Arguments } from '../models/interface';
 import { Workspace } from '../models/workspace';
@@ -122,16 +122,44 @@ export async function runOptionsBuild(
     logger.warn(`Target is ${options.target}  configuration is ${options.configuration} `);
     await _exec('ng', ['build', '--configuration=' + options.configuration], {}, logger);
 
+
+    const BROWSER_PATH = join(normalize(process.cwd()),'dist/browser');
+    const SERVER_PATH = join(normalize(process.cwd()),'dist/server');
+    const AMP_PATH = join(normalize(process.cwd()),'dist/amp');
+
     // Coping css to server folder
     if (options.mode == Mode.Render){
-      if (!existsSync(join(normalize(process.cwd()),'dist/server'))) {
-        mkdirSync(join(normalize(process.cwd()),'dist/server'));
+
+
+      //CHECK Which STYLES FILE
+      let styles = 'styles.css'
+        let styleArray = readdirSync(BROWSER_PATH)
+          .filter((item: string) => item.match(/^(styles\.)[\w]+(\.css)$/g))
+
+        if (styleArray.length > 0) {
+          styles = styleArray[0]
+        }
+
+        if (options.configuration=='amp'){
+          if (!existsSync(AMP_PATH)) {
+            mkdirSync(AMP_PATH);
+          }
+          _copy( join(BROWSER_PATH, styles),join(AMP_PATH, styles ));
+        }
+        else {
+          if (!existsSync(SERVER_PATH)) {
+            mkdirSync(SERVER_PATH);
+          }
+          _copy( join(BROWSER_PATH, styles),join(SERVER_PATH, styles ));
+        }
+
       }
-    _copy( join(normalize(process.cwd()),'dist/browser/styles.css'),join(normalize(process.cwd()),'dist/server/styles.css' ));
+
+
     }
     return 0;
   }
-  }
+
   function _copy(from: string, to: string) {
 
 

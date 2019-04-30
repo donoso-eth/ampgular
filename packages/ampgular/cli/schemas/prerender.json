@@ -38,7 +38,7 @@
           "enum": ["test","render","deploy"]
         },
         "serve": {
-          "description": "Ensure Canonical",
+          "description": "Lauch a server",
           "type": "boolean",
           "default": true
         }

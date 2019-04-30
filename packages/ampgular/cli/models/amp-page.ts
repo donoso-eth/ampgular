@@ -107,34 +107,13 @@ export class AmpPage {
   public AMPisValid = async (): Promise<boolean> => {
     const html = this.args.cheerio.html();
     const route = this.route;
-    return new Promise((resolve, reject) => {
-      amphtmlValidator.getInstance().then( ((validator:any)=>  {
-        var result = validator.validateString(html);
-
-        if (result.status === 'PASS'){
-          this.logger.info(`Passing AMP VALIDATION: ${route}`)
-          resolve(true)
-        }
-        else {
-          this.logger.warn(result.status + ": " + route);
-          for (var ii = 0; ii < result.errors.length; ii++) {
-            var error = result.errors[ii];
-            var msg = 'line ' + error.line + ', col ' + error.col + ': ' + error.message;
-            if (error.specUrl !== null) {
-              msg += ' (see ' + error.specUrl + ')';
-            }
-            ((error.severity === 'ERROR') ? this.logger.error : this.logger.warn)(msg);
-          }
-          resolve(false)
-        }
-      }) )
-    })
+    return await validateAMP(html,route)
   }
 
 
     public AmpToFile(mode:String) {
 
-      const myAMPHtml = this._args.cheerio.html().replace('<html', '<html amp')
+      const myAMPHtml = this._args.cheerio.html()  // .replace('<html', '<html amp')
       if (mode=='test') {
           writeFileSync(join(this.AMP_FOLDER, '/index.html'), myAMPHtml
           , 'utf-8');
@@ -159,4 +138,29 @@ export class AmpPage {
     }
 
 
+}
+const validateAMP = async (html: string, route: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    amphtmlValidator.getInstance().then(function (validator:any) {
+      var result = validator.validateString(html);
+      if (result.status === 'PASS'){
+        console.log(`Passing AMP VALIDATION: ${route}`)
+        resolve(true)
+      }
+      else {
+        console.warn(result.status + ": " + route);
+        for (var ii = 0; ii < result.errors.length; ii++) {
+          var error = result.errors[ii];
+          var msg = 'line ' + error.line + ', col ' + error.col + ': ' + error.message;
+          if (error.specUrl !== null) {
+            msg += ' (see ' + error.specUrl + ')';
+          }
+          ((error.severity === 'ERROR') ? console.error : console.warn)(msg);
+
+        }
+        console.log();
+        resolve(false)
+      }
+    });
+  })
 }

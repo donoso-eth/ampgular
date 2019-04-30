@@ -25,7 +25,7 @@ describe ('OPTIMIZE CSS', () => {
      <style> .test3 { color:green;} .test2Delete:{background:red}</style>
     </head> <body> <h2 class="test1">  <p class="test3"> Madrid Day Spa test</p>  </body> </html>`;
     const $ = load (html)
-    const htmlOptimized = await prepareCss($,'');
+    const htmlOptimized = await prepareCss($,'','');
 
     const document = createDocument(htmlOptimized);
     const head = document.querySelector(

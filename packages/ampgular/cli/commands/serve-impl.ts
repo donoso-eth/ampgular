@@ -41,8 +41,9 @@ export class ServeCommand extends AmpgularCommand<ServeCommandSchema> {
       SERVER_CONFIG = {
         assetsPath: 'dist/public/assets',
         launchPath: 'dist/public',
-        message: 'Express Server on localhost:6000 from DEPLOY CHECK',
-        url: 'http://localhost:6000'
+        message: 'Express Server on localhost:5000 from DEPLOY CHECK',
+        url: 'http://localhost:5000',
+        port:5000
       }
       this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
       await this.appServerNew.LaunchServer();
@@ -51,8 +52,9 @@ export class ServeCommand extends AmpgularCommand<ServeCommandSchema> {
       SERVER_CONFIG  = {
         assetsPath: 'src',
         launchPath: 'dist/server',
-        message: 'Express Server on localhost:6000 from SEO prerender Check',
-        url: 'http://localhost:6000'
+        message: 'Express Server on localhost:5000 from SEO prerender Check',
+        url: 'http://localhost:5000',
+        port:5000
       }
       this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
       await this.appServerNew.LaunchServer();
@@ -62,8 +64,9 @@ export class ServeCommand extends AmpgularCommand<ServeCommandSchema> {
       SERVER_CONFIG  = {
         assetsPath: 'src',
         launchPath: 'dist/amp',
-        message: 'Express Server on localhost:6000 from AMP prerender Check',
-        url: 'http://localhost:6000'
+        message: 'Express Server on localhost:5000 from AMP prerender Check',
+        url: 'http://localhost:5000',
+        port:5000
       }
       this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
       await this.appServerNew.LaunchServer();
@@ -72,8 +75,9 @@ export class ServeCommand extends AmpgularCommand<ServeCommandSchema> {
       SERVER_CONFIG  = {
         assetsPath: 'src',
         launchPath: 'dist/amp',
-        message: 'Express Server on localhost:6000 from AMP prerender Check',
-        url: 'http://localhost:6000'
+        message: 'Express Server on localhost:5000 from AMP prerender Check',
+        url: 'http://localhost:5000',
+        port:5000
       }
       this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
       await this.appServerNew.LaunchServer();

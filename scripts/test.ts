@@ -189,7 +189,7 @@ export default function (args: ParsedArgs, logger: logging.Logger) {
 
   if (args.large) {
     // Default timeout for large specs is 2.5 minutes.
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 160000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 150000;
   }
 
   if (args.timeout && Number.parseInt(args.timeout) > 0) {

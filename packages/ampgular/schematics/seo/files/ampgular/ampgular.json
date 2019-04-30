@@ -32,10 +32,6 @@
     "sitemap": true,
     "robots": true,
     "files": [
-      {
-        "from": "/src/_fonts.scss",
-        "to": "public"
-      }
     ]
   },
   "prerender": {
@@ -62,11 +58,7 @@
     "custom": [
       {
         "urls": [
-          "/es/nuilea-day-spa",
-          "/de/wellness-nuilea-day-spa",
-          "/en/wellness-nuilea-day-spa",
-          "/fr/bien-etre-nuilea-day-spa",
-          "**/last-minute*"
+
         ],
         "frecuency": "daily",
         "priority": 1

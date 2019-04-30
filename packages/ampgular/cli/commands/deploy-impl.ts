@@ -125,8 +125,9 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
       const SERVER_CONFIG: ExpressConfig = {
         assetsPath: 'dist/public/assets',
         launchPath: 'dist/public',
-        message: 'Express Server on localhost:6000 from DEPLOY CHECK',
-        url: 'http://localhost:6000'
+        message: 'Express Server on localhost:5000 from DEPLOY CHECK',
+        url: 'http://localhost:5000',
+        port:5000
       }
       this.appServerNew = new ExpressServer(SERVER_CONFIG, this.logger);
       await this.appServerNew.LaunchServer();
@@ -212,9 +213,9 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
       new descriptionPrerender.impl({ workspace }, descriptionPrerender, this.logger);
 
     if (ampVersion) {
-      return await prerender.validateAndRun({ localhost: true, path: 'dist/amp', configuration: 'amp',mode: Mode.Deploy });
+      return await prerender.validateAndRun({ path: 'dist/amp', configuration: 'amp',mode: Mode.Deploy });
     } else {
-      return await prerender.validateAndRun({ localhost: true, path: 'dist/browser',mode: Mode.Deploy });
+      return await prerender.validateAndRun({  path: 'dist/browser',mode: Mode.Deploy });
     }
 
   }

@@ -9,7 +9,7 @@
         "type":"object",
         "properties": {
           "mode": {
-            "description": "Create only one AMp Page (route porperty) and spin a loclaserver to easy the devs process",
+            "description": "Mode",
             "type": "string",
             "default": "render",
             "hidden" :true,

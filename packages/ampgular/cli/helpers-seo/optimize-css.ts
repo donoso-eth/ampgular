@@ -8,7 +8,7 @@ import { Mode } from '../schemas/amp';
 
 
 
-export async function prepareCss($: any,globalCss:string): Promise<string> {
+export async function prepareCss($: any,globalCss:string,styles:string): Promise<string> {
   /* Read HTML in CHEERIO*/
   //const $ = load(html);
 
@@ -58,7 +58,7 @@ export async function prepareCss($: any,globalCss:string): Promise<string> {
         });
 
    $('head').append('<style  ng-transition="serverApp">' + newcss + '</style>');
-
+   $('body').append(`<link rel="stylesheet" href="${styles}>`);
 
   return $.html();
 }

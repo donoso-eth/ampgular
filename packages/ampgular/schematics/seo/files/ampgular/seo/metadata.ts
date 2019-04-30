@@ -5,104 +5,84 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+// tslint:disable
 import { Injectable, Inject } from '@angular/core';
-import { Title, Meta, ɵBrowserDomAdapter, MetaDefinition } from '@angular/platform-browser';
+import { MetaDefinition, Meta, Title } from '@angular/platform-browser';
 
-import {  ɵDomAdapter, ɵgetDOM } from '@angular/platform-browser';
-import { isPlatformBrowser, isPlatformServer, DOCUMENT } from '@angular/common';
-import { PLATFORM_ID } from '@angular/core';
-
-
- interface MetaExtendedDefinition extends MetaDefinition  {
- 
-} 
+import { ɵDomAdapter, ɵgetDOM } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 
 
+interface MetaExtendedDefinition extends MetaDefinition {
+
+}
+
+export interface MustMetaData {
+  title: string;
+  description: string;
+  canonical: string;
+
+}
 
 
 
 @Injectable()
-export class MetaService extends Meta {
-  // tslint:disable-next-line:variable-name
-  public _dom: ɵDomAdapter = ɵgetDOM();
-  lang: string;
-  offers: {};
-  reviews: {};
-  myReview = {};
-  myAggregateReview = {};
-  // private _dom2: ɵBrowserDomAdapter = getDOM();
-  localBusiness: any = {};
-  organization: any = {};
-  homeText: any = {};
-  events: any = [];
+export class MetaService {
 
-  // event2:any =  {} ;
-  // event3:any =  {} ;
-  // tslint:disable-next-line:variable-name
+  public _dom: ɵDomAdapter = ɵgetDOM();
+  private jsonLd = {};
   private _head: any;
-  constructor(private _doc:any
+  private host = "www.yourhost.com"
+  constructor(
+    @Inject(DOCUMENT) private _doc: any,
+    private _title: Title,
+    private _meta: Meta,
   ) {
-    super(_doc);
+
     this._head = this._doc.head;
-    this._doc = this._dac;
+
   }
 
   /**
    * Sets the title of the page
    */
   public setTitle(title: string) {
-  this.setTitle(title)
+    this._title.setTitle(title);
   }
 
   public setNoIndex() {
-    // const ele = this._createMetaElement();
-    // this._dom.setAttribute(ele, 'name', 'robots');
-    // this._dom.setAttribute(ele, 'content', 'noindex');
-    // this._dom.appendChild(this._head, ele);
-    let tag:MetaExtendedDefinition = {
-      name:"robots" , content:"noindex"
+    let tag: MetaExtendedDefinition = {
+      name: "robots", content: "noindex"
     }
-    this.addTag(tag)
+    this._meta.addTag(tag)
 
 
   }
 
-  public insertJsonLd(jsonLd: {}) {
+  public pushJsonld(pushJonLd: {}) {
+    this.jsonLd = { ...this.jsonLd, ...pushJonLd }
+  }
+
+  public insertJsonLd(insertJsonLd: {}) {
+    this.jsonLd = { ...this.jsonLd, ...insertJsonLd }
     const jsonScriptLink = this._createScriptElement();
     this._dom.setAttribute(jsonScriptLink, 'type', 'application/ld+json');
-    this._dom.setInnerHTML(jsonScriptLink, JSON.stringify(jsonLd));
-
+    this._dom.setInnerHTML(jsonScriptLink, JSON.stringify(this.jsonLd));
     this._dom.appendChild(this._head, jsonScriptLink);
   }
 
-  public setMustMetadata() {
 
+  public setMustMetadata(metaData: MustMetaData) {
+    this._title.setTitle(metaData.title);
 
-  }
-
-
-  
-
-  linkCano(metaUpdate: any) {
-
-
-
-
-
-      // const html = this._document;
-      const html = this._dom.childNodesAsList(this._doc)[1];
-      this._dom.setAttribute(html, 'lang', this.lang);
-
-      const childNodesAsList: Node[] = this._dom.childNodesAsList(this._head);
-
-      // childNodesAsList.forEach((x =>  {
-      //   let p = x as HTMLElement;
-      //   console.log(p);
-      // });
-
-     // const insertIni = childNodesAsList.find(x => x.localName === 'script');
-
-      // const Name2 = childNodesAsList.find(el=> el.attributes.item.name=='keywords');
+    let tag: MetaExtendedDefinition = {
+      name: "description", content: metaData.description
+    }
+    this._meta.addTag(tag)
+    const canonicalLink = this._createLinkElement();
+    this._dom.setAttribute(canonicalLink, "rel", "canonical");
+    this._dom.setAttribute(canonicalLink, "href", this.host + metaData.canonical)
+    this._dom.appendChild(this._head, canonicalLink);
 
 
   }

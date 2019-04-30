@@ -13,12 +13,12 @@
         "webpack": {
           "type": "boolean",
           "default": false,
-          "description": "When Server Configuration....."
+          "description": "When Node Configuration and Webàck required for build Server Bundle"
         },
         "excludeQuery": {
           "type": "boolean",
           "default": false,
-          "description": "Urls with AqueryParams have to be crawled?"
+          "description": "Urls with queryParams have to be crawled? / TO BE DONE"
         }
       }
     },

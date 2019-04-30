@@ -4,6 +4,7 @@ import express = require('express');
 import { Server } from 'http';
 import { Path, logging } from '@angular-devkit/core';
 import { join, normalize } from 'path';
+import { textChangeRangeIsUnchanged } from 'typescript';
 const open = require('open');
 
 export interface ExpressConfig {
@@ -11,6 +12,7 @@ export interface ExpressConfig {
   launchPath:string;
   message:string;
   url:string;
+  port:number
 }
 
 export class ExpressServer {
@@ -23,7 +25,7 @@ export class ExpressServer {
   }
 
   async CloseServer() {
-  this.server.close();
+  this.server!==undefined? this.server.close():'';
   }
 
   async openServer(){
@@ -31,12 +33,38 @@ export class ExpressServer {
 
 
   }
+  async LaunchServerSPA(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      try {
+        const PORT = this.config.port
+        const DIST_FOLDER = join(normalize(process.cwd()), 'dist/browser');
 
+
+
+        const ASSETS_FOLDER = join(normalize(process.cwd()), this.config.assetsPath);
+
+        this.app.get('*.*', express.static(join(DIST_FOLDER)));
+        this.app.get('*', function(req, res) {
+          res.sendFile(join(DIST_FOLDER, 'index.html')); // load the single view file (angular will handle the page changes on the front-end)
+        });
+
+
+
+        this.server = this.app.listen(PORT, async () => {
+          this.logger.info(this.config.message)
+
+          resolve(this.app);
+        });
+      } catch (err) {
+       reject(false);
+      }
+    });
+  }
 
   async LaunchServer(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       try {
-        const PORT = 6000;
+        const PORT = this.config.port
         const DIST_FOLDER = join(normalize(process.cwd()), this.config.launchPath);
         const ASSETS_FOLDER = join(normalize(process.cwd()), this.config.assetsPath);
 
@@ -56,9 +84,14 @@ export class ExpressServer {
 
         this.server = this.app.listen(PORT, async () => {
           this.logger.info(this.config.message)
-          await open(this.config.url);
 
-          resolve(true);
+          if (this.config.url!=='no')
+
+          await open(this.config.url);
+          {
+            resolve(true);
+          }
+
 
         });
       } catch (err) {

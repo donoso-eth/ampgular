@@ -26,7 +26,7 @@ const embedScripts = async (args: AmpDescription): Promise<AmpDescription> => {
    /*
    * REMOVE SCRIPTS aand STYLES
    */
-  $('link').remove('[rel=\'stylesheet\']');
+  $('link').remove('[rel=\'stylesheet\']'); 
 
   const scriptTags = $('script');
     scriptTags.each(function(i:number, item:CheerioElement) {
@@ -45,6 +45,10 @@ const embedScripts = async (args: AmpDescription): Promise<AmpDescription> => {
 
 
   });
+
+  const htmlTag = $('html')
+  const ampHtmlTag = htmlTag.attr('amp','')
+
   //$('script').remove();
   $('head').children().remove('style');
 
