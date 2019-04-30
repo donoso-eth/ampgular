@@ -174,7 +174,7 @@ export async function runCommand(
 
     logger.error(tags.stripIndent`
         The specified command ("${commandName}") is invalid. For a list of available options,
-        run "ng help".
+        run "amp help".
 
         Did you mean "${allCommands[0]}"?
     `);

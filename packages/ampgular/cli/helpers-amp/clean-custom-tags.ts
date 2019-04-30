@@ -195,6 +195,24 @@ export const cleanHtml = async (
   args: AmpDescription,
 ): Promise<AmpDescription> => {
 
+  const $= args.cheerio
+
+
+
+  const scriptTags = $('script');
+    scriptTags.each(function(i:number, item:CheerioElement) {
+     if (item.attribs['type'] !== undefined ) {
+        if( item.attribs['type'].match(/application\/ld\+json/g)) {}
+        else {  $(item).remove();}
+      }
+      else {
+        $(item).remove();
+      }
+
+
+
+  });
+
   args =  await  CleanAttributes(args);
 
   args =  await  CleanCustomElements (args);

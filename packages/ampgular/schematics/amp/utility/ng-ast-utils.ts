@@ -82,3 +82,80 @@ export function getAppModulePath(host: Tree, mainPath: string): string {
 
   return modulePath;
 }
+
+export interface ParamEnv {
+  name: string;
+  initiator: boolean;
+}
+
+export class UpdateEnvironmentFile {
+
+  private  _param: ParamEnv;
+  private _sourceFile: ts.SourceFile;
+  private _context:ts.TransformationContext;
+  private _flag: ts.Expression |
+  (ts.BooleanLiteral & ts.Token<ts.SyntaxKind.FalseKeyword>)
+  | (ts.BooleanLiteral & ts.Token<ts.SyntaxKind.TrueKeyword>);
+
+  changeEnvFile= (param:ParamEnv, filePath:string, tree:Tree): Tree => {
+
+    const fileBuffer = tree.read(filePath) as Buffer;
+    const fileBufferString = fileBuffer.toString('utf8');
+
+    this._param = param;
+    this._sourceFile = ts.createSourceFile(
+      filePath, fileBufferString, ts.ScriptTarget.Latest, true);
+
+      const printer: ts.Printer = ts.createPrinter();
+      const result: ts.TransformationResult<ts.SourceFile> = ts.transform<ts.SourceFile>(
+          this._sourceFile, [this.transformer],
+        );
+        const transformedSourceFile: ts.SourceFile = result.transformed[0];
+        const newContent = printer.printFile(transformedSourceFile);
+        result.dispose();
+        tree.overwrite(filePath , newContent)
+        return tree
+
+  }
+
+  private visit = (node: ts.Node): ts.Node => {
+    node = ts.visitEachChild(node, this.visit, this._context);
+    if (ts.isObjectLiteralExpression(node)
+    && ts.isIdentifier(node.parent.getChildAt(0))
+
+    && node.parent.getChildAt(0).getFullText().trim() == 'environment' ) {
+
+
+      if(node.properties.some( (prop:ts.PropertyAssignment) => prop.name.getFullText().trim() == 'amp')){
+        return node
+      }
+
+
+
+      const newProp =  [
+        ts.createPropertyAssignment(this._param.name, this._flag) as ts.ObjectLiteralElementLike
+      , ...node.properties];
+
+      return ts.updateObjectLiteral(node, newProp);
+    }
+
+    return node;
+  }
+
+  private transformer = <T extends ts.Node>(context: ts.TransformationContext) => {
+    this._context = context;
+    return (rootNode: T) => {
+
+      if (!this._param.initiator) {
+          this._flag = ts.createFalse();
+      } else {
+          this._flag = ts.createTrue();
+      }
+
+
+      return ts.visitNode(rootNode, this.visit);
+    };
+  };
+
+
+}

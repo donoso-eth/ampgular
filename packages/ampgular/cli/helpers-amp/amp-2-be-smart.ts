@@ -19,7 +19,7 @@ import {
   createComponentListSingle,
   createComponentMultiBind, createComponentScroll
 } from './recreate-state';
-import { join, normalize } from '@angular-devkit/core';
+import { join, normalize } from 'path';
 
 
 const recreateState = async (args: AmpDescription): Promise<AmpDescription> => {
@@ -29,6 +29,12 @@ const recreateState = async (args: AmpDescription): Promise<AmpDescription> => {
   if (myPageState == undefined) {
     return args;
   }
+
+  if(args.customScript.indexOf('amp-bind') === -1){
+    args.customScript.push('amp-bind')
+  }
+
+
 
   Object.keys(myPageState).forEach(async state => {
     const myComponent = myPageState[state];
@@ -58,6 +64,19 @@ const recreateState = async (args: AmpDescription): Promise<AmpDescription> => {
   return args;
 };
 
+
+const recreateDynamicScripts = (
+  args:AmpDescription,check:Array<string>):AmpDescription => {
+
+  check.forEach(checky=> {
+    if(args.customScript.indexOf(checky) === -1){
+      args.customScript.push(checky)
+    }
+  })
+return args
+
+}
+
 const recreateDynamicData = async (args: AmpDescription): Promise<AmpDescription> => {
   // tslint:disable-next-line:no-any
   const myPageDynamic: any = args.pageDynamic;
@@ -65,6 +84,11 @@ const recreateDynamicData = async (args: AmpDescription): Promise<AmpDescription
 
   if (myPageDynamic == undefined) {
     return args;
+  }
+
+
+  if(args.customScript.indexOf('amp-bind') === -1){
+    args.customScript.push('amp-bind')
   }
 
   for (const dynamic of Object.keys(myPageDynamic)) {
@@ -75,9 +99,11 @@ const recreateDynamicData = async (args: AmpDescription): Promise<AmpDescription
       ListsDynamic.forEach(async (list: ListPostComponentSchema | ListGetComponentSchema) => {
         switch (list['type']) {
           case 'post':
+          args = recreateDynamicScripts(args,['amp-list','amp-mustache','amp-form'])
             args = await createListPostComponent(args, dynamic, list as ListPostComponentSchema);
             break;
           case 'get':
+          args = recreateDynamicScripts(args,['amp-list','amp-mustache'])
             args = await createListGetComponent(args, dynamic, list as ListGetComponentSchema);
             break;
 
@@ -91,6 +117,7 @@ const recreateDynamicData = async (args: AmpDescription): Promise<AmpDescription
       FormsDynamic.forEach(async (form: FormPostComponentSchema) => {
         switch (form['type']) {
           case 'post':
+            args = recreateDynamicScripts(args,['amp-form'])
             args = await createFormPostComponent(args, dynamic, form);
             break;
           default:

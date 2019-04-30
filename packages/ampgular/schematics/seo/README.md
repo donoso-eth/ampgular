@@ -1,0 +1,3 @@
+# Ampgule SEO schematics
+
+WIP

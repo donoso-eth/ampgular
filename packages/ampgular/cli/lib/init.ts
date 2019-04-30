@@ -7,7 +7,7 @@
  */
 // ts-lint:disable
 
-import { join, normalize } from '@angular-devkit/core';
+import { join, normalize } from 'path';
 import * as fs from 'fs';
 import { readFileSync } from 'fs';
 import * as path from 'path';

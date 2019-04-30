@@ -5,25 +5,31 @@
   "type": "object",
   "properties": {
     "targetApp": {
+      "description": "Type of App to be deployed, for the tome being only mode pre-render is accepted",
       "type": "string",
       "enum": ["spa", "prerender", "ssr"]
     },
     "amp":{
+      "description":"When true deploy AMP version too",
       "type":"boolean",
       "default":false
     },
     "sitemap": {
+      "description":"When true create Sitemap and copy to public folder",
       "type": "boolean"
     },
     "serve": {
+      "description":"When true Spin a server for testing purposes",
       "type": "boolean",
       "default":false
     },
     "robots": {
+      "description":"When true copy robots.txt dile to Public",
       "type": "boolean"
     },
     "files": {
       "type": "array",
+      "description":"Array of Custom Files to be copied to Public",
       "items": {
         "type": "object",
         "properties": {

@@ -1,9 +1,12 @@
 {
+  "build":"./commands/build.json",
+  "config":"./commands/config.json",
+  "deploy":"./commands/deploy.json",
   "help": "./commands/help.json",
+  "me":"./commands/me.json",
   "prerender":"./commands/prerender.json",
   "spider":"./commands/spider.json",
-  "build":"./commands/build.json",
-  "deploy":"./commands/deploy.json",
-  "me":"./commands/me.json",
-  "sitemap":"./commands/sitemap.json"
+  "serve":"./commands/serve.json",
+  "sitemap":"./commands/sitemap.json",
+  "version":"./commands/version.json"
 }

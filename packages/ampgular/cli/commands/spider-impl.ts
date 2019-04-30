@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import { join, normalize, resolve } from '@angular-devkit/core';
+import { join, normalize, resolve } from 'path';
 import { createDocument, createWindow } from 'domino';
 import { writeFileSync } from 'fs';
 import * as minimatch from 'minimatch';
@@ -78,14 +78,15 @@ extends RenderCommand<SpiderCommandSchema> {
             const set = new Set(this._routesDiscovered);
             this._routesDiscovered = Array.from(set);
 
-            if (this._routesDiscovered.length == 0) {
+              //|| this._routesDone.length==100)
+
+            if (this._routesDiscovered.length == 0 ) {
               this._renderPath.complete();
             } else {
 
               if ((this.commandConfigOptions as SpiderOptions).verbose) {
                 this.logger.info(`Rendered: ${this._routesDone.length}, Discovered: ${
-                  this._routesDiscovered.length
-                  }`);
+                  this._routesDiscovered.length}:   ${this._routesDiscovered[0]}  rendered  `);
               } else {
                 this.loggingSameLine(`Rendered: ${this._routesDone.length}, Discovered: ${
                   this._routesDiscovered.length
@@ -94,16 +95,24 @@ extends RenderCommand<SpiderCommandSchema> {
 
 
               this._routesExcluded.push(this._routesDiscovered[0]);
+
               this._renderPath.next(this._routesDiscovered[0]);
             }
           },
           error => { },
           () => {
 
+            if ((this.commandConfigOptions as SpiderOptions).dryRun){
+            this._writeVerbose(this._routesDone,'dry-run')
+
+            } else {
             this._writeSummary();
+            }
+
             if ((this.commandConfigOptions as SpiderOptions).verbose) {
-              this._writeVerbose(this._routesNoIndex, 'noIndex');
-              this._writeVerbose(this._routesQueryExcluded, 'queryExcluded');
+              this._writeVerbose(this._routesNoIndex, 'no-index');
+              this._writeVerbose(this._routesDiscovered, 'discovered');
+              this._writeVerbose(this._routesQueryExcluded, 'query-excluded');
               if ((this.commandConfigOptions as SpiderOptions).ensureCanonical) {
                 this._writeVerbose(this._routesCanonical, 'canonical');
                 this._writeVerbose(this._routesNoCanonical, 'noCanonical');
@@ -221,7 +230,21 @@ extends RenderCommand<SpiderCommandSchema> {
     const href = body.querySelectorAll('[href]');
     for (let index = 0; index < href.length; index++) {
       const attr = href.item(index).getAttribute('href') as string;
-      attr.indexOf(':') == -1 ? routesHref.push(attr) : '';
+      if ( attr.indexOf(':') == -1){
+        let myRoute= attr;
+
+        if (attr.indexOf("#")!=-1){
+          myRoute = attr.split("#")[0];
+        }
+
+
+        if (myRoute.substr(0,1)!="/"){
+          myRoute = "/"+ myRoute
+        }
+
+        routesHref.push(myRoute)
+      }
+
     }
 
     return routesHref;

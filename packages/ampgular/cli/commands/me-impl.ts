@@ -6,13 +6,12 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
+import {
 
+  join,  normalize
+} from 'path';
 import {
-  JsonParseMode, dirname, isJsonObject,
-  join, json, logging, normalize, path, relative, resolve,
-} from '@angular-devkit/core';
-import {
-  readFileSync,
+  readFileSync, readdirSync,
 } from 'fs';
 import * as minimatch from 'minimatch';
 import { AmpPage } from '../models/amp-page';
@@ -24,15 +23,16 @@ import {
   DynamicSchema, StateSchema,
 } from '../models/interface';
 import { Schema as AmpOptions, Mode } from '../schemas/amp';
-import { ExpressServer } from '../utilities/expressserver';
+import { ExpressServer, ExpressConfig } from '../utilities/expressserver';
 import { getWorkspaceDetails } from '../utilities/project';
 import { getRoutes } from '../utilities/utils';
 import { runOptionsBuild } from '../utilities/workspace-extensions';
 import { getCommandDescription } from './deploy-impl';
 import { Schema as MeCommandSchema } from './me';
+import { terminal } from '@angular-devkit/core';
 
 
-const open = require('open');
+
 
 interface StateMap {
 
@@ -71,8 +71,12 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
   }
 
   public async run(options: MeCommandSchema & Arguments): Promise<number> {
+
     await super.run(options);
 
+    if(options.mode==Mode.Deploy){
+      this.commandConfigOptions.mode = Mode.Deploy
+    }
 
     if (this.overrides['route'] !== undefined) {
      this.commandConfigOptions.mode = Mode.Test;
@@ -129,20 +133,37 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
       };
     }
 
+    let styles = 'styles.css'
+    if (this._ampgularConfig.target == 'browser') {
 
-    if (this.commandConfigOptions.mode!= Mode.Deploy){
-      if (this.commandConfigOptions.prerender){
-        await this._callPrerender();
+
+      let styleArray = readdirSync(this.BROWSER_PATH)
+        .filter((item: string) => item.match(/^(styles\.)[\w]+(\.css)$/g))
+
+      if (styleArray.length > 0) {
+        styles = styleArray[0]
       }
 
     }
 
 
+    if (this.commandConfigOptions.mode!= Mode.Deploy){
+
+      this._globalCss= readFileSync(join(normalize(process.cwd()),`/dist/amp/${styles}`)).toString('utf-8')
+
+      if (this.commandConfigOptions.prerender){
+        await this._callPrerender();
+      }
+    }
+
+      else {
+        this._globalCss= readFileSync(join(normalize(process.cwd()),`/dist/browser/${styles}`)).toString('utf-8')
+
+      }
 
 
-    this._globalCss= readFileSync(join(normalize(process.cwd()),'/dist/amp/css/styles.css')).toString('utf-8')
 
-
+    let k = 1;
     for (const ampRoute of this._toAmpROUTES) {
 
       // create state associated to Route
@@ -158,7 +179,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
 
       // create an instance of AMP PAGE
-      const myAMPPage = new AmpPage(ampRoute, this._globalCss);
+      const myAMPPage = new AmpPage(ampRoute, this._globalCss,this.logger);
 
       myAMPPage.initialize(this.commandConfigOptions,
         this._myPageState, this._myPageDynamic, this._myPagePlugins);
@@ -170,19 +191,38 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
       await myAMPPage.AmpToJustAmp();
 
       await myAMPPage.AmpToFile(this.commandConfigOptions.mode);
+      this.loggingSameLine(`AMPing....nr:${k} page:${ampRoute} `);
+
+      const passValidation = await myAMPPage.AMPisValid();
+      if (passValidation==true && this.commandConfigOptions.mode==Mode.Deploy){
+        await myAMPPage.AmpCanonical();
+      }
 
 
+
+
+
+        k++;
     }
 
+    const SERVER_CONFIG:ExpressConfig = {
+      assetsPath: 'src/assets',
+      launchPath: 'dist/amp',
+      message: 'Express Server on localhost:5000 from AMP testing purposes',
+      url:'http://localhost:5000#development=1',
+      port:5000
+    }
     if (this.commandConfigOptions.mode == "test") {
-      this.appServerNew = new ExpressServer(normalize('dist/amp'));
+      SERVER_CONFIG.url = 'http://localhost:5000#development=1';
+      this.appServerNew = new ExpressServer(SERVER_CONFIG,this.logger);
       await this.appServerNew.LaunchServer();
-      await open('http://localhost:5000#development=1');
       return 55;
-    } else if (this.commandConfigOptions.mode == "test") {
-      this.appServerNew = new ExpressServer(normalize('dist/amp'));
+    } else if (this.commandConfigOptions.mode == "render" && this.commandConfigOptions.serve) {
+
+      SERVER_CONFIG.url = 'http://localhost:5000';
+      SERVER_CONFIG.message = 'Express Server on localhost:5000 from pre-rende check pages',
+      this.appServerNew = new ExpressServer(SERVER_CONFIG,this.logger);
       await this.appServerNew.LaunchServer();
-      await open('http://localhost:5000');
       return 55;
     } else {
     return 0;
@@ -314,3 +354,4 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
 
 }
+

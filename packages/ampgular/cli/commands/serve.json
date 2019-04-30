@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "amp-cli://commands/serve.json",
+  "description": "Serve the prepared APP.",
+  "$longDescription": "",
+
+  "$aliases": [ "sv" ],
+  "$scope": "all",
+  "$impl": "./serve-impl#ServeCommand",
+
+  "type": "object",
+  "allOf": [
+    { "$ref": "./definitions.json#/definitions/base" }
+  ]
+}

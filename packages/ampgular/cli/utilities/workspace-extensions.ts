@@ -1,20 +1,25 @@
 
 import {
     getSystemPath,
-    join,
+
     json,
     logging,
-    normalize,
+
     virtualFs,
+    dirname,
+
 
   } from '@angular-devkit/core';
+import {  relative,  join,  normalize} from 'path';
 import * as child_process from 'child_process';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
 import { Schema as AmpgularConfig } from '../lib/config/schema';
 import { Arguments } from '../models/interface';
 import { Workspace } from '../models/workspace';
 import { WorkspaceLoader } from '../models/workspace-loader';
 import { Schema as BuildOptions } from '../schemas/build';
+//import { webpackcss } from './webpack';
+import { Mode } from '../schemas/amp';
 
 
 export async function loadWorkspaceAndAmpgular(
@@ -71,27 +76,99 @@ export async function runOptionsBuild(
 
     if (options.target == 'node') {
 
-      logger.warn(`....starting BUILDDING SERVER APPLICATON..... this may take several minutes`);
+      logger.warn(`BUILDING SERVER APPLICATON..... this may take several minutes`);
       logger.warn(`Target is ${options.target}  configuration is ${options.configuration} `);
+
 
       await _exec('ng', ['run', options.projectName + ':server',
                         '--configuration=' + options.configuration], {}, logger);
 
-      if(options.configuration == 'amp'){
-       // await _exec('npm',['run', 'node-sass',join(normalize(process.cwd()),'src/styles.scss'), '-o', join(normalize(process.cwd()),'dist/amp/css')],{},logger)
+
+      if (options.mode == Mode.Render){
+      /* Hack precompiling the scss t the render Folder until we achieve to progamatically launch the node-sass..... */
+
+        if (existsSync(join(normalize(process.cwd()),'src/styles.css'))){
+
+            if(options.configuration == 'amp'){
+              _copy(join(normalize(process.cwd()),'src/styles.css'),join(normalize(process.cwd()),'dist/amp/styles.css'))
+            }
+            else {
+              _copy(join(normalize(process.cwd()),'src/styles.css'),join(normalize(process.cwd()),'dist/server/styles.css'))
+
+            }
+
+        }
+        else  if (existsSync(join(normalize(process.cwd()),'src/styles.scss'))){
+
+
+          if(options.configuration == 'amp'){
+            await _exec('npm',['run','build-amp-css'], {}, logger);
+
+          }
+          else {
+            await _exec('npm',['run','build-server-css'], {}, logger);
+          }
+        }
+
       }
+
+
 
 
       return  0;
 
   } else {
-    logger.warn(`....starting BUILDDING CLEINT APPLICATON..... this may take several minutes`);
+    logger.warn(`BUILDING CLIENT APPLICATON..... this may take several minutes`);
     logger.warn(`Target is ${options.target}  configuration is ${options.configuration} `);
     await _exec('ng', ['build', '--configuration=' + options.configuration], {}, logger);
 
+
+    const BROWSER_PATH = join(normalize(process.cwd()),'dist/browser');
+    const SERVER_PATH = join(normalize(process.cwd()),'dist/server');
+    const AMP_PATH = join(normalize(process.cwd()),'dist/amp');
+
+    // Coping css to server folder
+    if (options.mode == Mode.Render){
+
+
+      //CHECK Which STYLES FILE
+      let styles = 'styles.css'
+        let styleArray = readdirSync(BROWSER_PATH)
+          .filter((item: string) => item.match(/^(styles\.)[\w]+(\.css)$/g))
+
+        if (styleArray.length > 0) {
+          styles = styleArray[0]
+        }
+
+        if (options.configuration=='amp'){
+          if (!existsSync(AMP_PATH)) {
+            mkdirSync(AMP_PATH);
+          }
+          _copy( join(BROWSER_PATH, styles),join(AMP_PATH, styles ));
+        }
+        else {
+          if (!existsSync(SERVER_PATH)) {
+            mkdirSync(SERVER_PATH);
+          }
+          _copy( join(BROWSER_PATH, styles),join(SERVER_PATH, styles ));
+        }
+
+      }
+
+
+    }
     return 0;
   }
+
+  function _copy(from: string, to: string) {
+
+
+    from = relative(normalize(process.cwd()), normalize(from));
+    to = relative(normalize(process.cwd()), normalize(to));
+    const buffer = readFileSync(from);
+    writeFileSync(to, buffer);
   }
+
 
 function _exec(
     command: string,
@@ -99,6 +176,8 @@ function _exec(
     opts: { cwd?: string },
     logger: logging.Logger,
   ): Promise<string> {
+
+
     return new Promise((resolve) => {
       const { status, error, stderr, stdout, output } = child_process.spawnSync(
         command,
@@ -106,6 +185,9 @@ function _exec(
         {
           stdio: 'inherit',
           ...opts,
+
+            shell: true
+
         },
       );
 

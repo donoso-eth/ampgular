@@ -8,6 +8,18 @@
       {
         "type":"object",
         "properties": {
+          "mode": {
+            "description": "Mode",
+            "type": "string",
+            "default": "render",
+            "hidden" :true,
+            "enum": ["test","render","deploy"]
+          }
+        }
+      },
+      {
+        "type":"object",
+        "properties": {
           "projectname": {
             "type": "string",
             "description": "Optional, explicitly set the project name"

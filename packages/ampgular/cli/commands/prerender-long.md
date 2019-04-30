@@ -3,5 +3,5 @@
  For example,
 
  ```sh
- ng help serve
+ amp help serve
  ```

@@ -1,11 +1,11 @@
 import {
   Path,
   experimental,
-  join,
   logging,
-  normalize,
   virtualFs,
+  terminal,
 } from '@angular-devkit/core';
+import { join, normalize} from 'path';
 import { NgClass } from '@angular/common';
 import { ApplicationRef, NgZone, enableProdMode } from '@angular/core';
 import { renderModuleFactory } from '@angular/platform-server';
@@ -28,9 +28,10 @@ import {
 } from '../models/interface';
 import { parseArguments } from '../models/parser';
 import { Workspace } from '../models/workspace';
-import { Launchserver } from './expressserver';
+import { Launchserver, ExpressConfig, ExpressServer } from './expressserver';
 import { webpackRun } from './webpack';
 import { getProjectName, runOptionsBuild } from './workspace-extensions';
+import { load } from 'cheerio';
 
 interface BrowserRenderOptions {
   url: string;
@@ -45,7 +46,7 @@ export class RenderEngine {
   private _command: string;
   private _logger: logging.Logger;
   private _workspace: Workspace;
-  appServerNew: any;
+  appServerNew: ExpressServer;
   newCrome: ChromeRenderer;
   _context: CommandContext;
   projectName: any;
@@ -95,9 +96,18 @@ export class RenderEngine {
     }
 
     if (this._target == 'browser') {
-        this.newCrome = new ChromeRenderer();
+         this.newCrome = new ChromeRenderer();
         // Launchin PUOETTER  FOR ALTER RENDER
-        this.appServerNew = await Launchserver();
+
+        const SERVER_CONFIG: ExpressConfig = {
+          assetsPath: 'dist/public/assets',
+          launchPath: 'dist/public',
+          message: 'Launching Puppeteer for Browser Render Port 4200',
+          url: 'no',
+          port:4200
+        }
+        this.appServerNew = new ExpressServer(SERVER_CONFIG, this._logger);
+        await this.appServerNew.LaunchServerSPA();
 
         await this.newCrome.initialize();
       }
@@ -149,14 +159,18 @@ export class RenderEngine {
       target: 'node',
       configuration: this._options.configuration,
       projectName: this.projectName,
+      mode: this._options.mode
     };
 
     await runOptionsBuild(newOptions, this._logger);
-    await _exec('node-sass',[ 'src/styles.scss', '-o', 'dist/amp/css'],{},this._logger)
+   // await _exec('node-sass',[ 'src/styles.scss', '-o', 'dist/amp/css'],{},this._logger)
 
   }
 
   public async renderUrl(): Promise<Function> {
+
+
+
     switch (this._target) {
       case 'browser':
         return await this.renderclient();
@@ -184,11 +198,20 @@ export class RenderEngine {
   }
 
   async renderclient(): Promise<Function> {
+    this._logger.info(terminal.blue('Rendering routes through Puppeteer'))
 
     return async (options: BrowserRenderOptions): Promise<string> => {
-      const html = await this.newCrome.render({
-        url: 'http://localhost:4200' + options.url,
+      let Route="";
+      if(options.url.substr(0,1)!="/"){
+          Route = "/" + options.url
+        }
+        else {
+          Route = options.url
+        }
+        const html = await this.newCrome.render({
+        url: 'http://localhost:4200' + Route,
       });
+
 
       return html;
     };
@@ -197,8 +220,8 @@ export class RenderEngine {
   public async clenUp() {
     switch (this._target) {
       case 'browser':
-        this._browser.close();
-        this.appServerNew.CloseServer();
+        this.newCrome.close();
+       this.appServerNew.CloseServer();
         break;
       case 'node':
         if (this._options.localhost) { this.localhost.shutdown(); }
@@ -211,14 +234,17 @@ class ChromeRenderer {
   private page: any;
 
   public async initialize() {
-    this.browser = await puppeteer.launch();
+    this.browser = await puppeteer.launch({defaultViewport: null});
     this.page = await this.browser.newPage();
   }
 
   public async render(options: BrowserRenderOptions) {
     await this.page.goto(options.url, { waitUntil: 'networkidle2' });
 
-    return await this.page.evaluate(() => document.documentElement.outerHTML);
+    return await this.page.content(() => {
+
+      return document.documentElement.outerHTML
+    });
   }
 
   async close() {
@@ -226,54 +252,5 @@ class ChromeRenderer {
   }
 }
 
-function _exec(
-  command: string,
-  args: string[],
-  opts: { cwd?: string },
-  logger: logging.Logger,
-): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const { status, error, stderr, stdout, output } = child_process.spawnSync(
-      command,
-      args,
-      {
-        stdio: 'inherit',
-        ...opts,
-      },
-    );
-
-    resolve(output[0]);
 
 
-    if (status != 0) {
-      logger.error(
-        `Command failed: ${command} ${args
-          .map(x => JSON.stringify(x))
-          .join(', ')}`,
-      );
-      if (error) {
-        logger.error('Error: ' + (error ? error.message : 'undefined'));
-      } else {
-        logger.error(`STDOUT:\n${stdout}`);
-        logger.error(`STDERR:\n${stderr}`);
-      }
-      throw error;
-    }
-  });
-}
-
- // OLD SPAWN to EXECUTE SERVER
-  // async renderWepack(path:string):Promise<boolean> {
-  //   const { spawn } = require("child_process");
-  //   return new Promise((resolve,reject) =>{
-  //     let child = spawn('ts-node',['ampgular/seo/server.ts']);
-
-  //     child.stdout.on("data", (data:any) => {
-  //     this._logger.info(data.toString('utf-8'))
-  //     resolve(true)
-
-  //     });
-
-
-  //   })
-  // }

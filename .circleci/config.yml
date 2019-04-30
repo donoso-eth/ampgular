@@ -25,19 +25,19 @@ anchor_1: &defaults
     - image: *docker_image
 
 # After checkout, rebase on top of target branch.
-# anchor_2: &post_checkout
-#   run:
-#     name: Rebase PR on target branch
-#     command: >
-#       if [[ -n "${CIRCLE_PR_NUMBER}" ]]; then
-#         # User is required for rebase.
-#         git config user.name "angular-ci"	
-#         git config user.email "angular-ci"      
-#         # Rebase PR on top of target branch.
-#         node tools/rebase-pr.js angular/angular-cli ${CIRCLE_PR_NUMBER}
-#       else
-#         echo "This build is not over a PR, nothing to do."
-#       fi
+anchor_2: &post_checkout
+  run:
+    name: Rebase PR on target branch
+    command: >
+      if [[ -n "${CIRCLE_PR_NUMBER}" ]]; then
+        # User is required for rebase.
+        git config user.name "ampgular"	
+        git config user.email "ampgular"      
+        # Rebase PR on top of target branch.
+        node tools/rebase-pr.js ampgular/ampgular ${CIRCLE_PR_NUMBER}
+      else
+        echo "This build is not over a PR, nothing to do."
+      fi
 anchor_3: &restore_cache
   restore_cache:
     keys:
@@ -54,6 +54,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - *post_checkout
       - *restore_cache
       - run: yarn install --frozen-lockfile
       - persist_to_workspace:
@@ -76,11 +77,11 @@ jobs:
     steps:
       - attach_workspace: *attach_options
       - run: npm run validate -- --ci
-  test:
-    <<: *defaults
-    steps:
-      - attach_workspace: *attach_options
-      - run: npm run test 
+  # test:
+  #   <<: *defaults
+  #   steps:
+  #     - attach_workspace: *attach_options
+  #     - run: npm run test 
 
  
   build:
@@ -114,6 +115,6 @@ workflows:
             branches:
               ignore:
               - /docs-preview/
-      - test:
-          requires:
-            - build
+      # - test:
+      #     requires:
+      #       - build

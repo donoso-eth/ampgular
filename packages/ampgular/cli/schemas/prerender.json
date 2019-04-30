@@ -27,7 +27,20 @@
           "type":"array",
           "items": {
             "type":"string"
-          }
+          },
+          "hidden": true
+        },
+        "mode": {
+          "description": "Create only one AMp Page (route porperty) and spin a loclaserver to easy the devs process",
+          "type": "string",
+          "default": "render",
+          "hidden" :true,
+          "enum": ["test","render","deploy"]
+        },
+        "serve": {
+          "description": "Lauch a server",
+          "type": "boolean",
+          "default": true
         }
       },
       "required": ["namedFiles", "cssOptimize"]

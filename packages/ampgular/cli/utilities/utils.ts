@@ -22,3 +22,5 @@ export function loadJsonFile(
 export function getRoutes(path: string): string[] {
   return require(path + '/ampgular/routes').ROUTES;
 }
+
+

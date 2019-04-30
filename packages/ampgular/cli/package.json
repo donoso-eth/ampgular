@@ -53,13 +53,15 @@
     "rxjs":"6.3.3",
     "css-shortener":"^2.1.0",
     "progress-bar-webpack-plugin": "^1.12.1",
+    "mini-css-extract-plugin":"^0.6.0",
     "cheerio":"^1.0.0-rc.3",
     "purify-css":"^1.2.5",
     "string-to-stream":"^1.1.1",
     "postcss":"^7.0.14",
     "@types/cheerio":"^0.22.11",
     "typescript": "3.2.4",
-    "open":"^6.1.0"
+    "open":"^6.1.0",
+    "amphtml-validator":"^1.0.23"
   },
   "ng-update": {
     "migrations": "@schematics/angular/migrations/migration-collection.json"

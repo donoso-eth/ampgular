@@ -1,5 +1,7 @@
 
-import { join, json, normalize, terminal } from '@angular-devkit/core';
+import {  json,terminal } from '@angular-devkit/core';
+import { join, normalize } from 'path';
+
 import { createConsoleLogger } from '@angular-devkit/core/node';
 import { load } from 'cheerio';
 import { readFileSync } from 'fs';

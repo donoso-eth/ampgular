@@ -25,9 +25,9 @@
   ],
   "links": {
     "Contributing": "/CONTRIBUTING.md",
-    "Ampgular CLI Repo": "http://github.com/ampgular/ampgular-cli",
-    "Ampgular SEO Repo": "http://github.com/ampgular/ampgular-cli",
-    "Ampgular AMP Repo": "http://github.com/ampgular/ampgular-cli"
+    "Ampgular CLI Repo": "http://github.com/ampgular/ampgular",
+    "Ampgular SEO Repo": "/packages/ampgular/schematics/seo",
+    "Ampgular AMP Repo": "/packages/ampgular/schematics/amp"
   },
   "linksAngular": {
     "Angular CLI Repo": "http://github.com/angular/angular-cli",
@@ -52,7 +52,7 @@
       "links": [
         {
           "label": "README",
-          "url": "/packages/ampgular/seo/README.md"
+          "url": "/packages/ampgular/schematics/seo/README.md"
         }
       ]
     },
@@ -62,7 +62,7 @@
       "links": [
         {
           "label": "README",
-          "url": "/packages/ampgular/amp/README.md"
+          "url": "/packages/ampgular/schematics/amp/README.md"
         }
       ]
     },
