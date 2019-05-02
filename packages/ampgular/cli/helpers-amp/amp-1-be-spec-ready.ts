@@ -3,6 +3,8 @@ import { AmpDescription } from '../models/interface';
 import { cleanHtml } from './clean-custom-tags';
 import { OptimizeCSS } from './optimize-css';
 import { load } from 'cheerio';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 
 const addAngTags = [{ selector: 'app-root' }, { selector: 'router-outlet' }];
 
@@ -30,35 +32,35 @@ const CssAllTogether = async (
 
   const uniStyle = parse(args.singleUniStyle);
 
-  const inlineStyle = $('[style]');
+  // const inlineStyle = $('[style]');
 
-  inlineStyle.each(function(i, inline: CheerioElement) {
-    if (inline.attribs['id'] == undefined) {
-      inlineStyle.filter(inline).attr('id', '_ni' + i);
-      inlineStyle.filter(inline).addClass('_ni' + i);
-      uniStyle.append(
-        '#' + '_ni' + i + '._ni' + i + '{' + inline.attribs['style'] + '}',
-      );
-    } else {
-      inlineStyle.filter(inline).addClass('_ni' + i);
-      uniStyle.append(
-        '#' +
-          inline.attribs['id'] +
-          i +
-          '._ni' +
-          i +
-          '{' +
-          inline.attribs['style'] +
-          '}',
-      );
-    }
+  // inlineStyle.each(function(i, inline: CheerioElement) {
+  //   if (inline.attribs['id'] == undefined) {
+  //     inlineStyle.filter(inline).attr('id', '_ni' + i);
+  //     inlineStyle.filter(inline).addClass('_ni' + i);
+  //     uniStyle.append(
+  //       '#' + '_ni' + i + '._ni' + i + '{' + inline.attribs['style'] + '}',
+  //     );
+  //   } else {
+  //     inlineStyle.filter(inline).addClass('_ni' + i);
+  //     uniStyle.append(
+  //       '#' +
+  //         inline.attribs['id'] +
+  //         i +
+  //         '._ni' +
+  //         i +
+  //         '{' +
+  //         inline.attribs['style'] +
+  //         '}',
+  //     );
+  //   }
 
-    inlineStyle.filter(inline).removeAttr('style');
-  });
+  //   inlineStyle.filter(inline).removeAttr('style');
+  // });
 
-  $('head')
-    .children()
-    .remove('style');
+  // $('head')
+  //   .children()
+  //   .remove('style');
   $('link').remove("[rel='stylesheet']");
 
   args.singleUniStyle = uniStyle.toString();
@@ -75,6 +77,10 @@ const AngularComponentCheck = (args: AmpDescription): AmpDescription => {
   const checkRegEx = /(_nghost-)[\w]+(-c[0-9]+)/;
   const matchAttr = indexHtml.match(checkRegEx) as RegExpMatchArray
   let attrMatch= "";
+
+  if (matchAttr===null){
+    return args
+  }
 
 
   attrMatch= matchAttr[0].replace(matchAttr[1],'').replace(matchAttr[2],'') // .substr(9, matchAttr[0].length-3);

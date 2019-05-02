@@ -242,8 +242,9 @@ class ChromeRenderer {
     await this.page.goto(options.url, { waitUntil: 'networkidle2' });
 
     return await this.page.content(() => {
+      
 
-      return document.documentElement.outerHTML
+      return  document.documentElement.outerHTML
     });
   }
 

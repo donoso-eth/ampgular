@@ -19,6 +19,8 @@ import { AmpgularCommand } from './ampgular-command';
 import { BaseCommandOptions } from './command';
 import { Arguments } from './interface';
 import { Mode } from '../schemas/amp';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 export interface RenderCommandOptions extends BaseCommandOptions {
   // project?: string;
   // configuration?: string;
@@ -137,7 +139,7 @@ if ((this.commandConfigOptions as PrerenderOptions).mode == Mode.Deploy){
 
 }
 
-    return await this.renderFunction({ url: url }, this._workingFolder, this._bundlePath);
+  return  await this.renderFunction({ url: url }, this._workingFolder, this._bundlePath);
   }
 
   public async run(options: RenderCommandOptions & Arguments): Promise<number> {
