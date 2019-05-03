@@ -53,7 +53,7 @@ const CleanCustomElements = async (
       });
 
 
-      console.log(customTags)
+
 
     if (customTags.indexOf('picture') !== -1) {
         args =   customFunctions['picture']('picture', args);
@@ -68,7 +68,6 @@ const CleanCustomElements = async (
 
         const regExp = new RegExp('[^.|#](' + tag + ')|^(' + tag + ')', 'gi');
 
-        console.log(regExp)
 
         args['singleUniStyle'] = args['singleUniStyle'].replace(
           regExp,

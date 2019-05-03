@@ -60,6 +60,7 @@ export class AmpPage {
             pageState: pageState,
             pageDynamic: pageDynamic,
             pagePlugins: pagePlugins,
+            route: this.route
         };
     }
 

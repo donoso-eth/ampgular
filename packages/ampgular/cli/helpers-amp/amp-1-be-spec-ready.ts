@@ -154,6 +154,7 @@ let check2 = indexHtml.replace(compoRegex, function (match, code, id) {
       $('[' + sel + ']').attr(sel, null);
     });
 
+
   angCompo
     .map(x => x.selector)
     .forEach(tag => {

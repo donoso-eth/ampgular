@@ -48,7 +48,7 @@ export interface AmpDescription {
   singleUniStyle: string;
   angCompo: string[];
   customScript: string[];
-  route?: string;
+  route: string;
   pageState: {};
   pageDynamic: {};
   pagePlugins: {};

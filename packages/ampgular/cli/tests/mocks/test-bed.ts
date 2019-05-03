@@ -168,6 +168,7 @@ export class TestBed {
          pageDynamic: {},
          pageState: {},
          pagePlugins: {},
+         route:"",
          options: {
            cssOptimize: true,
            ampValidation: true,
