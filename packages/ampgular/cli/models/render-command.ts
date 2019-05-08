@@ -50,8 +50,7 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
     options: RenderCommandOptions & Arguments,
   ): Promise<void> {
     await super.initialize(options);
-    this._bundlePath = 'server';
-    this._workingFolder = 'src';
+
 
 
     this.target = this._ampgularConfig.target;
@@ -66,21 +65,6 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
 
 
 
-    if (extra.filter(x => x.indexOf('--path') != -1).length == 1) {
-      const path = extra.filter(x => x.indexOf('--path') != -1)[0];
-      this._bundlePath = path.replace('--path=', '');
-      extra.splice( extra.indexOf(path), 1 );
-    } else if (this.target == 'browser') {
-      this._bundlePath = 'dist/browser';
-    }
-
-   else if (this.overrides.mode== Mode.Deploy) {
-    this._bundlePath = 'dist/browser';
-    this._workingFolder = 'dist/browser';
-  }
-  console.log(this.overrides)
-
-
     this.commandConfigOptions = {
       ...this.commandConfigOptions,
       ...renderCommandOptions,
@@ -89,15 +73,36 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
       ...this.overrides,
     } ;
 
-    if(this.commandConfigOptions.configuration=='amp'){
-      this._workingFolder = 'src';
-      this._bundlePath = 'amp';
-    }
+
 
 
   }
 
   async validateAndLaunch(): Promise<number> {
+
+    if (this.target == 'browser') {
+      this._bundlePath = 'dist/browser';
+    } else if (this.commandConfigOptions.configuration=='amp'){
+      this._bundlePath = 'amp';
+    } else {
+      this._bundlePath = 'server';
+    }
+
+    if ((this.commandConfigOptions as PrerenderOptions).mode == Mode.Deploy){
+
+      this._workingFolder = 'dist/browser';
+    }
+    else {
+      if (this.target == 'browser') {
+        this._workingFolder = 'dist/browser';
+      } else if (this.commandConfigOptions.configuration=='amp'){
+        this._workingFolder = 'src';
+      } else {
+        this._workingFolder = 'src';
+      }
+    }
+
+
 
     try {
 
@@ -126,18 +131,6 @@ export abstract class RenderCommand<T extends BaseCommandOptions = BaseCommandOp
   }
 
   protected async renderUrl(url: string): Promise<string> {
-
-if ((this.commandConfigOptions as PrerenderOptions).mode == Mode.Deploy){
-  if(this.commandConfigOptions.configuration=='amp'){
-    this._bundlePath = 'amp';
-    this._workingFolder = 'dist/browser';
-  } else {
-    this._bundlePath = 'server';
-    this._workingFolder = 'dist/browser';
-  }
-
-
-}
 
   return  await this.renderFunction({ url: url }, this._workingFolder, this._bundlePath);
   }

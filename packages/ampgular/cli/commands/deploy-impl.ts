@@ -44,6 +44,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
   public readonly command = 'deploy';
   private build: CommandInterface;
   private prerender: CommandInterface;
+  private prerenderAMP: CommandInterface;
   private amp: CommandInterface;
   private commnadWorkspace: CommandWorkspace;
   appServerNew: ExpressServer;
@@ -94,7 +95,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
       switch (targetApp) {
         case TargetApp.Prerender:
           this.logger.info('PRERENDERING THE SITE .......  FOR DEPLOYING');
-          await this._callPrerender(false);
+          await this._callPrerender();
           break;
         case TargetApp.Ssr:
           this.logger.info('PREPARING SERVER SIDE THE SITE .......  FOR DEPLOYING');
@@ -109,7 +110,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
       this.logger.info('BUNDLING AMP APP .......  FOR DEPLOYING');
       await this._createServerBundle(true);
       this.logger.info('PRERENDERING AMP APP .......  FOR DEPLOYING');
-      await this._callPrerender(true);
+      await this._callPrerenderAMP();
       this.logger.info('CREATING AMP PAGES .......  FOR DEPLOYING');
 
       await this._createAmpPages();
@@ -206,19 +207,30 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
   }
 
-  async _callPrerender(ampVersion: boolean) {
+  async _callPrerender() {
     const workspace: CommandWorkspace = getWorkspaceDetails() as CommandWorkspace;
     const descriptionPrerender = await getCommandDescription('prerender', this._registry);
-    const prerender =
+    this.prerender =
       new descriptionPrerender.impl({ workspace }, descriptionPrerender, this.logger);
 
-    if (ampVersion) {
-      return await prerender.validateAndRun({ path: 'dist/amp', configuration: 'amp',mode: Mode.Deploy });
-    } else {
-      return await prerender.validateAndRun({  path: 'dist/browser',mode: Mode.Deploy });
-    }
+      return await this.prerender.validateAndRun({  mode: Mode.Deploy });
+
 
   }
+
+  async _callPrerenderAMP() {
+    const workspace: CommandWorkspace = getWorkspaceDetails() as CommandWorkspace;
+    const descriptionPrerender = await getCommandDescription('prerender', this._registry);
+     this.prerenderAMP =
+      new descriptionPrerender.impl({ workspace }, descriptionPrerender, this.logger);
+
+
+      return await this.prerenderAMP.validateAndRun({ configuration: 'amp',mode: Mode.Deploy });
+
+
+  }
+
+
 
   async _callAmpMe() {
     const workspace: CommandWorkspace = getWorkspaceDetails() as CommandWorkspace;
