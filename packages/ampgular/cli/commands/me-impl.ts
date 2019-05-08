@@ -58,6 +58,7 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
   private _myPagePlugins: any;
   private prerender: CommandInterface;
   appServerNew: ExpressServer;
+  private _ampValidationResults:any;
   private _globalCss: string;
 
   public async initialize(options: MeCommandSchema & Arguments): Promise<void> {
@@ -73,6 +74,9 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
   public async run(options: MeCommandSchema & Arguments): Promise<number> {
 
     await super.run(options);
+    this._ampValidationResults = {};
+    this._ampValidationResults['valid']=0;
+    this._ampValidationResults['error']=0;
 
     if(options.mode==Mode.Deploy){
       this.commandConfigOptions.mode = Mode.Deploy
@@ -193,9 +197,32 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
       await myAMPPage.AmpToFile(this.commandConfigOptions.mode);
       this.loggingSameLine(`AMPing....nr:${k} page:${ampRoute} `);
 
-      const passValidation = await myAMPPage.AMPisValid();
+      const {passValidation,result} = await myAMPPage.AMPisValid();
+
+
+
+
       if (passValidation==true && this.commandConfigOptions.mode==Mode.Deploy){
+        this._ampValidationResults['valid']++;
         await myAMPPage.AmpCanonical();
+      }
+      else {
+
+        if (result.errors.length>1){
+          let code = 'More than one'
+          if (this._ampValidationResults[code]!=undefined){this._ampValidationResults[code]++ }
+          else {this._ampValidationResults[code]=1}
+
+        }
+        else if (result.errors.length==1){
+          let code =result.errors[0]['code']
+          if (this._ampValidationResults[code]!=undefined){this._ampValidationResults[code]++ }
+          else {this._ampValidationResults[code]=1}
+        }
+
+        this._ampValidationResults['error']++;
+
+
       }
 
 
@@ -204,6 +231,9 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
         k++;
     }
+
+
+    this.logger.info(terminal.green(this._ampValidationResults))
 
     const SERVER_CONFIG:ExpressConfig = {
       assetsPath: 'src/assets',

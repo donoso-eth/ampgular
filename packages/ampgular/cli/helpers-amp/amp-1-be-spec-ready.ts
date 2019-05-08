@@ -84,11 +84,11 @@ const AngularComponentCheck = (args: AmpDescription): AmpDescription => {
     return args
   }
 
-  console.log(matchAttr[1],matchAttr[2]);
+
 
   attrMatch= matchAttr[0].replace(matchAttr[1],'').replace(matchAttr[2],'') // .substr(9, matchAttr[0].length-3);
 
-  console.log(attrMatch)
+
 
   const hostRegex = new RegExp('(_nghost)-' + attrMatch + 'c([0-9]+)','g');
 
