@@ -138,7 +138,7 @@ export async function Launchserver(): Promise<any> {
       const DIST_FOLDER = join(normalize(process.cwd()), 'dist/browser');
 
       app.get('*.*', express.static(join(DIST_FOLDER)));
-      app.get('*', function(req, res) {
+      app.get('*', function(req:any, res:any) {
         res.sendFile(join(DIST_FOLDER, 'index.html')); // load the single view file (angular will handle the page changes on the front-end)
       });
 
