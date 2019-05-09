@@ -14,4 +14,4 @@ export class Article extends JsonObject<Schema> {
     }
   }
 
-export { Schema as ArtocleOptions } from './schema';
+export { Schema as ArticleOptions } from './schema';

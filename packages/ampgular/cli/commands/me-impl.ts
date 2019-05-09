@@ -222,18 +222,12 @@ export class MeCommand extends AmpgularCommand<MeCommandSchema> {
 
         this._ampValidationResults['error']++;
 
-
       }
-
-
-
-
-
         k++;
     }
 
 
-    this.logger.info(terminal.green(this._ampValidationResults))
+    console.log(this._ampValidationResults)
 
     const SERVER_CONFIG:ExpressConfig = {
       assetsPath: 'src/assets',

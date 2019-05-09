@@ -1,14 +1,17 @@
-import { enableProdMode } from '@angular/core';
+
 import { renderModuleFactory } from '@angular/platform-server';
 import { readFileSync } from 'fs';
 import { join, normalize } from 'path';
 import 'reflect-metadata';
 import 'zone.js/dist/zone-node';
+import { isDevMode, enableProdMode } from '@angular/core';
 
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 
-// enableProdMode();
+if(isDevMode()) {
+  enableProdMode();
+}
 // Express server
 // const myUrl = process.argv.slice(2)[0];
 
@@ -16,9 +19,9 @@ import 'zone.js/dist/zone-node';
 // * NOTE :: leave this as require() since this file is built Dynamically from webpack
 
 export async function renderserver(
-  options: any, path: string, configuration: string): Promise<string> {
+  options: any, workingFolder: string, bundlePath: string): Promise<string> {
 
-  const WORKING_FOLDER = join(process.cwd(), path);
+  const WORKING_FOLDER = join(process.cwd(), workingFolder);
 
 
   const indexTemplate = readFileSync(
@@ -30,7 +33,7 @@ export async function renderserver(
   const {
       AppServerModuleNgFactory,
       LAZY_MODULE_MAP,
-    } = require(`../../dist/${configuration}/main`);
+    } = require(`../../dist/${bundlePath}/main`);
   const {
     // tslint:disable-next-line:no-shadowed-variable
     provideModuleMap,
