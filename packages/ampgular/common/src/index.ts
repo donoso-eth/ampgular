@@ -1,4 +1,3 @@
 
 
-export * from './json-ld';
-export *  from './utility';
+export * from './json-ld/index';

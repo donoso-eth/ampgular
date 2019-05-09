@@ -12,8 +12,5 @@
     "schematic"
   ],
   "dependencies": {
-    "@angular-devkit/core": "^7.3.8",
-    "@angular-devkit/schematics": "^7.3.8",
-    "typescript": "3.2.4"
   }
 }
