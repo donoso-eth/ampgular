@@ -36,7 +36,7 @@ export class MetaService {
   constructor(
     @Inject(DOCUMENT) private _doc: any,
     private _title: Title,
-    private _meta: Meta,
+
   ) {
 
     this._head = this._doc.head;
@@ -54,8 +54,8 @@ export class MetaService {
     let tag: MetaExtendedDefinition = {
       name: "robots", content: "noindex"
     }
-    this._meta.addTag(tag)
 
+    this.createandInsert(tag.name,tag.content)
 
   }
 
@@ -78,7 +78,10 @@ export class MetaService {
     let tag: MetaExtendedDefinition = {
       name: "description", content: metaData.description
     }
-    this._meta.addTag(tag)
+
+
+    this.createandInsert(tag.name,tag.content)
+
     const canonicalLink = this._createLinkElement();
     this._dom.setAttribute(canonicalLink, "rel", "canonical");
     this._dom.setAttribute(canonicalLink, "href", this.host + metaData.canonical)
@@ -87,18 +90,17 @@ export class MetaService {
 
   }
 
+
+
   createandInsert(
     name: string,
     nameContent: string,
-    content: string,
-    contentValue: string,
-    parent: Node,
-    after: Node
+
+
   ) {
     const ele = this._createMetaElement();
     this._dom.setAttribute(ele, name, nameContent);
-    this._dom.setAttribute(ele, content, contentValue);
-    this._dom.insertBefore(parent, after, ele);
+   this._dom.appendChild(this._head, ele);
   }
 
   createandInsertScheme(

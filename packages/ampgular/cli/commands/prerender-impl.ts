@@ -79,7 +79,7 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
     } else if (this.commandConfigOptions.mode == Mode.Deploy) {
       this.PRERENDER_PATH = this.PUBLIC_PATH;
     } else {
-       
+
         this.PRERENDER_PATH = this.SERVER_PATH;
 
     }
@@ -129,9 +129,6 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
       // IF PRERENDERING AMP OPTIMIZE WILL BE DONE IN AMP MODULE & INCLUDE STYLESSHEET IN RENDER MODE TO PRE-VIEW PURPOSES
       if (this.commandConfigOptions.configuration == 'amp') {
 
-
-
-
         $('head').append(`<link rel="stylesheet" href="${styles}">`);
 
         html = $.html()
@@ -159,10 +156,14 @@ export class PrerenderCommand<T extends BaseCommandOptions = BaseCommandOptions>
           }
 
         }
-        // if (this.commandConfigOptions.mode == 'deploy') {
-
-        //   $('body').append(`<link rel="stylesheet" href="${styles}>`);
-        // }
+         if (this.commandConfigOptions.mode == 'deploy') {
+        // console.log('in deploy', 'link')
+        // console.log('in deploy', 'link')
+        // console.log('in deploy', 'link')
+        //   const new$ = load(html)
+        //  new$('body').append(`<link rel="stylesheet" href="${styles}>`);
+        //  html = new$.html();
+        }
 
       }
 

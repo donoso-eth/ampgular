@@ -1,3 +1,9 @@
 {
-  
+    "analytics": {
+        "routes": {
+          "match": ["**"]
+        },
+        "whiteListed": [],
+        "plugin": "analytics"
+      }
 }

@@ -26,7 +26,7 @@ const embedScripts = async (args: AmpDescription): Promise<AmpDescription> => {
    /*
    * REMOVE SCRIPTS aand STYLES
    */
-  $('link').remove('[rel=\'stylesheet\']'); 
+  $('link').remove('[rel=\'stylesheet\']');
 
   const scriptTags = $('script');
     scriptTags.each(function(i:number, item:CheerioElement) {
@@ -56,8 +56,11 @@ const embedScripts = async (args: AmpDescription): Promise<AmpDescription> => {
    /*
    * EMDEB MANDATORY AMP SCRIPTS AND BOILER PLATE
    */
+
+
   $('head').children('[charset="utf-8"]')
     .after('<script async src="https://cdn.ampproject.org/v0.js"></script>\r');
+
     $('head').append(`<style amp-boilerplate>body{-webkit-animation:
       -amp-start 8s steps(1,end) 0s 1 normal both;
       -moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:

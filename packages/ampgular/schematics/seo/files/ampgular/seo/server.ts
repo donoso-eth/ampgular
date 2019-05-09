@@ -1,4 +1,4 @@
-import { enableProdMode } from '@angular/core';
+
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
@@ -16,20 +16,20 @@ export class ExpressNodeServer {
   server: any;
   PORT: number;
   constructor() {
-    enableProdMode();
+
     this.app = express();
-    this.PORT = 8000;
+    this.PORT = 8020;
   }
 
-  async bootstrapServer(path: string, configuration: string) {
-    const WORKING_FOLDER = join(process.cwd(), path);
+  async bootstrapServer(workingFolder: string, bundlePath: string) {
+    const WORKING_FOLDER = join(process.cwd(), workingFolder);
 
    // const REQUIRE_PATH = '../../dist/' + configuration + '/main';
 
     const {
       AppServerModuleNgFactory,
       LAZY_MODULE_MAP,
-    } = require(`../../dist/${configuration}/main`);
+    } = require(`../../dist/${bundlePath}/main`);
 
     return new Promise((resolve, reject) => {
 
@@ -55,7 +55,6 @@ export class ExpressNodeServer {
         });
         // Start up the Node server
         this.server = this.app.listen(this.PORT, () => {
-          console.log('YES ERVER IS ON');
           resolve(`Node Express server listening on http://localhost:${this.PORT}`);
         });
       } catch (error) {
@@ -63,7 +62,12 @@ export class ExpressNodeServer {
       }
     });
   }
-  shutdown() {
+  async shutdown() {
+
+    return new Promise((resolve, reject) => {
+
     this.server.close();
+    resolve(`Node Express Closing http://localhost:${this.PORT}`);
+    });
   }
 }

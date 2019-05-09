@@ -3,6 +3,8 @@ import { AmpDescription } from '../models/interface';
 import { cleanHtml } from './clean-custom-tags';
 import { OptimizeCSS } from './optimize-css';
 import { load } from 'cheerio';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 
 const addAngTags = [{ selector: 'app-root' }, { selector: 'router-outlet' }];
 
@@ -30,35 +32,35 @@ const CssAllTogether = async (
 
   const uniStyle = parse(args.singleUniStyle);
 
-  const inlineStyle = $('[style]');
+  // const inlineStyle = $('[style]');
 
-  inlineStyle.each(function(i, inline: CheerioElement) {
-    if (inline.attribs['id'] == undefined) {
-      inlineStyle.filter(inline).attr('id', '_ni' + i);
-      inlineStyle.filter(inline).addClass('_ni' + i);
-      uniStyle.append(
-        '#' + '_ni' + i + '._ni' + i + '{' + inline.attribs['style'] + '}',
-      );
-    } else {
-      inlineStyle.filter(inline).addClass('_ni' + i);
-      uniStyle.append(
-        '#' +
-          inline.attribs['id'] +
-          i +
-          '._ni' +
-          i +
-          '{' +
-          inline.attribs['style'] +
-          '}',
-      );
-    }
+  // inlineStyle.each(function(i, inline: CheerioElement) {
+  //   if (inline.attribs['id'] == undefined) {
+  //     inlineStyle.filter(inline).attr('id', '_ni' + i);
+  //     inlineStyle.filter(inline).addClass('_ni' + i);
+  //     uniStyle.append(
+  //       '#' + '_ni' + i + '._ni' + i + '{' + inline.attribs['style'] + '}',
+  //     );
+  //   } else {
+  //     inlineStyle.filter(inline).addClass('_ni' + i);
+  //     uniStyle.append(
+  //       '#' +
+  //         inline.attribs['id'] +
+  //         i +
+  //         '._ni' +
+  //         i +
+  //         '{' +
+  //         inline.attribs['style'] +
+  //         '}',
+  //     );
+  //   }
 
-    inlineStyle.filter(inline).removeAttr('style');
-  });
+  //   inlineStyle.filter(inline).removeAttr('style');
+  // });
 
-  $('head')
-    .children()
-    .remove('style');
+  // $('head')
+  //   .children()
+  //   .remove('style');
   $('link').remove("[rel='stylesheet']");
 
   args.singleUniStyle = uniStyle.toString();
@@ -72,14 +74,23 @@ const AngularComponentCheck = (args: AmpDescription): AmpDescription => {
 
   const $ = args['cheerio'];
   const indexHtml = $.html();
-  const checkRegEx = /(_nghost-)[\w]+(-c[0-9]+)/;
+  const checkRegEx = /(_nghost-)[\w]+(c[0-9]+)/;
   const matchAttr = indexHtml.match(checkRegEx) as RegExpMatchArray
   let attrMatch= "";
 
 
+
+  if (matchAttr===null){
+    return args
+  }
+
+
+
   attrMatch= matchAttr[0].replace(matchAttr[1],'').replace(matchAttr[2],'') // .substr(9, matchAttr[0].length-3);
 
-  const hostRegex = new RegExp('(_nghost)-' + attrMatch + '-c([0-9]+)','g');
+
+
+  const hostRegex = new RegExp('(_nghost)-' + attrMatch + 'c([0-9]+)','g');
 
 
   const matchHost: string[] = [];
@@ -90,7 +101,7 @@ const AngularComponentCheck = (args: AmpDescription): AmpDescription => {
         matchHost.push(
             id
         );
-     let aqui = $ ('[_nghost-'+ attrMatch+ '-c'  + id + ']')[0]
+     let aqui = $ ('[_nghost-'+ attrMatch+ 'c'  + id + ']')[0]
      angCompo.push(
          {'selector':aqui.tagName,
         'id':id });
@@ -99,7 +110,7 @@ const AngularComponentCheck = (args: AmpDescription): AmpDescription => {
     return "";
 });
     const matchCompo:any = [];
-    const compoRegex = new RegExp('(_ngcontent)-' + attrMatch + '-c([0-9]+)','g');
+    const compoRegex = new RegExp('(_ngcontent)-' + attrMatch + 'c([0-9]+)','g');
 
 let check2 = indexHtml.replace(compoRegex, function (match, code, id) {
 
@@ -119,13 +130,13 @@ let check2 = indexHtml.replace(compoRegex, function (match, code, id) {
   angCompo = angCompo.concat(addAngTags);
 
   angCompo.forEach(index => {
-    const regExp = new RegExp('\\[_nghost-'+  attrMatch + '-c' + index.id + '\\]', 'gi');
+    const regExp = new RegExp('\\[_nghost-'+  attrMatch + 'c' + index.id + '\\]', 'gi');
     args['singleUniStyle'] = args['singleUniStyle'].replace(
       regExp,
       '._nh' + index.id,
     );
 
-    const sel = '_nghost-' + attrMatch + '-c' + index.id;
+    const sel = '_nghost-' + attrMatch + 'c' + index.id;
 
     $('[' + sel + ']').addClass('_nh' + index.id);
     $('[' + sel + ']').attr(sel, null);
@@ -135,18 +146,19 @@ let check2 = indexHtml.replace(compoRegex, function (match, code, id) {
     .filter(x => x.id != undefined)
     .map(x => x.id)
     .forEach(index => {
-      const regExp = new RegExp('\\[_ngcontent-'+  attrMatch + '-c' + index + '\\]', 'gi');
+      const regExp = new RegExp('\\[_ngcontent-'+  attrMatch + 'c' + index + '\\]', 'gi');
 
       args['singleUniStyle'] = args['singleUniStyle'].replace(
         regExp,
         '._nc' + index,
       );
 
-      const sel = '_ngcontent-' + attrMatch + '-c' + index;
+      const sel = '_ngcontent-' + attrMatch + 'c' + index;
 
       $('[' + sel + ']').addClass('_nc' + index);
       $('[' + sel + ']').attr(sel, null);
     });
+
 
   angCompo
     .map(x => x.selector)

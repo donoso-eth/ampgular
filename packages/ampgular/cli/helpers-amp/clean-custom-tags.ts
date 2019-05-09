@@ -1,14 +1,19 @@
 import { AmpDescription, MiniCheerioElement } from '../models/interface';
 import { cleanAttributes, whiteListed } from './whitelistedtags';
+import { readFileSync, writeFileSync } from 'fs';
+import { join, normalize } from 'path';
 const CleanAttributes = async (
   args: AmpDescription,
 ): Promise<AmpDescription> => {
 
     const $ = args.cheerio;
 
-    const toClean = cleanAttributes;
+   const customClean:any = _readFile()
+
+    const toClean =   cleanAttributes.concat(customClean.clean);
 
     toClean.forEach(attr => {
+
     $(attr.tag).attr(attr.attr, null);
    });
 
@@ -48,6 +53,8 @@ const CleanCustomElements = async (
       });
 
 
+
+
     if (customTags.indexOf('picture') !== -1) {
         args =   customFunctions['picture']('picture', args);
       }
@@ -57,9 +64,35 @@ const CleanCustomElements = async (
        if ((customFunctions as any)[tag] != undefined) {
         args =   (customFunctions as any)[tag](tag, args);
        } else {
-        $(tag).each((index, element) => {
-          element.tagName = 'div';
 
+
+        const regExp = new RegExp('[^.|#](' + tag + ')|^(' + tag + ')', 'gi');
+
+
+        args['singleUniStyle'] = args['singleUniStyle'].replace(
+          regExp,
+          (x, code) => {
+            if (x.length == code.length) {
+              //  console.log('dentro-length!=code and match',x)
+              return '._nc' + code;
+            } else {
+              return x.substr(0, 1) + '._nc' + code;
+            }
+          },
+        );
+
+
+        //  console.log(args['singleUniStyle'])
+
+       // $(tag).addClass('_nc' + tag);
+        const changeCustom = $(tag);
+        changeCustom.each((index, element) => {
+          let oldClass = element.attribs['class'] || '';
+          let newClass = '_nc' + tag + " " + oldClass
+          element.attribs['class'] = newClass
+          if (element.tagName != 'app-root') {
+            element.tagName = 'div';
+          }
         });
        }
 
@@ -212,10 +245,22 @@ export const cleanHtml = async (
 
 
   });
+  args =  await  CleanCustomElements (args);
 
   args =  await  CleanAttributes(args);
 
-  args =  await  CleanCustomElements (args);
+
 
   return args;
 };
+
+
+
+const _readFile = (): Object => {
+
+  let file = JSON.parse(
+    readFileSync(join(normalize(process.cwd()), 'ampgular/amp/clean_attributes.json')).toString('utf-8'),
+  );
+
+  return  file
+}

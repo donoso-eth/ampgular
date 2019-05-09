@@ -86,7 +86,7 @@ extends RenderCommand<SpiderCommandSchema> {
 
               if ((this.commandConfigOptions as SpiderOptions).verbose) {
                 this.logger.info(`Rendered: ${this._routesDone.length}, Discovered: ${
-                  this._routesDiscovered.length}:   ${this._routesDiscovered[0]}  rendered  `);
+                  this._routesDiscovered.length}:   ${this._routesDiscovered[0]}`);
               } else {
                 this.loggingSameLine(`Rendered: ${this._routesDone.length}, Discovered: ${
                   this._routesDiscovered.length
@@ -95,6 +95,11 @@ extends RenderCommand<SpiderCommandSchema> {
 
 
               this._routesExcluded.push(this._routesDiscovered[0]);
+
+              if ((this.commandConfigOptions as SpiderOptions).verbose) {
+                this.logger.info(`Starting rendering:  ${this._routesDiscovered[0]}`);
+              }
+
 
               this._renderPath.next(this._routesDiscovered[0]);
             }

@@ -178,6 +178,7 @@ export const cleanAttributes = [
   { tag: '*', attr: 'ng-version' },
   { tag: '*', attr: 'onclick' },
   { tag: '*', attr: 'cass' },
+
 ];
 
 export interface AmpComponent {

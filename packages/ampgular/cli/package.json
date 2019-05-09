@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/ampgular/ampgular-cli",
   "dependencies": {
+    "@ampgular/common": "0.0.0",
     "@angular-devkit/core": "^7.3.8",
     "@angular/platform-server": "^7.2.10",
     "@angular/platform-browser":"^7.2.10",
@@ -61,7 +62,8 @@
     "@types/cheerio":"^0.22.11",
     "typescript": "3.2.4",
     "open":"^6.1.0",
-    "amphtml-validator":"^1.0.23"
+    "amphtml-validator":"^1.0.23",
+    "puppeteer": "^1.15.0"
   },
   "ng-update": {
     "migrations": "@schematics/angular/migrations/migration-collection.json"

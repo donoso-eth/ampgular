@@ -14,6 +14,7 @@
     "@angular-devkit/core": "^7.3.8",
     "@angular-devkit/schematics": "^7.3.8",
     "typescript": "3.2.4",
-    "@ampgular/common":"0,0,0"
+    "@ampgular/common":"0.0.0",
+    "@ampgular/cli": "0.0.0"
   }
 }

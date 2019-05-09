@@ -58,7 +58,8 @@ export async function prepareCss($: any,globalCss:string,styles:string): Promise
         });
 
    $('head').append('<style  ng-transition="serverApp">' + newcss + '</style>');
-   $('body').append(`<link rel="stylesheet" href="${styles}>`);
+  
+   $('body').append(`<link rel="stylesheet" href="${styles}">`);
 
   return $.html();
 }
