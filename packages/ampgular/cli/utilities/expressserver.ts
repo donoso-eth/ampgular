@@ -1,9 +1,9 @@
 import  { Express }from 'express';
-import express = require('express');
-import { Server } from 'http';
-import { Path, logging } from '@angular-devkit/core';
-import { join, normalize } from 'path';
 
+import { Server } from 'http';
+import { logging } from '@angular-devkit/core';
+import { join, normalize } from 'path';
+const express = require('express');
 const open = require('open');
 
 export interface ExpressConfig {

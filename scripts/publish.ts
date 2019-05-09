@@ -106,7 +106,12 @@ export default async function (args: PublishArgs, logger: logging.Logger) {
       .then(() => {
         logger.info(name);
 
-        return _exec('npm', ['publish'].concat(args.tag ? ['--tag', args.tag] : []), {
+        // return _exec('npm', ['publish'].concat(args.tag ? ['--tag', args.tag] : []), {
+        //   cwd: pkg.dist,
+        // }, logger);
+
+
+        return _exec('npm', ['publish', '--access=public'], {
           cwd: pkg.dist,
         }, logger);
       })
