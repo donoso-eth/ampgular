@@ -129,11 +129,6 @@
     "renderConfig": {
       "type": "object",
       "properties": {
-        "port": {
-          "type": "string",
-          "description": "Port to be used for Express ",
-          "default": false
-        },
         "node": {
           "type": "object",
           "properties": {

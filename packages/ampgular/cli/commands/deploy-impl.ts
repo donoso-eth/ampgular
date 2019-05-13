@@ -91,7 +91,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
     if (targetApp == TargetApp.Prerender || targetApp == TargetApp.Ssr) {
       this.logger.info('........ NODE APP .......  FOR RENDERING ');
-      await this._createServerBundle(false);
+      await this._createPrerenderBundle(false);
       switch (targetApp) {
         case TargetApp.Prerender:
           this.logger.info('PRERENDERING THE SITE .......  FOR DEPLOYING');
@@ -108,7 +108,7 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
 
     if ((this.commandConfigOptions as DeployOptions).amp == true) {
       this.logger.info('BUNDLING AMP APP .......  FOR DEPLOYING');
-      await this._createServerBundle(true);
+      await this._createPrerenderBundle(true);
       this.logger.info('PRERENDERING AMP APP .......  FOR DEPLOYING');
       await this._callPrerenderAMP();
       this.logger.info('CREATING AMP PAGES .......  FOR DEPLOYING');
@@ -184,25 +184,27 @@ export class DeployCommand extends AmpgularCommand<DeployCommandSchema> {
   }
 
 
-  async _createServerBundle(ampVersion: boolean) {
+  async _createPrerenderBundle(ampVersion: boolean) {
     const workspace: CommandWorkspace = getWorkspaceDetails() as CommandWorkspace;
     const descriptionBuild = await getCommandDescription('build', this._registry);
     this.build = new descriptionBuild.impl({ workspace }, descriptionBuild, this.logger);
 
-    if (ampVersion) {
-      return await
-        this.build.validateAndRun({
-          target: 'node',
-          configuration: 'amp'
-        });
-    }
-    else {
-      return await
-        this.build.validateAndRun({
-          target: 'node',
-          configuration: this._ampgularConfig.buildConfig.configuration
-        });
-    }
+
+      if (ampVersion) {
+        return await
+          this.build.validateAndRun({
+            target: this._ampgularConfig.target,
+            configuration: 'amp'
+          });
+      }
+      else {
+        return await
+          this.build.validateAndRun({
+            target: this._ampgularConfig.target,
+            configuration: this._ampgularConfig.buildConfig.configuration
+          });
+      }
+
 
 
   }

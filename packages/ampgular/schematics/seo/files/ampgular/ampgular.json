@@ -21,9 +21,6 @@
     "node": {
       "webpack": false,
       "localhost": false
-    },
-    "browser": {
-      "port": "4000"
     }
   },
   "deploy": {

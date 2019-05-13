@@ -127,7 +127,6 @@ function changeConfigPaths(options: SeoOptions, host: Tree): Rule {
 
     const { target } = options;
 
-
     const clientProject: Test = workspace.projects[options.clientProject as string] as {};
 
     if (target == 'node') {
@@ -206,7 +205,7 @@ function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
   };
 }
 
-function updteEnvironmentFiles(options: SeoOptions, tree: Tree): Rule {
+function updateEnvironmentFiles(options: SeoOptions, tree: Tree): Rule {
   return (tree: Tree) => {
 
     const changeEnvFile = new UpdateEnvironmentFile();
@@ -214,27 +213,30 @@ function updteEnvironmentFiles(options: SeoOptions, tree: Tree): Rule {
       { name: 'seo', initiator: false },
       'src/environments/environment.ts', tree);
     let originalPath: string;
-    if (options.target == 'browser') {
-      originalPath = 'src/environments/environment.prod.ts';
-    } else {
-      originalPath = 'src/environments/environment.server.ts';
+    originalPath = 'src/environments/environment.prod.ts';
+    const originalPathExists =  tree.exists(originalPath);
+    if (!originalPathExists) {
+      throw new SchematicsException(`environment prod file not found.`);
     }
+
+    const originalFileBuffer = tree.read(originalPath) as Buffer;
+    const originalFileString = originalFileBuffer.toString('utf-8');
+
     const seoPath = 'src/environments/environment.seo.ts';
     const existsSeoFile = tree.exists(seoPath);
-    const seoFileBuffer = tree.read(originalPath) as Buffer;
-    const seoFileString = seoFileBuffer.toString('utf-8');
+
     if (existsSeoFile) {
-      tree.overwrite(seoPath, seoFileString);
-    } else {
-      tree.create(seoPath, seoFileString);
-    }
+        tree.overwrite(seoPath, originalFileString);
+      } else {
+        tree.create(seoPath, originalFileString);
+      }
     tree = changeEnvFile.changeEnvFile(
-      { name: 'seo', initiator: true },
-      seoPath, tree);
+        { name: 'seo', initiator: true },
+        seoPath, tree);
 
     tree = changeEnvFile.changeEnvFile(
-      { name: 'seo', initiator: false },
-      originalPath, tree);
+        { name: 'seo', initiator: false },
+        originalPath, tree);
 
 
     return tree;
@@ -249,17 +251,18 @@ function addDependenciesandCreateScripts(options: SeoOptions): Rule {
       throw new SchematicsException('Could not find package.json');
     }
 
+    if (options.target == 'node') {
     const pkg = JSON.parse(buffer.toString());
     pkg.dependencies['@nguniversal/module-map-ngfactory-loader'] = '^7.1.1';
     pkg.dependencies['@nguniversal/express-engine'] = '^7.1.1';
-
     const scssPath = 'srs/styles.scss';
-
     if (host.exists(scssPath)) {
        pkg.scripts['build-server-css'] = 'node-sass src/styles.scss -o dist/server';
     }
 
     host.overwrite(pkgPath, JSON.stringify(pkg, null, 2));
+
+  }
 
     return host;
   };
@@ -275,7 +278,7 @@ export function seo(options: SeoOptions): Rule {
       changeConfigPaths(options, tree),
       addDependenciesandCreateScripts(options),
       updateTarget(options, tree),
-      updteEnvironmentFiles(options, tree),
+      updateEnvironmentFiles(options, tree),
     ])(tree, context);
   };
 }

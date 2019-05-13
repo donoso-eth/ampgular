@@ -23,6 +23,6 @@ export class HelpCommand extends Command<HelpCommandSchema> {
       const aliasInfo = cmd.aliases.length > 0 ? ` (${cmd.aliases.join(', ')})` : '';
       this.logger.info(`  ${terminal.cyan(cmd.name)}${aliasInfo} ${cmd.description}`);
     }
-    this.logger.info(`\nFor more detailed help run "ng [command name] --help"`);
+    this.logger.info(`\nFor more detailed help run "amp [command name] --help"`);
   }
 }

@@ -184,7 +184,7 @@ function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
 }
 
 
-function updteEnvironmentFiles(options: AmpOptions, tree: Tree): Rule {
+function updateEnvironmentFiles(options: AmpOptions, tree: Tree): Rule {
   return (tree: Tree) => {
 
     const changeEnvFile = new UpdateEnvironmentFile();
@@ -192,20 +192,23 @@ function updteEnvironmentFiles(options: AmpOptions, tree: Tree): Rule {
       { name: 'amp', initiator: false },
       'src/environments/environment.ts', tree);
     let originalPath: string;
-    if (options.target == 'browser') {
-      originalPath = 'src/environments/environment.prod.ts';
-    } else {
-      originalPath = 'src/environments/environment.server.ts';
-    }
+    originalPath = 'src/environments/environment.prod.ts';
+    const originalPathExists =  tree.exists(originalPath);
+    if (!originalPathExists) {
+        throw new SchematicsException(`environment prod file not found.`);
+      }
+
+    const originalFileBuffer = tree.read(originalPath) as Buffer;
+    const originalFileString = originalFileBuffer.toString('utf-8');
+
     const seoPath = 'src/environments/environment.seo.ts';
     const ampPath = 'src/environments/environment.amp.ts';
     const existsAmpFile = tree.exists(ampPath);
-    const ampFileBuffer = tree.read(originalPath) as Buffer;
-    const ampFileString = ampFileBuffer.toString('utf-8');
+
     if (existsAmpFile) {
-      tree.overwrite(ampPath, ampFileString);
+      tree.overwrite(ampPath, originalFileString);
     } else {
-      tree.create(ampPath, ampFileString);
+      tree.create(ampPath, originalFileString);
     }
     tree = changeEnvFile.changeEnvFile(
       { name: 'amp', initiator: true },
@@ -232,14 +235,12 @@ function addDependenciesandCreateScripts(options: AmpOptions): Rule {
       throw new SchematicsException('Could not find package.json');
     }
 
-
     const scssPath = 'srs/styles.scss';
 
     if (host.exists(scssPath)) {
       const pkg = JSON.parse(buffer.toString());
       pkg.scripts['build-amp-css'] = 'node-sass src/styles.scss -o dist/amp';
       host.overwrite(pkgPath, JSON.stringify(pkg, null, 2));
-
     }
 
     return host;
@@ -264,7 +265,8 @@ export function amp(options: AmpOptions): Rule {
       externalSeo(options, tree),
       createFiles(options, tree),
       changeConfigPaths(options, tree),
-      updteEnvironmentFiles(options, tree),
+      addDependenciesandCreateScripts(options),
+      updateEnvironmentFiles(options, tree),
     ])(tree, context);
   };
 }

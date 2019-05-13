@@ -94,7 +94,9 @@ export default async function (args: PublishArgs, logger: logging.Logger) {
   logger.info('Building...');
   await build({}, logger.createChild('build'));
 
-  return Object.keys(packages).reduce((acc: Promise<void>, name: string) => {
+
+  return Object.keys(packages)
+    .filter((name) => /ampgular/.test(name)).reduce((acc: Promise<void>, name: string) => {
     const pkg = packages[name];
     if (pkg.packageJson['private']) {
       logger.debug(`${name} (private)`);
@@ -109,8 +111,6 @@ export default async function (args: PublishArgs, logger: logging.Logger) {
         // return _exec('npm', ['publish'].concat(args.tag ? ['--tag', args.tag] : []), {
         //   cwd: pkg.dist,
         // }, logger);
-
-
         return _exec('npm', ['publish', '--access=public'], {
           cwd: pkg.dist,
         }, logger);
