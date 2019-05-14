@@ -4,7 +4,7 @@
   "description": "Compiles an Angular app into an output directory named dist/ at the given output path. Must be executed from within a workspace directory.",
   "$longDescription": "./me-long.md",
 
-  "$aliases": ["me"],
+  "$aliases": ["a"],
   "$scope": "in",
   "$type": "me",
   "$impl": "./me-impl#MeCommand",

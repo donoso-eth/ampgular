@@ -21,8 +21,12 @@ export async function prepareCss($: any,globalCss:string,styles:string): Promise
   const styleTags = $('style');
   let styleNr = 0;
   styleTags.each(function(i:number, item:CheerioElement) {
-    singleUniStyle = item.firstChild.data + ' ' + singleUniStyle;
-    styleNr = styleNr + 1;
+    if (item.firstChild != undefined) {
+      singleUniStyle = item.firstChild.data + ' ' + singleUniStyle;
+    }
+      styleNr = styleNr + 1;
+
+
   });
 
   const  uniStyle = parse(singleUniStyle);
@@ -35,7 +39,7 @@ export async function prepareCss($: any,globalCss:string,styles:string): Promise
       inlineStyle.filter(inline).attr('id', '_ng-i' + i);
       inlineStyle.filter(inline).addClass('_ng-i' + i);
 
-      uniStyle.append( '#' + '_ng-i' + i  + '._ng-i' + i + '{' + inline.attribs['style'] + '}' )
+      uniStyle.append( '#' + '._ng-i' + i + '{' + inline.attribs['style'] + '}' )
           ;
       inlineStyle.filter(inline).removeAttr('style');
   });
@@ -58,7 +62,7 @@ export async function prepareCss($: any,globalCss:string,styles:string): Promise
         });
 
    $('head').append('<style  ng-transition="serverApp">' + newcss + '</style>');
-  
+
    $('body').append(`<link rel="stylesheet" href="${styles}">`);
 
   return $.html();

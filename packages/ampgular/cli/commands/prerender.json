@@ -5,7 +5,7 @@
   "$longDescription": "./prerender-long.md",
 
   "$scope": "all",
-  "$aliases": [],
+  "$aliases": ["p"],
   "$impl": "./prerender-impl#PrerenderCommand",
   "type": "object",
   "allOf": [

@@ -4,7 +4,7 @@
   "description": "DEPLOY DEPLOY ",
   "$longDescription": "./deploy-long.md",
 
-  "$aliases": ["b"],
+  "$aliases": ["d"],
   "$scope": "in",
   "$type": "deploy",
   "$impl": "./deploy-impl#DeployCommand",

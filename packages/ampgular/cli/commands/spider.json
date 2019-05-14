@@ -4,7 +4,7 @@
   "description": "Crawl the site to create an array of paths/urls for later prerender or ssr .",
   "$longDescription": "./spider-long.md",
 
-  "$aliases": [ "s" ],
+  "$aliases": [ "sp" ],
   "$scope": "in",
   "$type": "render",
   "$impl": "./spider-impl#SpiderCommand",

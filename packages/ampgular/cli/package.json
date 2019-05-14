@@ -63,8 +63,8 @@
     "@types/cheerio":"^0.22.11",
     "typescript": "3.2.4",
     "open":"^6.1.0",
-    "amphtml-validator":"^1.0.23",
-    "puppeteer": "^1.15.0"
+    "amphtml-validator":"^1.0.23"
+
   },
   "ng-update": {
     "migrations": "@schematics/angular/migrations/migration-collection.json"

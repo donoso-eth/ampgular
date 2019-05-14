@@ -4,7 +4,7 @@
   "description": "The spider command crawls your entire site preparing the routes paths for later pre-render or ssr",
   "$longDescription": "./sitemap-long.md",
 
-  "$aliases": ["d"],
+  "$aliases": ["si"],
   "$scope": "in",
   "$type": "sitemap",
   "$impl": "./sitemap-impl#SitemapCommand",

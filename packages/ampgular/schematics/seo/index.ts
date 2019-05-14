@@ -255,7 +255,7 @@ function addDependenciesandCreateScripts(options: SeoOptions): Rule {
     const pkg = JSON.parse(buffer.toString());
     pkg.dependencies['@nguniversal/module-map-ngfactory-loader'] = '^7.1.1';
     pkg.dependencies['@nguniversal/express-engine'] = '^7.1.1';
-    const scssPath = 'srs/styles.scss';
+    const scssPath = 'src/styles.scss';
     if (host.exists(scssPath)) {
        pkg.scripts['build-server-css'] = 'node-sass src/styles.scss -o dist/server';
     }
